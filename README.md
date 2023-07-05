@@ -12,3 +12,6 @@ TrackIt is a web-based application that simplifies shipment tracking by providin
 - Responsive UI design
 - Search functionality for easy tracking number retrieval
 - Drag-and-drop reordering for organizing shipments
+
+## Install
+- npx husky install
