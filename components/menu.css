@@ -1,0 +1,16 @@
+.DropdownMenu-content {
+	@apply bg-[#403f49]/25 backdrop-blur-xl border border-indigo-200 text-[#FEFCE8] shadow-2xl rounded-md p-2 min-w-[220px];
+}
+
+.DropdownMenu-item {
+	@apply p-2 pl-6 rounded cursor-pointer text-xs;
+	outline: none;
+}
+
+.DropdownMenu-item[data-highlighted] {
+	@apply bg-indigo-500;
+}
+
+.DropdownMenu-item[data-state="open"] {
+	@apply bg-indigo-500/25;
+}
