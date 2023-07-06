@@ -53,6 +53,11 @@ const Card = () => {
 								value={name}
 								onChange={handleNameChange}
 								onBlur={handleSaveName}
+								onKeyDown={(event) => {
+									if (event.key === "Enter") {
+										handleSaveName()
+									}
+								}}
 								className="text-lg bg-transparent text-yellow-50 font-semibold tracking-tighter outline-none"
 							/>
 						) : (
@@ -68,8 +73,9 @@ const Card = () => {
 							</h3>
 						)}
 						<a
-							className="flex gap-1 items-center text-xs text-indigo-300 "
+							className="underline-link flex gap-1 items-center text-xs text-indigo-300"
 							href="https://www.shipmentracker.com/"
+							target="_blank"
 						>
 							<MdOutlineExplore />
 							<p className="uppercase">Courier</p>
