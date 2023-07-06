@@ -25,3 +25,11 @@ body {
 		)
 		rgb(var(--background-start-rgb));
 }
+
+.leading-both {
+	leading-trim: both;
+}
+
+.text-cap {
+	text-edge: cap;
+}
