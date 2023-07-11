@@ -1,18 +1,32 @@
 .DropdownMenu-content {
-	@apply min-w-[220px] rounded-md border border-indigo-200 bg-[#403f49]/25 p-2 text-[#FEFCE8] shadow-2xl backdrop-blur-xl;
+	min-width: 220px;
+	border-radius: 0.25rem;
+	border: 1px solid #a0aec0;
+	background-color: rgba(64, 63, 73, 0.25);
+	padding: 0.5rem;
+	color: #fefce8;
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+	backdrop-filter: blur(40px);
 }
 
 .DropdownMenu-item {
-	@apply cursor-pointer rounded p-2 pl-6 text-xs;
+	cursor: pointer;
+	border-radius: 0.25rem;
+	padding: 0.5rem;
+	padding-left: 1.5rem;
+	font-size: 0.75rem;
 	outline: none;
 }
 
-.DropdownMenu-item[data-highlighted] {
-	@apply bg-indigo-500;
+.DropdownMenu-item[data-state="open"] {
+	background-color: rgb(99 102 241 / 0.25);
 }
 
-.DropdownMenu-item[data-state="open"] {
-	@apply bg-indigo-500/25;
+.DropdownMenu-item[data-highlighted] {
+	&.text-red-400 {
+		background-color: rgba(255, 0, 0, 0.5);
+	}
+	background-color: rgb(99 102 241);
 }
 
 .underline-link {

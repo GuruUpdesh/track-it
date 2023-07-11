@@ -34,7 +34,7 @@ const Card = () => {
 
 	return (
 		<div className="max-w-[350px] border border-indigo-400 bg-[#110F1B]">
-			<div className="flex justify-between border-b border-indigo-400 p-2">
+			<div className="flex justify-between p-2">
 				<div className="flex gap-2">
 					<div className="flex aspect-square w-[50px] items-center justify-center rounded-full border border-indigo-400">
 						<Image
@@ -121,9 +121,6 @@ const Card = () => {
 						</DropdownMenu.Content>
 					</DropdownMenu.Portal>
 				</DropdownMenu.Root>
-			</div>
-			<div className="min-w-[350px]">
-				<p>map</p>
 			</div>
 		</div>
 	)
