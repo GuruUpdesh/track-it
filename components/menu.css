@@ -1,9 +1,9 @@
 .DropdownMenu-content {
-	@apply bg-[#403f49]/25 backdrop-blur-xl border border-indigo-200 text-[#FEFCE8] shadow-2xl rounded-md p-2 min-w-[220px];
+	@apply min-w-[220px] rounded-md border border-indigo-200 bg-[#403f49]/25 p-2 text-[#FEFCE8] shadow-2xl backdrop-blur-xl;
 }
 
 .DropdownMenu-item {
-	@apply p-2 pl-6 rounded cursor-pointer text-xs;
+	@apply cursor-pointer rounded p-2 pl-6 text-xs;
 	outline: none;
 }
 

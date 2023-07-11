@@ -33,10 +33,10 @@ const Card = () => {
 	}
 
 	return (
-		<div className="border border-indigo-400 bg-[#110F1B] max-w-[350px]">
+		<div className="max-w-[350px] border border-indigo-400 bg-[#110F1B]">
 			<div className="flex justify-between border-b border-indigo-400 p-2">
 				<div className="flex gap-2">
-					<div className="flex items-center justify-center border border-indigo-400 rounded-full aspect-square w-[50px]">
+					<div className="flex aspect-square w-[50px] items-center justify-center rounded-full border border-indigo-400">
 						<Image
 							src="/package.svg"
 							alt="Package Box"
@@ -58,12 +58,12 @@ const Card = () => {
 										handleSaveName()
 									}
 								}}
-								className="text-lg bg-transparent text-yellow-50 font-semibold tracking-tighter outline-none"
+								className="bg-transparent text-lg font-semibold tracking-tighter text-yellow-50 outline-none"
 							/>
 						) : (
 							<h3
 								onDoubleClick={handleEditName}
-								className="text-yellow-50 text-lg font-semibold tracking-tighter overflow-hidden w-[20ch] whitespace-nowrap text-left"
+								className="w-[20ch] overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
 								style={{
 									WebkitMaskImage:
 										"linear-gradient(to right, black 90%, transparent)",
@@ -73,7 +73,7 @@ const Card = () => {
 							</h3>
 						)}
 						<a
-							className="underline-link flex gap-1 items-center text-xs text-indigo-300"
+							className="underline-link flex items-center gap-1 text-xs text-indigo-300"
 							href="https://www.shipmentracker.com/"
 							target="_blank"
 						>
@@ -86,7 +86,7 @@ const Card = () => {
 					<DropdownMenu.Trigger asChild>
 						<button
 							aria-label="Package Controls"
-							className="p-2 text-yellow-50 rounded-full hover:bg-yellow-50/10 focus:bg-yellow-50/10 aspect-square cursor-pointer outline-none"
+							className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10"
 						>
 							<MdMoreVert />
 						</button>
@@ -115,7 +115,7 @@ const Card = () => {
 									</DropdownMenu.SubContent>
 								</DropdownMenu.Portal>
 							</DropdownMenu.Sub>
-							<DropdownMenu.Item className="bg-red-500/25 text-red-400 DropdownMenu-item">
+							<DropdownMenu.Item className="DropdownMenu-item bg-red-500/25 text-red-400">
 								Delete
 							</DropdownMenu.Item>
 						</DropdownMenu.Content>
