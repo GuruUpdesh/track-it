@@ -148,7 +148,7 @@ const Card = () => {
 							<DropdownMenu.Item className="DropdownMenu-item bg-red-500/25 text-red-400">
 								Delete
 							</DropdownMenu.Item>
-							<DropdownMenu.Arrow className="fill-indigo-400/25" />
+							<DropdownMenu.Arrow className="fill-indigo-400/75" />
 						</DropdownMenu.Content>
 					</DropdownMenu.Portal>
 				</DropdownMenu.Root>
