@@ -69,7 +69,7 @@ const Card = () => {
 							/>
 						) : (
 							<Tooltip.Provider>
-								<Tooltip.Root>
+								<Tooltip.Root defaultOpen={false}>
 									<Tooltip.Trigger asChild>
 										<h3
 											ref={textRef}
@@ -79,22 +79,25 @@ const Card = () => {
 												WebkitMaskImage:
 													"linear-gradient(to right, black 90%, transparent)",
 											}}
+											data-overflow={
+												isTextOverflowed
+													? "true"
+													: "false"
+											}
 										>
 											{name}
 										</h3>
 									</Tooltip.Trigger>
 									<Tooltip.Portal>
-										<Tooltip.Content
-											className="Tooltip-content"
-											side="bottom"
-										>
-											{isTextOverflowed ? (
-												<>
-													{name}
-													<Tooltip.Arrow className="fill-indigo-400/75" />
-												</>
-											) : undefined}
-										</Tooltip.Content>
+										{isTextOverflowed ? (
+											<Tooltip.Content
+												className="Tooltip-content"
+												side="bottom"
+												data-testid="tooltip-content"
+											>
+												{name}
+											</Tooltip.Content>
+										) : null}
 									</Tooltip.Portal>
 								</Tooltip.Root>
 							</Tooltip.Provider>
