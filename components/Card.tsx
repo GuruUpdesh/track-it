@@ -5,7 +5,9 @@ import { MdMoreVert, MdOutlineExplore } from "react-icons/md" // todo transition
 import { BsChevronRight } from "react-icons/bs"
 import Image from "next/image"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
+import * as Tooltip from "@radix-ui/react-tooltip"
 import "./menu.css"
+import useTextOverflow from "@/hooks/useTextOverflow"
 
 const Card = () => {
 	const [name, setName] = useState("")
@@ -31,6 +33,10 @@ const Card = () => {
 	function handleEditName() {
 		setEditName(true)
 	}
+
+	const [textRef, isTextOverflowed] = useTextOverflow<HTMLHeadingElement>([
+		editName,
+	])
 
 	return (
 		<div className="min-w-[220px] max-w-[350px] select-none border border-indigo-400/25 border-b-indigo-400/25 bg-[#110F1B] after:block after:h-[1px] after:w-[29%] after:bg-green-400">
@@ -62,16 +68,36 @@ const Card = () => {
 								className="max-w-full bg-transparent text-lg font-semibold tracking-tighter text-yellow-50 outline-none"
 							/>
 						) : (
-							<h3
-								onClick={handleEditName}
-								className="w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
-								style={{
-									WebkitMaskImage:
-										"linear-gradient(to right, black 90%, transparent)",
-								}}
-							>
-								{name}
-							</h3>
+							<Tooltip.Provider>
+								<Tooltip.Root>
+									<Tooltip.Trigger asChild>
+										<h3
+											ref={textRef}
+											onClick={handleEditName}
+											className="w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
+											style={{
+												WebkitMaskImage:
+													"linear-gradient(to right, black 90%, transparent)",
+											}}
+										>
+											{name}
+										</h3>
+									</Tooltip.Trigger>
+									<Tooltip.Portal>
+										<Tooltip.Content
+											className="Tooltip-content"
+											side="bottom"
+										>
+											{isTextOverflowed ? (
+												<>
+													{name}
+													<Tooltip.Arrow className="fill-indigo-400/75" />
+												</>
+											) : undefined}
+										</Tooltip.Content>
+									</Tooltip.Portal>
+								</Tooltip.Root>
+							</Tooltip.Provider>
 						)}
 						<a
 							className="underline-link flex items-center gap-1 text-xs text-indigo-300"
@@ -119,7 +145,7 @@ const Card = () => {
 							<DropdownMenu.Item className="DropdownMenu-item bg-red-500/25 text-red-400">
 								Delete
 							</DropdownMenu.Item>
-							<DropdownMenu.Arrow className="fill-indigo-400/75" />
+							<DropdownMenu.Arrow className="fill-indigo-400/25" />
 						</DropdownMenu.Content>
 					</DropdownMenu.Portal>
 				</DropdownMenu.Root>
