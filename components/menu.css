@@ -53,6 +53,8 @@
 }
 
 .Tooltip-content {
+	max-width: calc(100svw - 3rem);
+	word-wrap: break-word;
 	border-radius: 2rem;
 	font-size: 10px;
 	border: 1px solid rgba(129, 140, 248, 0.25);
