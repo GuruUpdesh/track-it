@@ -33,9 +33,9 @@ const Card = () => {
 	}
 
 	return (
-		<div className="max-w-[350px] border border-indigo-400 bg-[#110F1B]">
+		<div className="max-w-[350px] border border-indigo-400/25 border-b-indigo-400/25 bg-[#110F1B] after:block after:h-[1px] after:w-[29%] after:bg-green-400">
 			<div className="flex justify-between p-2">
-				<div className="flex gap-2">
+				<div className="flex min-w-fit gap-2">
 					<div className="flex aspect-square w-[50px] items-center justify-center rounded-full border border-indigo-400">
 						<Image
 							src="/package.svg"
