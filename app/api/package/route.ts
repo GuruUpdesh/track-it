@@ -20,18 +20,22 @@ async function fetchTrackingInfo(trackingNumber: string, courier: string) {
 }
 
 export async function GET(request: NextRequest) {
-    const url = new URL(request.url)
-    const trackingNumber = url.searchParams.get("trackingNumber")
-    const courier = url.searchParams.get("courier")
+	const url = new URL(request.url)
+	const trackingNumber = url.searchParams.get("trackingNumber")
+	const courier = url.searchParams.get("courier")
 
-    if (!trackingNumber || !courier) {
-        return new NextResponse(JSON.stringify({ error: "Missing tracking number or courier in url parameters" }), {
-            status: 400,
-        })
-    }
+	if (!trackingNumber || !courier) {
+		return new NextResponse(
+			JSON.stringify({
+				error: "Missing tracking number or courier in url parameters",
+			}),
+			{
+				status: 400,
+			}
+		)
+	}
 
-    const packageAPIInfo = await fetchTrackingInfo(trackingNumber, courier);
+	const packageAPIInfo = await fetchTrackingInfo(trackingNumber, courier)
 
-
-    return new Response(JSON.stringify(packageAPIInfo), { status: 200 });
+	return new Response(JSON.stringify(packageAPIInfo), { status: 200 })
 }

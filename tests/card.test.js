@@ -1,7 +1,6 @@
 import "@testing-library/jest-dom"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import Card from "../components/Card" // replace with your actual path to the Card component
-import Layout from "../app/layout.tsx"
 
 describe("Card Component", () => {
 	it("renders without crashing", () => {
