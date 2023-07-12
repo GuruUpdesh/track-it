@@ -53,7 +53,11 @@ function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 }
 
 const Grid = () => {
-	const [packages, dispatchPackages] = useLocalStorage("packages", [], packageReducer)
+	const [packages, dispatchPackages] = useLocalStorage(
+		"packages",
+		[],
+		packageReducer
+	)
 
 	return (
 		<div>
@@ -62,7 +66,11 @@ const Grid = () => {
 			</button>
 			<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{packages.map((pkg) => (
-					<Card key={pkg.id} pkg={pkg} dispatchPackages={dispatchPackages} />
+					<Card
+						key={pkg.id}
+						pkg={pkg}
+						dispatchPackages={dispatchPackages}
+					/>
 				))}
 			</div>
 		</div>

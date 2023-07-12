@@ -1,8 +1,10 @@
 import { useEffect, useReducer, useRef } from "react"
 
-const INIT_ACTION_TYPE = Symbol('useLocalStorage/init')
+const INIT_ACTION_TYPE = Symbol("useLocalStorage/init")
 
-type LocalStorageAction<T, A> = { type: typeof INIT_ACTION_TYPE, payload: T } | A
+type LocalStorageAction<T, A> =
+	| { type: typeof INIT_ACTION_TYPE; payload: T }
+	| A
 
 function useLocalStorage<T, A extends { type: string }>(
 	key: string,
@@ -12,7 +14,7 @@ function useLocalStorage<T, A extends { type: string }>(
 	const init = (key: string) => {
 		try {
 			const item = localStorage.getItem(key)
-			console.log("useLocalStorage > get item",  item)
+			console.log("useLocalStorage > get item", item)
 			if (item && item !== "undefined") {
 				return JSON.parse(item) as T
 			}
@@ -25,7 +27,10 @@ function useLocalStorage<T, A extends { type: string }>(
 		}
 	}
 
-	const localStorageReducer = (state: T, action: LocalStorageAction<T, A>) => {
+	const localStorageReducer = (
+		state: T,
+		action: LocalStorageAction<T, A>
+	) => {
 		if (action.type === INIT_ACTION_TYPE) {
 			return action.payload
 		} else {
