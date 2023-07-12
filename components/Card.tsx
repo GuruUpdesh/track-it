@@ -1,8 +1,16 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { MdMoreVert, MdOutlineExplore } from "react-icons/md" // todo transition to radix-ui/react-icons
-import { BsChevronRight } from "react-icons/bs"
+import { MdMoreVert, MdOutlineExplore, MdOutlineEditNote } from "react-icons/md" // todo transition to radix-ui/react-icons
+import { BsChevronRight, BsDot } from "react-icons/bs"
+import {
+	AiOutlineNumber,
+	AiOutlineDelete,
+	AiOutlineEdit,
+	AiOutlineMail,
+} from "react-icons/ai"
+import { BiCopy } from "react-icons/bi"
+import { TbEditCircle } from "react-icons/tb"
 import Image from "next/image"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import * as Tooltip from "@radix-ui/react-tooltip"
@@ -12,6 +20,8 @@ import useTextOverflow from "@/hooks/useTextOverflow"
 const Card = () => {
 	const [name, setName] = useState("")
 	const [editName, setEditName] = useState(false)
+
+	const [courier, setCourier] = React.useState("UPS")
 
 	useEffect(() => {
 		if (name === "") {
@@ -123,9 +133,19 @@ const Card = () => {
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Portal>
 						<DropdownMenu.Content className="DropdownMenu-content">
+							<DropdownMenu.Item className="DropdownMenu-item">
+								<AiOutlineNumber className="absolute left-4" />
+								Copy Tracking Number
+							</DropdownMenu.Item>
+							<DropdownMenu.Item className="DropdownMenu-item">
+								<MdOutlineExplore className="absolute left-4" />
+								Open Courier Website
+							</DropdownMenu.Item>
+							<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
 							<DropdownMenu.Sub>
 								<DropdownMenu.SubTrigger className="DropdownMenu-item">
-									Update
+									<MdOutlineEditNote className="absolute left-4" />
+									Edit
 									<div className="float-right">
 										<BsChevronRight />
 									</div>
@@ -137,15 +157,63 @@ const Card = () => {
 										alignOffset={-5}
 									>
 										<DropdownMenu.Item className="DropdownMenu-item">
-											Change Name
+											<AiOutlineEdit className="absolute left-4" />
+											Name
 										</DropdownMenu.Item>
 										<DropdownMenu.Item className="DropdownMenu-item">
-											Update Tracking Number
+											<TbEditCircle className="absolute left-4" />
+											Tracking Number
 										</DropdownMenu.Item>
+										<DropdownMenu.Sub>
+											<DropdownMenu.SubTrigger className="DropdownMenu-item">
+												<AiOutlineMail className="absolute left-4" />
+												Override Courier
+												<div className="float-right">
+													<BsChevronRight />
+												</div>
+											</DropdownMenu.SubTrigger>
+											<DropdownMenu.Portal>
+												<DropdownMenu.SubContent
+													className="DropdownMenu-content"
+													sideOffset={5}
+													alignOffset={-5}
+												>
+													<DropdownMenu.RadioGroup
+														value={courier}
+														onValueChange={
+															setCourier
+														}
+													>
+														{[
+															"USPS",
+															"UPS",
+															"FedEx",
+														].map((courier) => (
+															<DropdownMenu.RadioItem
+																key={courier}
+																className="DropdownMenu-item"
+																value={courier}
+															>
+																<DropdownMenu.ItemIndicator className="absolute left-4">
+																	<BsDot />
+																</DropdownMenu.ItemIndicator>
+																{courier}
+															</DropdownMenu.RadioItem>
+														))}
+													</DropdownMenu.RadioGroup>
+												</DropdownMenu.SubContent>
+											</DropdownMenu.Portal>
+										</DropdownMenu.Sub>
 									</DropdownMenu.SubContent>
 								</DropdownMenu.Portal>
 							</DropdownMenu.Sub>
+							<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
+							<DropdownMenu.Item className="DropdownMenu-item">
+								<BiCopy className="absolute left-4" />
+								Duplicate
+							</DropdownMenu.Item>
 							<DropdownMenu.Item className="DropdownMenu-item bg-red-500/25 text-red-400">
+								<AiOutlineDelete className="absolute left-4" />
 								Delete
 							</DropdownMenu.Item>
 							<DropdownMenu.Arrow className="fill-indigo-400/75" />
