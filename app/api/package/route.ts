@@ -108,36 +108,51 @@ function isTCourier(courier: string): courier is TCourier {
 }
 
 export async function GET(request: NextRequest) {
-	const url = new URL(request.url)
-	const trackingNumber = url.searchParams.get("trackingNumber")
-	const courier = url.searchParams.get("courier")
+	try {
+		const url = new URL(request.url)
+		const trackingNumber = url.searchParams.get("trackingNumber")
+		const courier = url.searchParams.get("courier")
 
-	if (!trackingNumber || !courier || !isTCourier(courier)) {
+		if (!trackingNumber || !courier || !isTCourier(courier)) {
+			return new NextResponse(
+				JSON.stringify({
+					error: "Missing tracking number or courier in url parameters",
+				}),
+				{
+					status: 400,
+				}
+			)
+		}
+
+		const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
+		// convert into simpler format
+		const packageInfoSimple = {
+			trackingNumber: packageInfo.tracking_number,
+			courier: packageInfo.carrier,
+			status: packageInfo.tracking_status.status,
+			trackingHistory: packageInfo.tracking_history.map((history) => ({
+				status: history.status,
+				statusDetails: history.status_details,
+				statusDate: history.status_date,
+				location: history.location,
+			})),
+		}
+
+		return new Response(JSON.stringify(packageInfoSimple, null, 2), {
+			status: 200,
+		})
+	} catch (error) {
+		const errorMessage =
+			process.env.NODE_ENV === "development"
+				? error
+				: "Internal server error"
 		return new NextResponse(
 			JSON.stringify({
-				error: "Missing tracking number or courier in url parameters",
+				error: errorMessage,
 			}),
 			{
-				status: 400,
+				status: 500,
 			}
 		)
 	}
-
-	const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
-	// convert into simpler format
-	const packageInfoSimple = {
-		trackingNumber: packageInfo.tracking_number,
-		courier: packageInfo.carrier,
-		status: packageInfo.tracking_status.status,
-		trackingHistory: packageInfo.tracking_history.map((history) => ({
-			status: history.status,
-			statusDetails: history.status_details,
-			statusDate: history.status_date,
-			location: history.location,
-		})),
-	}
-
-	return new Response(JSON.stringify(packageInfoSimple, null, 2), {
-		status: 200,
-	})
 }
