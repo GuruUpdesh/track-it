@@ -20,6 +20,7 @@ import useTextOverflow from "@/hooks/useTextOverflow"
 const Card = () => {
 	const [name, setName] = useState("")
 	const [editName, setEditName] = useState(false)
+	const nameInputRef = React.useRef<HTMLInputElement>(null)
 
 	const [courier, setCourier] = React.useState("UPS")
 
@@ -48,6 +49,38 @@ const Card = () => {
 		editName,
 	])
 
+	const menuFunctions = {
+		copyTrackingNumber: () => {
+			console.log("menuFunctions > copyTrackingNumber")
+			// todo test this works
+			navigator.clipboard.writeText("test")
+		},
+		openCourierWebsite: () => {
+			console.log("menuFunctions > openCourierWebsite")
+			// todo test this works
+			window.open("https://www.shipmentracker.com/")
+		},
+		edit: {
+			name: () => {
+				console.log("menuFunctions > edit > name")
+				if (editName) {
+					nameInputRef.current?.focus()
+					return
+				}
+				setEditName(true)
+			},
+			trackingNumber: () => {
+				console.log("menuFunctions > edit > trackingNumber")
+			},
+		},
+		duplicate: () => {
+			console.log("menuFunctions > duplicate")
+		},
+		delete: () => {
+			console.log("menuFunctions > delete")
+		},
+	}
+
 	return (
 		<div className="min-w-[220px] max-w-[350px] select-none border border-indigo-400/25 border-b-indigo-400/25 bg-[#110F1B] after:block after:h-[1px] after:w-[29%] after:bg-green-400">
 			<div className="flex justify-between p-2">
@@ -65,6 +98,7 @@ const Card = () => {
 					<div className="relative flex max-w-[calc(100%-50px)] flex-col items-start">
 						{editName ? (
 							<input
+								ref={nameInputRef}
 								autoFocus
 								placeholder="Type name..."
 								value={name}
@@ -132,12 +166,21 @@ const Card = () => {
 						</button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Portal>
-						<DropdownMenu.Content className="DropdownMenu-content">
-							<DropdownMenu.Item className="DropdownMenu-item">
+						<DropdownMenu.Content
+							className="DropdownMenu-content"
+							onCloseAutoFocus={(e) => e.preventDefault()}
+						>
+							<DropdownMenu.Item
+								onSelect={menuFunctions.copyTrackingNumber}
+								className="DropdownMenu-item"
+							>
 								<AiOutlineNumber className="absolute left-4" />
 								Copy Tracking Number
 							</DropdownMenu.Item>
-							<DropdownMenu.Item className="DropdownMenu-item">
+							<DropdownMenu.Item
+								onSelect={menuFunctions.openCourierWebsite}
+								className="DropdownMenu-item"
+							>
 								<MdOutlineExplore className="absolute left-4" />
 								Open Courier Website
 							</DropdownMenu.Item>
@@ -156,11 +199,20 @@ const Card = () => {
 										sideOffset={5}
 										alignOffset={-5}
 									>
-										<DropdownMenu.Item className="DropdownMenu-item">
+										<DropdownMenu.Item
+											onSelect={menuFunctions.edit.name}
+											className="DropdownMenu-item"
+										>
 											<AiOutlineEdit className="absolute left-4" />
 											Name
 										</DropdownMenu.Item>
-										<DropdownMenu.Item className="DropdownMenu-item">
+										<DropdownMenu.Item
+											onSelect={
+												menuFunctions.edit
+													.trackingNumber
+											}
+											className="DropdownMenu-item"
+										>
 											<TbEditCircle className="absolute left-4" />
 											Tracking Number
 										</DropdownMenu.Item>
@@ -208,12 +260,18 @@ const Card = () => {
 								</DropdownMenu.Portal>
 							</DropdownMenu.Sub>
 							<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
-							<DropdownMenu.Item className="DropdownMenu-item">
+							<DropdownMenu.Item
+								onSelect={menuFunctions.duplicate}
+								className="DropdownMenu-item"
+							>
 								<BiCopy className="absolute left-4" />
 								Duplicate
 							</DropdownMenu.Item>
 							<DropdownMenu.Item className="DropdownMenu-item bg-red-500/25 text-red-400">
-								<AiOutlineDelete className="absolute left-4" />
+								<AiOutlineDelete
+									onSelect={menuFunctions.delete}
+									className="absolute left-4"
+								/>
 								Delete
 							</DropdownMenu.Item>
 							<DropdownMenu.Arrow className="fill-indigo-400/75" />

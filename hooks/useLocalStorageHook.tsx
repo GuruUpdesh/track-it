@@ -19,7 +19,7 @@ function useLocalStorage<T>(
 		}
 	}
 
-	const [state, setState] = useState<T>(() => init(key))
+	const [state, setState] = useState<T>(initialValue)
 
 	useEffect(() => {
 		setState(init(key))
