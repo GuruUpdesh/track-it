@@ -92,7 +92,7 @@ const Card = () => {
 							width={27}
 							height={27}
 							priority
-							className="pointer-events-none"
+							className="pointer-events-none h-auto"
 						/>
 					</div>
 					<div className="relative flex max-w-[calc(100%-50px)] flex-col items-start">
