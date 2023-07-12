@@ -16,8 +16,14 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import "./menu.css"
 import useTextOverflow from "@/hooks/useTextOverflow"
+import { PackageAction, TPackage } from "../Grid"
 
-const Card = () => {
+type Props = {
+	pkg: TPackage
+	dispatchPackages: React.Dispatch<PackageAction>
+}
+
+const Card = ({ pkg, dispatchPackages }: Props) => {
 	const [name, setName] = useState("")
 	const [editName, setEditName] = useState(false)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
@@ -78,6 +84,7 @@ const Card = () => {
 		},
 		delete: () => {
 			console.log("menuFunctions > delete")
+			dispatchPackages({ type: "delete", id: pkg.id })
 		},
 	}
 
