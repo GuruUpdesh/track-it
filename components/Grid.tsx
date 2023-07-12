@@ -1,10 +1,8 @@
-"use client";
+"use client"
 
 import React from "react"
 import Card from "@/components/Card/Card"
 import useLocalStorage from "@/hooks/useLocalStorageHook"
-
-type Props = {}
 
 type TPackage = {
 	id: number
@@ -13,7 +11,7 @@ type TPackage = {
 	courier: string
 }
 
-const Grid = (props: Props) => {
+const Grid = () => {
 	const [cards, setCards] = useLocalStorage<TPackage[]>("packages", [])
 
 	function handleAddPackage() {
