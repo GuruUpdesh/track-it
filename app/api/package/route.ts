@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import axios from "axios"
+import {
+	convertLocationObjectToString,
+	extractDeliveryLocation,
+	formatDate,
+	formatRelativeDate,
+	getTimeFromDate,
+} from "@/utils/package"
 
-type TLocation = {
+export type TLocation = {
 	city: string
 	state: string
 	zip: string
@@ -60,15 +67,21 @@ interface ShippoTrackingHistory {
 }
 
 export interface PackageInfo {
-	trackingNumber: string;
-    courier: TCourier;
-    status: TStatus;
-    trackingHistory: {
-        status: TStatus;
-        statusDetails: string;
-        statusDate: string;
-        location: TLocation;
-    }[];
+	trackingNumber: string
+	courier: TCourier
+	status: TrackingHistory
+	trackingHistory: TrackingHistory[]
+}
+
+interface TrackingHistory {
+	status: TStatus
+	location: string
+	date: {
+		relative: string
+		absolute: string
+		time: string
+	}
+	deliveryLocation: string | null
 }
 
 const SHIPPO_API_KEY = "ShippoToken " + process.env.SHIPPO_KEY
@@ -119,6 +132,21 @@ function isTCourier(courier: string): courier is TCourier {
 	return couriers.includes(courier as TCourier)
 }
 
+function simplifyStatusObject(trackingHistory: ShippoTrackingHistory) {
+	return {
+		status: trackingHistory.status,
+		location: convertLocationObjectToString(trackingHistory.location),
+		date: {
+			relative: formatRelativeDate(trackingHistory.status_date),
+			absolute: formatDate(trackingHistory.status_date),
+			time: getTimeFromDate(trackingHistory.status_date),
+		},
+		deliveryLocation: extractDeliveryLocation(
+			trackingHistory.status_details
+		),
+	}
+}
+
 export async function GET(request: NextRequest) {
 	try {
 		const url = new URL(request.url)
@@ -137,22 +165,31 @@ export async function GET(request: NextRequest) {
 		}
 
 		const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
+
 		// convert into simpler format
-		const packageInfoSimple: PackageInfo = {
+		const packageInfoSimple = {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
-			status: packageInfo.tracking_status.status,
-			trackingHistory: packageInfo.tracking_history.map((history) => ({
-				status: history.status,
-				statusDetails: history.status_details,
-				statusDate: history.status_date,
-				location: history.location,
-			})),
+			status: simplifyStatusObject(
+				packageInfo.tracking_status as ShippoTrackingHistory
+			),
+			trackingHistory: packageInfo.tracking_history.map((history) =>
+				simplifyStatusObject(history)
+			),
 		}
 
-		return new Response(JSON.stringify(packageInfoSimple, null, 2), {
-			status: 200,
-		})
+		return new Response(
+			JSON.stringify(
+				{
+					packageInfo: packageInfoSimple,
+				},
+				null,
+				2
+			),
+			{
+				status: 200,
+			}
+		)
 	} catch (error) {
 		const errorMessage =
 			process.env.NODE_ENV === "development"
