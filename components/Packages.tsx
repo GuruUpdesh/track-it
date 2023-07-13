@@ -28,7 +28,7 @@ function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 				{
 					id: Date.now(),
 					name: "",
-					trackingNumber: "",
+					trackingNumber: "tracking number",
 					courier: "ups",
 				},
 			]

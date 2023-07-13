@@ -1,0 +1,28 @@
+.Modal-content {
+	min-width: 420px;
+	border-radius: 0.25rem;
+	border: 1px solid rgba(129, 140, 248, 0.75);
+	background-color: rgba(64, 63, 73, 0.25);
+	color: #fefce8;
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+	-webkit-backdrop-filter: blur(40px);
+	backdrop-filter: blur(40px);
+}
+
+.Modal-overlay {
+	animation: Modal-overlay-enter 1500ms cubic-bezier(0.075, 0.82, 0.165, 1)
+		forwards;
+}
+
+@keyframes Modal-overlay-enter {
+	0% {
+		-webkit-backdrop-filter: blur(15px);
+		backdrop-filter: blur(15px);
+		background-color: rgba(0, 0, 0, 0);
+	}
+	100% {
+		-webkit-backdrop-filter: blur(24px);
+		backdrop-filter: blur(24px);
+		background-color: rgba(0, 0, 0, 0.25);
+	}
+}
