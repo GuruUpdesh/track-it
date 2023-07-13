@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import { MdMoreVert, MdOutlineExplore, MdOutlineEditNote } from "react-icons/md" // todo transition to radix-ui/react-icons
-import { BsChevronRight, BsDot } from "react-icons/bs"
+import { BsChevronRight, BsCheckLg, BsHouseCheck } from "react-icons/bs"
 import {
 	AiOutlineNumber,
 	AiOutlineDelete,
@@ -17,6 +17,12 @@ import * as Tooltip from "@radix-ui/react-tooltip"
 import "./menu.css"
 import useTextOverflow from "@/hooks/useTextOverflow"
 import { PackageAction, TPackage } from "../Grid"
+import {
+	couriers,
+	getCourierIconFromCode,
+	getCourierStringFromCode,
+} from "@/utils/courier"
+import { TCourier } from "@/app/api/package/route"
 
 type Props = {
 	pkg: TPackage
@@ -24,24 +30,25 @@ type Props = {
 }
 
 const Card = ({ pkg, dispatchPackages }: Props) => {
-	const [name, setName] = useState("")
 	const [editName, setEditName] = useState(false)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
 
-	const [courier, setCourier] = React.useState("UPS")
-
 	useEffect(() => {
-		if (name === "") {
+		if (pkg.name === "") {
 			setEditName(true)
 		}
 	}, [name])
 
 	function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-		setName(e.target.value)
+		dispatchPackages({
+			type: "updateName",
+			id: pkg.id,
+			name: e.target.value,
+		})
 	}
 
 	function handleSaveName() {
-		if (name === "") {
+		if (pkg.name === "") {
 			return
 		}
 		setEditName(false)
@@ -78,9 +85,14 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 			trackingNumber: () => {
 				console.log("menuFunctions > edit > trackingNumber")
 			},
+			courier: (courier: TCourier) => {
+				console.log("menuFunctions > edit > courier")
+				dispatchPackages({ type: "updateCourier", id: pkg.id, courier })
+			},
 		},
 		duplicate: () => {
 			console.log("menuFunctions > duplicate")
+			dispatchPackages({ type: "duplicate", id: pkg.id })
 		},
 		delete: () => {
 			console.log("menuFunctions > delete")
@@ -89,7 +101,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 	}
 
 	return (
-		<div className="min-w-[220px] max-w-[350px] select-none border border-indigo-400/25 border-b-indigo-400/25 bg-[#110F1B] after:block after:h-[1px] after:w-[29%] after:bg-green-400">
+		<div className="min-w-[220px] max-w-[350px] select-none border border-indigo-400/25 border-b-indigo-400/25 bg-[#110F1B] after:block after:h-[1px] after:w-[29%] after:bg-indigo-400/75">
 			<div className="flex justify-between p-2">
 				<div className="flex max-w-[80%] gap-2">
 					<div className="flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/50">
@@ -108,7 +120,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 								ref={nameInputRef}
 								autoFocus
 								placeholder="Type name..."
-								value={name}
+								value={pkg.name}
 								onChange={handleNameChange}
 								onBlur={handleSaveName}
 								onKeyDown={(event) => {
@@ -136,7 +148,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 													: "false"
 											}
 										>
-											{name}
+											{pkg.name}
 										</h3>
 									</Tooltip.Trigger>
 									<Tooltip.Portal>
@@ -146,7 +158,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 												side="bottom"
 												data-testid="tooltip-content"
 											>
-												{name}
+												{pkg.name}
 											</Tooltip.Content>
 										) : null}
 									</Tooltip.Portal>
@@ -158,8 +170,8 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 							href="https://www.shipmentracker.com/"
 							target="_blank"
 						>
-							<MdOutlineExplore />
-							<p className="uppercase">Courier</p>
+							{getCourierIconFromCode(pkg.courier)}
+							<p>{getCourierStringFromCode(pkg.courier)}</p>
 						</a>
 					</div>
 				</div>
@@ -200,6 +212,13 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 										<BsChevronRight />
 									</div>
 								</DropdownMenu.SubTrigger>
+								<DropdownMenu.Item
+									onSelect={menuFunctions.openCourierWebsite}
+									className="DropdownMenu-item"
+								>
+									<BsHouseCheck className="absolute left-4" />
+									Mark as Delivered
+								</DropdownMenu.Item>
 								<DropdownMenu.Portal>
 									<DropdownMenu.SubContent
 										className="DropdownMenu-content"
@@ -224,7 +243,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 											Tracking Number
 										</DropdownMenu.Item>
 										<DropdownMenu.Sub>
-											<DropdownMenu.SubTrigger className="DropdownMenu-item">
+											<DropdownMenu.SubTrigger className="DropdownMenu-item bg-orange-500/25 text-orange-400">
 												<AiOutlineMail className="absolute left-4" />
 												Override Courier
 												<div className="float-right">
@@ -238,25 +257,33 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 													alignOffset={-5}
 												>
 													<DropdownMenu.RadioGroup
-														value={courier}
-														onValueChange={
-															setCourier
+														value={pkg.courier}
+														onValueChange={(
+															value
+														) =>
+															menuFunctions.edit.courier(
+																value as TCourier
+															)
 														}
 													>
-														{[
-															"USPS",
-															"UPS",
-															"FedEx",
-														].map((courier) => (
+														<DropdownMenu.Label className="p-2 text-xs text-orange-400">
+															Warning this could
+															cause errors!
+														</DropdownMenu.Label>
+														{Object.keys(
+															couriers
+														).map((courier) => (
 															<DropdownMenu.RadioItem
 																key={courier}
 																className="DropdownMenu-item"
 																value={courier}
 															>
 																<DropdownMenu.ItemIndicator className="absolute left-4">
-																	<BsDot />
+																	<BsCheckLg />
 																</DropdownMenu.ItemIndicator>
-																{courier}
+																{getCourierStringFromCode(
+																	courier
+																)}
 															</DropdownMenu.RadioItem>
 														))}
 													</DropdownMenu.RadioGroup>
@@ -274,11 +301,11 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 								<BiCopy className="absolute left-4" />
 								Duplicate
 							</DropdownMenu.Item>
-							<DropdownMenu.Item className="DropdownMenu-item bg-red-500/25 text-red-400">
-								<AiOutlineDelete
-									onSelect={menuFunctions.delete}
-									className="absolute left-4"
-								/>
+							<DropdownMenu.Item
+								onSelect={menuFunctions.delete}
+								className="DropdownMenu-item bg-red-500/25 text-red-400"
+							>
+								<AiOutlineDelete className="absolute left-4" />
 								Delete
 							</DropdownMenu.Item>
 							<DropdownMenu.Arrow className="fill-indigo-400/75" />
