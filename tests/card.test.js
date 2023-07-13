@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import Card from "../components/Card/Card" // replace with your actual path to the Card component
 
 describe("Card Component", () => {
@@ -87,6 +87,7 @@ describe("Card Component", () => {
 		})
 	})
 
+	// todo move to a util file that test the util functions
 	describe("Couriers", () => {
 		// test each courier
 		const couriers = ["ups", "fedex", "dhl", "usps", "ontrac"]
