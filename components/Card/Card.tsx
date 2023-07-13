@@ -7,11 +7,7 @@ import {
 	MdOutlineEditNote,
 	MdClose,
 } from "react-icons/md" // todo transition to radix-ui/react-icons
-import {
-	BsChevronRight,
-	BsCheckLg,
-	BsHouseCheck,
-} from "react-icons/bs"
+import { BsChevronRight, BsCheckLg, BsHouseCheck } from "react-icons/bs"
 import {
 	AiOutlineNumber,
 	AiOutlineDelete,
