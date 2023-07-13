@@ -59,6 +59,18 @@ interface ShippoTrackingHistory {
 	location: TLocation
 }
 
+export interface PackageInfo {
+	trackingNumber: string;
+    courier: TCourier;
+    status: TStatus;
+    trackingHistory: {
+        status: TStatus;
+        statusDetails: string;
+        statusDate: string;
+        location: TLocation;
+    }[];
+}
+
 const SHIPPO_API_KEY = "ShippoToken " + process.env.SHIPPO_KEY
 
 async function fetchTrackingInfo(
@@ -126,7 +138,7 @@ export async function GET(request: NextRequest) {
 
 		const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
 		// convert into simpler format
-		const packageInfoSimple = {
+		const packageInfoSimple: PackageInfo = {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
 			status: packageInfo.tracking_status.status,
