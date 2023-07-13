@@ -1,0 +1,23 @@
+### Fetch SHIPPO_PRE_TRANSIT tracking info
+GET https://api.goshippo.com/tracks/shippo/SHIPPO_PRE_TRANSIT
+Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2
+
+### Fetch SHIPPO_TRANSIT tracking info
+GET https://api.goshippo.com/tracks/shippo/SHIPPO_TRANSIT
+Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2
+
+### Fetch SHIPPO_DELIVERED tracking info
+GET https://api.goshippo.com/tracks/shippo/SHIPPO_DELIVERED
+Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2
+
+### Fetch SHIPPO_RETURNED tracking info
+GET https://api.goshippo.com/tracks/shippo/SHIPPO_RETURNED
+Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2
+
+### Fetch SHIPPO_FAILURE tracking info
+GET https://api.goshippo.com/tracks/shippo/SHIPPO_FAILURE
+Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2
+
+### Fetch SHIPPO_UNKNOWN tracking info
+GET https://api.goshippo.com/tracks/shippo/SHIPPO_UNKNOWN
+Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2

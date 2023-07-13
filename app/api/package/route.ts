@@ -15,7 +15,7 @@ export type TLocation = {
 	country: string
 }
 
-export type TCourier = "ups" | "usps" | "ontrac" | "dhl" | "fedex"
+export type TCourier = "ups" | "usps" | "ontrac" | "dhl" | "fedex" | "shippo"
 
 // ref https://docs.goshippo.com/docs/tracking/tracking/
 export type TStatus =
@@ -73,7 +73,7 @@ export interface PackageInfo {
 	trackingHistory: TrackingHistory[]
 }
 
-interface TrackingHistory {
+export interface TrackingHistory {
 	status: TStatus
 	location: string
 	date: {
@@ -85,22 +85,24 @@ interface TrackingHistory {
 }
 
 const SHIPPO_API_KEY = "ShippoToken " + process.env.SHIPPO_KEY
+const SHIPPO_TEST_API_KEY = "ShippoToken " + process.env.SHIPPO_TEST
 
 async function fetchTrackingInfo(
 	trackingNumber: string,
-	courier: TCourier
+	courier: TCourier,
 ): Promise<ShippoResponse> {
 	const { data, status } = await axios.get(
 		`https://api.goshippo.com/tracks/${courier}/${trackingNumber}`,
 		{
 			headers: {
-				Authorization: SHIPPO_API_KEY,
+				Authorization: courier === "shippo" ? SHIPPO_TEST_API_KEY : SHIPPO_API_KEY,
 			},
 		}
 	)
 	if (status !== 200) {
 		throw new Error("API call failed")
 	}
+	console.error(status)
 
 	// verify that the response is what we expect
 	const responseKeys = Object.keys(data)
@@ -128,7 +130,7 @@ async function fetchTrackingInfo(
 }
 
 function isTCourier(courier: string): courier is TCourier {
-	const couriers: TCourier[] = ["ups", "usps", "ontrac", "dhl", "fedex"]
+	const couriers: TCourier[] = ["ups", "usps", "ontrac", "dhl", "fedex", "shippo"]
 	return couriers.includes(courier as TCourier)
 }
 
