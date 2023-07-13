@@ -46,7 +46,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 		if (pkg.name === "") {
 			setEditName(true)
 		}
-	}, [name])
+	}, [pkg.name])
 
 	function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
 		dispatchPackages({
