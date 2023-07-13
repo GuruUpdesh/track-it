@@ -1,4 +1,4 @@
-import { TLocation } from "@/app/api/package/route"
+import { TLocation, TStatus } from "@/app/api/package/route"
 import { format, formatDistance } from "date-fns"
 
 export function formatRelativeDate(date: string): string {
@@ -19,7 +19,7 @@ export function getTimeFromDate(date: string): string {
 export function convertLocationObjectToString(
 	location: TLocation | null
 ): string {
-	if (!location) return ""
+	if (!location) return "Location not found"
 	return `${location.city}, ${location.state}`
 }
 
@@ -37,4 +37,30 @@ export function extractDeliveryLocation(statusUpdate: string): string | null {
 	}
 
 	return null
+}
+
+import { BsHouseDoor, BsMailbox, BsTruck, BsQuestion } from "react-icons/bs"
+import { TbTruckLoading } from "react-icons/tb"
+import { AiOutlineWarning } from "react-icons/ai"
+export function getIconForStatus(
+	status: TStatus,
+	deliveryLocation?: string | null
+): JSX.Element {
+	switch (status) {
+		case "PRE_TRANSIT":
+			return <TbTruckLoading />
+		case "TRANSIT":
+			return <BsTruck />
+		case "DELIVERED":
+			if (deliveryLocation === "mailbox") return <BsMailbox />
+			return <BsHouseDoor />
+		case "RETURNED":
+			return <BsTruck style={{ transform: "scaleX(-1)" }} />
+		case "FAILURE":
+			return <AiOutlineWarning />
+		case "UNKNOWN":
+			return <BsQuestion />
+		default:
+			return <></>
+	}
 }

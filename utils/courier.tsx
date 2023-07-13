@@ -64,6 +64,8 @@ export function getCourierStringFromCode(code: string) {
 			return "DHL"
 		case "fedex":
 			return "FedEx"
+		case "shippo":
+			return "Shippo -- test only"
 		default:
 			console.error("Invalid Courier Code", code)
 			return "Invalid Courier"
@@ -82,6 +84,8 @@ export function getCourierIconFromCode(code: string) {
 			return couriers.dhl.icon
 		case "fedex":
 			return couriers.fedex.icon
+		case "shippo":
+			return <MdOutlineExplore />
 		default:
 			console.error("Invalid Courier Code", code)
 			return <MdOutlineExplore />

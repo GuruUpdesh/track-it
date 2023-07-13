@@ -89,20 +89,20 @@ const SHIPPO_TEST_API_KEY = "ShippoToken " + process.env.SHIPPO_TEST
 
 async function fetchTrackingInfo(
 	trackingNumber: string,
-	courier: TCourier,
+	courier: TCourier
 ): Promise<ShippoResponse> {
 	const { data, status } = await axios.get(
 		`https://api.goshippo.com/tracks/${courier}/${trackingNumber}`,
 		{
 			headers: {
-				Authorization: courier === "shippo" ? SHIPPO_TEST_API_KEY : SHIPPO_API_KEY,
+				Authorization:
+					courier === "shippo" ? SHIPPO_TEST_API_KEY : SHIPPO_API_KEY,
 			},
 		}
 	)
 	if (status !== 200) {
 		throw new Error("API call failed")
 	}
-	console.error(status)
 
 	// verify that the response is what we expect
 	const responseKeys = Object.keys(data)
@@ -130,7 +130,14 @@ async function fetchTrackingInfo(
 }
 
 function isTCourier(courier: string): courier is TCourier {
-	const couriers: TCourier[] = ["ups", "usps", "ontrac", "dhl", "fedex", "shippo"]
+	const couriers: TCourier[] = [
+		"ups",
+		"usps",
+		"ontrac",
+		"dhl",
+		"fedex",
+		"shippo",
+	]
 	return couriers.includes(courier as TCourier)
 }
 

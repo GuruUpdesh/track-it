@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useReducer} from "react"
+import React, { useReducer } from "react"
 import Card from "@/components/Card/Card"
 import { TCourier } from "@/app/api/package/route"
 
@@ -67,51 +67,51 @@ function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 }
 
 const testPackages: TPackage[] = [
-    {
-      id: 1,
-      name: "Test Package 1",
-      trackingNumber: "SHIPPO_PRE_TRANSIT",
-      courier: "shippo"
-    },
-    {
-      id: 2,
-      name: "Test Package 2",
-      trackingNumber: "SHIPPO_TRANSIT",
-      courier: "shippo"
-    },
-    {
-      id: 3,
-      name: "Test Package 3",
-      trackingNumber: "SHIPPO_DELIVERED",
-      courier: "shippo"
-    },
-    {
-      id: 4,
-      name: "Test Package 4",
-      trackingNumber: "SHIPPO_RETURNED",
-      courier: "shippo"
-    },
-    {
-      id: 5,
-      name: "Test Package 5",
-      trackingNumber: "SHIPPO_FAILURE",
-      courier: "shippo"
-    },
-    {
-      id: 6,
-      name: "Test Package 6",
-      trackingNumber: "SHIPPO_UNKNOWN",
-      courier: "shippo"
-    }
-  ];
+	{
+		id: 1,
+		name: "Test Pre-Transit Package",
+		trackingNumber: "SHIPPO_PRE_TRANSIT",
+		courier: "shippo",
+	},
+	{
+		id: 2,
+		name: "Test Transit Package",
+		trackingNumber: "SHIPPO_TRANSIT",
+		courier: "shippo",
+	},
+	{
+		id: 3,
+		name: "Test Delivered Package",
+		trackingNumber: "SHIPPO_DELIVERED",
+		courier: "shippo",
+	},
+	{
+		id: 4,
+		name: "Test Returned Package",
+		trackingNumber: "SHIPPO_RETURNED",
+		courier: "shippo",
+	},
+	{
+		id: 5,
+		name: "Test Failure Package",
+		trackingNumber: "SHIPPO_FAILURE",
+		courier: "shippo",
+	},
+	{
+		id: 6,
+		name: "Test Unknown Package",
+		trackingNumber: "SHIPPO_UNKNOWN",
+		courier: "shippo",
+	},
+]
 
 const Grid = () => {
-    const [packages, dispatchPackages] = useReducer(packageReducer, testPackages)
+	const [packages, dispatchPackages] = useReducer(
+		packageReducer,
+		testPackages
+	)
 	return (
 		<div>
-			<button onClick={() => dispatchPackages({ type: "add" })}>
-				add
-			</button>
 			<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{packages.map((pkg) => (
 					<Card
