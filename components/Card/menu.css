@@ -75,7 +75,7 @@
 }
 
 .Tooltip-content {
-	max-width: calc(100svw - 3rem);
+	max-width: 200px;
 	word-wrap: break-word;
 	border-radius: 2rem;
 	font-size: 10px;
@@ -89,9 +89,15 @@
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
+	padding: 0.5rem 1rem;
 	animation: slideUp 200ms cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
 	will-change: transform, opacity;
 	z-index: 1000;
+}
+@media (max-width: 768px) {
+	.Tooltip-content {
+		max-width: calc(100svw - 3rem);
+	}
 }
 
 @keyframes slideUp {

@@ -75,6 +75,7 @@ export interface PackageInfo {
 
 export interface TrackingHistory {
 	status: TStatus
+	detailedStatus: string
 	location: string
 	date: {
 		relative: string
@@ -141,9 +142,12 @@ function isTCourier(courier: string): courier is TCourier {
 	return couriers.includes(courier as TCourier)
 }
 
-function simplifyStatusObject(trackingHistory: ShippoTrackingHistory) {
+function simplifyStatusObject(
+	trackingHistory: ShippoTrackingHistory
+): TrackingHistory {
 	return {
 		status: trackingHistory.status,
+		detailedStatus: trackingHistory.status_details,
 		location: convertLocationObjectToString(trackingHistory.location),
 		date: {
 			relative: formatRelativeDate(trackingHistory.status_date),

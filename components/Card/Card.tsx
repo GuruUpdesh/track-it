@@ -111,13 +111,15 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 						{historyItem.date.time} - {historyItem.date.relative}
 					</p>
 				</div>
-				<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400">
-					{historyItem.status.toLocaleLowerCase()}
-					{getIconForStatus(
-						historyItem.status,
-						historyItem.deliveryLocation
-					)}
-				</div>
+				<Tooltip text={historyItem.detailedStatus}>
+					<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400">
+						{historyItem.status.toLocaleLowerCase()}
+						{getIconForStatus(
+							historyItem.status,
+							historyItem.deliveryLocation
+						)}
+					</div>
+				</Tooltip>
 			</div>
 		)
 	}

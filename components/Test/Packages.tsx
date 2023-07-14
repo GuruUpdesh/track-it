@@ -108,7 +108,7 @@ const testPackages: TPackage[] = [
 		name: "Error Package",
 		trackingNumber: "INVALID",
 		courier: "ups",
-	}
+	},
 ]
 
 const Grid = () => {
