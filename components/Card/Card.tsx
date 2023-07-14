@@ -13,13 +13,13 @@ import {
 	AiOutlineDelete,
 	AiOutlineEdit,
 	AiOutlineMail,
+	AiOutlineLoading3Quarters,
 } from "react-icons/ai"
 import { BiCopy } from "react-icons/bi"
 import { TbEditCircle } from "react-icons/tb"
 import Image from "next/image"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
-import * as Tooltip from "@radix-ui/react-tooltip"
 import "./menu.css"
 import "./modal.css"
 import useTextOverflow from "@/hooks/useTextOverflow"
@@ -33,6 +33,7 @@ import { PackageInfo, TCourier, TrackingHistory } from "@/app/api/package/route"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 import { getIconForStatus } from "@/utils/package"
+import Tooltip from "../Base/Tooltip"
 
 type Props = {
 	pkg: TPackage
@@ -198,6 +199,11 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 					<div className="flex justify-between p-2">
 						<div className="flex max-w-[80%] gap-2">
 							<div className="flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/50">
+								<div className="absolute">
+									{!packageInfo ? (
+										<AiOutlineLoading3Quarters className="animate-spin" />
+									) : null}
+								</div>
 								<Image
 									src="/package.svg"
 									alt="Package Box"
@@ -224,39 +230,27 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 										className="max-w-full bg-transparent text-lg font-semibold tracking-tighter text-yellow-50 outline-none"
 									/>
 								) : (
-									<Tooltip.Provider>
-										<Tooltip.Root defaultOpen={false}>
-											<Tooltip.Trigger asChild>
-												<h3
-													ref={textRef}
-													onClick={handleEditName}
-													className="w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
-													style={{
-														WebkitMaskImage:
-															"linear-gradient(to right, black 90%, transparent)",
-													}}
-													data-overflow={
-														isTextOverflowed
-															? "true"
-															: "false"
-													}
-												>
-													{pkg.name}
-												</h3>
-											</Tooltip.Trigger>
-											<Tooltip.Portal>
-												{isTextOverflowed ? (
-													<Tooltip.Content
-														className="Tooltip-content"
-														side="bottom"
-														data-testid="tooltip-content"
-													>
-														{pkg.name}
-													</Tooltip.Content>
-												) : null}
-											</Tooltip.Portal>
-										</Tooltip.Root>
-									</Tooltip.Provider>
+									<Tooltip
+										text={pkg.name}
+										disabled={!isTextOverflowed}
+									>
+										<h3
+											ref={textRef}
+											onClick={handleEditName}
+											className="w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
+											style={{
+												WebkitMaskImage:
+													"linear-gradient(to right, black 90%, transparent)",
+											}}
+											data-overflow={
+												isTextOverflowed
+													? "true"
+													: "false"
+											}
+										>
+											{pkg.name}
+										</h3>
+									</Tooltip>
 								)}
 								<a
 									className="underline-link flex items-center gap-1 text-xs text-indigo-300"
