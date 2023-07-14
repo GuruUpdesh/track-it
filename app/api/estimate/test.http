@@ -1,0 +1,3 @@
+### Fetch journy estimate and eta from tracking info
+GET https://api.goshippo.com/tracks/shippo/SHIPPO_PRE_TRANSIT
+Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2
