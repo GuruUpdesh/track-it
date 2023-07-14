@@ -2,6 +2,13 @@
 	transition: all 2.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+.journeyPercentCircle {
+	background: conic-gradient(
+		rgb(129 140 248 / 0.75) 0deg,
+		rgb(129 140 248 / 0.25) 0deg
+	);
+}
+
 .DropdownMenu-content {
 	min-width: 220px;
 	@media (max-width: 768px) {

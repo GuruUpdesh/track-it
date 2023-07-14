@@ -44,6 +44,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
+	const journeyPercentCircleRef = React.useRef<HTMLDivElement>(null)
 	const [editName, setEditName] = useState(false)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
 		useState(false)
@@ -69,6 +70,13 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 		if (journeyPercentRef.current && packageInfo) {
 			journeyPercentRef.current.style.width = `${Math.random() * 100}%`
 			journeyPercentRef.current.style.opacity = "1"
+		}
+
+		if (journeyPercentCircleRef.current && packageInfo) {
+			journeyPercentCircleRef.current.style.background = `conic-gradient(
+				rgb(129 140 248 / 0.75) ${Math.random() * 360}deg,
+				rgb(129 140 248 / 0.25) 0deg
+			);`
 		}
 	}, [packageInfo])
 
@@ -104,7 +112,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 		return (
 			<div className="flex items-center justify-between px-2 py-1">
 				<div>
-					<h1 className="text-left text-lg font-semibold tracking-tighter text-yellow-50/75">
+					<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75">
 						{historyItem.location}
 					</h1>
 					<p className="text-left text-xs tracking-tighter text-yellow-50/25">
@@ -200,8 +208,19 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 					/>
 					<div className="flex justify-between p-2">
 						<div className="flex max-w-[80%] gap-2">
-							<div className="flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/50">
-								<div className="absolute">
+							<div className="relative flex aspect-square min-w-[50px] items-center justify-center rounded-full ">
+								<div
+									ref={journeyPercentCircleRef}
+									className="journeyPercentCircle absolute z-0 flex h-[calc(100%+2px)] w-[calc(100%+2px)] items-center justify-center rounded-full"
+								/>
+								<div className="absolute z-0 flex h-full w-[calc(100%)] items-center justify-center rounded-full bg-[#110F1B]" />
+								<div
+									className={
+										"absolute z-20 flex h-full w-full items-center justify-center rounded-full" +
+										(!packageInfo &&
+											" bg-black/25 backdrop-blur-[2px]")
+									}
+								>
 									{!packageInfo ? (
 										<AiOutlineLoading3Quarters className="animate-spin" />
 									) : null}
@@ -212,7 +231,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 									width={27}
 									height={27}
 									priority
-									className="pointer-events-none h-auto"
+									className="pointer-events-none z-10 h-auto"
 								/>
 							</div>
 							<div className="relative flex max-w-[calc(100%-50px)] flex-col items-start">
