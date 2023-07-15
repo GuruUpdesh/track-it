@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
 import axios from "axios"
+import {
+	convertLocationObjectToString,
+	extractDeliveryLocation,
+	formatDate,
+	formatRelativeDate,
+	getTimeFromDate,
+} from "@/utils/package"
 
-type TLocation = {
+export type TLocation = {
 	city: string
 	state: string
 	zip: string
 	country: string
 }
 
-export type TCourier = "ups" | "usps" | "ontrac" | "dhl" | "fedex"
+export type TCourier = "ups" | "usps" | "ontrac" | "fedex" | "shippo"
 
 // ref https://docs.goshippo.com/docs/tracking/tracking/
 export type TStatus =
@@ -59,7 +66,27 @@ interface ShippoTrackingHistory {
 	location: TLocation
 }
 
+export interface PackageInfo {
+	trackingNumber: string
+	courier: TCourier
+	status: TrackingHistory
+	trackingHistory: TrackingHistory[]
+}
+
+export interface TrackingHistory {
+	status: TStatus
+	detailedStatus: string
+	location: string
+	date: {
+		relative: string
+		absolute: string
+		time: string
+	}
+	deliveryLocation: string | null
+}
+
 const SHIPPO_API_KEY = "ShippoToken " + process.env.SHIPPO_KEY
+const SHIPPO_TEST_API_KEY = "ShippoToken " + process.env.SHIPPO_TEST
 
 async function fetchTrackingInfo(
 	trackingNumber: string,
@@ -69,7 +96,8 @@ async function fetchTrackingInfo(
 		`https://api.goshippo.com/tracks/${courier}/${trackingNumber}`,
 		{
 			headers: {
-				Authorization: SHIPPO_API_KEY,
+				Authorization:
+					courier === "shippo" ? SHIPPO_TEST_API_KEY : SHIPPO_API_KEY,
 			},
 		}
 	)
@@ -103,11 +131,30 @@ async function fetchTrackingInfo(
 }
 
 function isTCourier(courier: string): courier is TCourier {
-	const couriers: TCourier[] = ["ups", "usps", "ontrac", "dhl", "fedex"]
+	const couriers: TCourier[] = ["ups", "usps", "ontrac", "fedex", "shippo"]
 	return couriers.includes(courier as TCourier)
 }
 
+function simplifyStatusObject(
+	trackingHistory: ShippoTrackingHistory
+): TrackingHistory {
+	return {
+		status: trackingHistory.status,
+		detailedStatus: trackingHistory.status_details,
+		location: convertLocationObjectToString(trackingHistory.location),
+		date: {
+			relative: formatRelativeDate(trackingHistory.status_date),
+			absolute: formatDate(trackingHistory.status_date),
+			time: getTimeFromDate(trackingHistory.status_date),
+		},
+		deliveryLocation: extractDeliveryLocation(
+			trackingHistory.status_details
+		),
+	}
+}
+
 export async function GET(request: NextRequest) {
+	console.log("GET /api/package")
 	try {
 		const url = new URL(request.url)
 		const trackingNumber = url.searchParams.get("trackingNumber")
@@ -125,22 +172,31 @@ export async function GET(request: NextRequest) {
 		}
 
 		const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
+
 		// convert into simpler format
 		const packageInfoSimple = {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
-			status: packageInfo.tracking_status.status,
-			trackingHistory: packageInfo.tracking_history.map((history) => ({
-				status: history.status,
-				statusDetails: history.status_details,
-				statusDate: history.status_date,
-				location: history.location,
-			})),
+			status: simplifyStatusObject(
+				packageInfo.tracking_status as ShippoTrackingHistory
+			),
+			trackingHistory: packageInfo.tracking_history.map((history) =>
+				simplifyStatusObject(history)
+			),
 		}
 
-		return new Response(JSON.stringify(packageInfoSimple, null, 2), {
-			status: 200,
-		})
+		return new Response(
+			JSON.stringify(
+				{
+					packageInfo: packageInfoSimple,
+				},
+				null,
+				2
+			),
+			{
+				status: 200,
+			}
+		)
 	} catch (error) {
 		const errorMessage =
 			process.env.NODE_ENV === "development"

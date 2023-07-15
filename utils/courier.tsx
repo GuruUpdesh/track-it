@@ -1,8 +1,26 @@
-import { FaDhl, FaUps, FaFedex } from "react-icons/fa"
+import { TCourier } from "@/app/api/package/route"
+import { FaUps, FaFedex } from "react-icons/fa"
 import { MdOutlineExplore } from "react-icons/md"
 import { SiUsps } from "react-icons/si"
 
-export const couriers = {
+interface Couriers {
+	[key: string]: {
+		patterns: RegExp[]
+		tracking_url: string
+		icon: JSX.Element
+		name: string
+	}
+}
+
+export const courierCodes: TCourier[] = [
+	"ups",
+	"usps",
+	"ontrac",
+	"fedex",
+	"shippo",
+]
+
+export const couriers: Couriers = {
 	ups: {
 		patterns: [
 			new RegExp(
@@ -11,6 +29,7 @@ export const couriers = {
 		],
 		tracking_url: "https://www.ups.com/mobile/track?trackingNumber=",
 		icon: <FaUps />,
+		name: "UPS",
 	},
 	usps: {
 		patterns: [
@@ -25,21 +44,13 @@ export const couriers = {
 		tracking_url:
 			"https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=",
 		icon: <SiUsps />,
+		name: "USPS",
 	},
 	ontrac: {
 		patterns: [new RegExp(/\b(C\d{14})\b/i)],
 		tracking_url: "http://www.ontrac.com/trackres.asp?tracking_number=",
 		icon: <MdOutlineExplore />,
-	},
-	dhl: {
-		patterns: [
-			new RegExp(
-				/\b(\d{4}[- ]?\d{4}[- ]?\d{2}|\d{3}[- ]?\d{8}|[A-Z]{3}\d{7})\b/i
-			),
-		],
-		tracking_url:
-			"http://www.dhl.com/content/g0/en/express/tracking.shtml?brand=DHL&AWB=",
-		icon: <FaDhl />,
+		name: "OnTrac",
 	},
 	fedex: {
 		patterns: [
@@ -49,45 +60,50 @@ export const couriers = {
 		],
 		tracking_url: "https://www.fedex.com/fedextrack/?tracknumbers=",
 		icon: <FaFedex />,
+		name: "FedEx",
 	},
 }
 
 export function getCourierStringFromCode(code: string) {
-	switch (code) {
-		case "ups":
-			return "UPS"
-		case "usps":
-			return "USPS"
-		case "ontrac":
-			return "OnTrac"
-		case "dhl":
-			return "DHL"
-		case "fedex":
-			return "FedEx"
-		default:
-			console.error("Invalid Courier Code", code)
-			return "Invalid Courier"
+	const courier = couriers[code]
+	if (!courier) {
+		if (code === "shippo") return "test"
+		console.error("Invalid Courier Code", code)
+		return "Invalid Courier"
 	}
+	return courier.name
 }
 
 export function getCourierIconFromCode(code: string) {
-	switch (code) {
-		case "ups":
-			return couriers.ups.icon
-		case "usps":
-			return couriers.usps.icon
-		case "ontrac":
-			return couriers.ontrac.icon
-		case "dhl":
-			return couriers.dhl.icon
-		case "fedex":
-			return couriers.fedex.icon
-		default:
-			console.error("Invalid Courier Code", code)
-			return <MdOutlineExplore />
+	const courier = couriers[code]
+	if (!courier) return <MdOutlineExplore />
+	const icon = courier.icon
+	if (!icon) {
+		if (code !== "shippo") console.error("Invalid Courier Code", code)
+		return <MdOutlineExplore />
 	}
 }
 
-function getCouriersFromTrackingNumber() {}
+export function getCouriersFromTrackingNumber(
+	trackingNumber: string
+): TCourier[] {
+	const matchingCouriers: TCourier[] = []
+	for (const courier in couriers) {
+		const patterns = couriers[courier].patterns
+		for (const pattern of patterns) {
+			if (pattern.test(trackingNumber)) {
+				matchingCouriers.push(courier as TCourier)
+			}
+		}
+	}
+	return matchingCouriers
+}
 
-function getCourierUrlsFromTrackingNumber() {}
+function getCourierUrlsFromTrackingNumber(trackingNumber: string) {
+	const couriersSubset = getCouriersFromTrackingNumber(trackingNumber)
+	const urls: string[] = []
+	for (const courier of couriersSubset) {
+		urls.push(couriers[courier].tracking_url + trackingNumber)
+	}
+	return urls
+}

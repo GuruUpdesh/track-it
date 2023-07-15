@@ -33,3 +33,124 @@ body {
 .text-cap {
 	text-edge: cap;
 }
+
+@keyframes rotate-spin {
+	0% {
+		transform: rotate(0deg) scale(0.5);
+		opacity: 0;
+	}
+	25% {
+		transform: rotate(90deg) scale(1.8);
+		opacity: 1;
+	}
+	50% {
+		transform: rotate(180deg) scale(1.2);
+		opacity: 0;
+	}
+	75% {
+		transform: rotate(270deg) scale(1.8);
+		opacity: 1;
+	}
+	100% {
+		transform: rotate(360deg) scale(0.5);
+		opacity: 0;
+	}
+}
+
+.relaxing-animation-0 {
+	animation-name: rotate-spin;
+	animation-duration: 25s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+}
+
+/* Variation 1 */
+@keyframes rotate-spin-1 {
+	0% {
+		transform: rotate(0deg) scale(0.5);
+		opacity: 0;
+	}
+	25% {
+		transform: rotate(90deg) scale(1.8);
+		opacity: 1;
+	}
+	50% {
+		transform: rotate(180deg) scale(1.2);
+		opacity: 0.5;
+	}
+	75% {
+		transform: rotate(270deg) scale(1.5);
+		opacity: 1;
+	}
+	100% {
+		transform: rotate(360deg) scale(0.5);
+		opacity: 0;
+	}
+}
+
+/* Variation 2 */
+@keyframes rotate-spin-2 {
+	0% {
+		transform: rotate(0deg) scale(0.5);
+		opacity: 0;
+	}
+	25% {
+		transform: rotate(90deg) scale(1.2);
+		opacity: 0.5;
+	}
+	50% {
+		transform: rotate(180deg) scale(1.8);
+		opacity: 1;
+	}
+	75% {
+		transform: rotate(270deg) scale(1.5);
+		opacity: 0.5;
+	}
+	100% {
+		transform: rotate(360deg) scale(0.5);
+		opacity: 0;
+	}
+}
+
+/* Variation 3 */
+@keyframes rotate-spin-3 {
+	0% {
+		transform: rotate(0deg) scale(0.5);
+	}
+	25% {
+		transform: rotate(90deg) scale(1.2);
+	}
+	50% {
+		transform: rotate(180deg) scale(1.8);
+	}
+	75% {
+		transform: rotate(270deg) scale(1.5);
+	}
+	100% {
+		transform: rotate(360deg) scale(0.5);
+	}
+}
+
+/* Apply variation 1 to an element */
+.relaxing-animation-1 {
+	animation-name: rotate-spin-1;
+	animation-duration: 25s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+}
+
+/* Apply variation 2 to an element */
+.relaxing-animation-2 {
+	animation-name: rotate-spin-2;
+	animation-duration: 25s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+}
+
+/* Apply variation 2 to an element */
+.relaxing-animation-3 {
+	animation-name: rotate-spin-3;
+	animation-duration: 25s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+}

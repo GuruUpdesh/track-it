@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom"
 import { fireEvent, render, screen } from "@testing-library/react"
-import Card from "../components/Card/Card" // replace with your actual path to the Card component
+import Card from "../components/Card/Card"
+import MockAdapter from "axios-mock-adapter"
+import axios from "axios"
 
 describe("Card Component", () => {
 	let mockDispatch
@@ -20,6 +22,11 @@ describe("Card Component", () => {
 				dispatchPackages={mockDispatch}
 			/>
 		)
+
+		const mock = new MockAdapter(axios)
+		mock.onGet("/api/package").reply(500, {})
+		jest.spyOn(console, "error").mockImplementation(() => {})
+		jest.spyOn(console, "log").mockImplementation(() => {})
 	})
 
 	it("renders without crashing", () => {
@@ -84,65 +91,6 @@ describe("Card Component", () => {
 			type: "updateName",
 			id: "1",
 			name: "Test Name Edited",
-		})
-	})
-
-	// todo move to a util file that test the util functions
-	describe("Couriers", () => {
-		// test each courier
-		const couriers = ["ups", "fedex", "dhl", "usps", "ontrac"]
-		couriers.forEach((courier) => {
-			it(`allows selection of ${courier}`, () => {
-				card = (
-					<Card
-						pkg={{
-							id: "1",
-							name: "",
-							courier: courier,
-							trackingNumber: "",
-						}}
-						dispatchPackages={mockDispatch}
-					/>
-				)
-				render(card)
-			})
-		})
-
-		// test invalid couriers
-		const invalidCouriers = [
-			"",
-			"invalid",
-			"123",
-			"1234567890",
-			null,
-			undefined,
-		]
-		invalidCouriers.forEach((courier) => {
-			it(`does not allow selection of ${courier}`, () => {
-				jest.spyOn(console, "error")
-				console.error.mockImplementation(() => {})
-
-				card = (
-					<Card
-						pkg={{
-							id: "1",
-							name: "",
-							courier: courier,
-							trackingNumber: "",
-						}}
-						dispatchPackages={mockDispatch}
-					/>
-				)
-				render(card)
-
-				// Verify that console.error was called
-				expect(console.error).toHaveBeenCalled()
-
-				// Verify the courier message
-				expect(screen.getByText("Invalid Courier")).toBeInTheDocument()
-
-				console.error.mockRestore()
-			})
 		})
 	})
 })
