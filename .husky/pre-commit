@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm npx lint-staged && run tsc --noEmit
+npx lint-staged && npm run tsc --noEmit && npm run lint

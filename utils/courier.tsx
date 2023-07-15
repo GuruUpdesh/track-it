@@ -106,5 +106,6 @@ export function getCourierUrlsFromTrackingNumber(trackingNumber: string) {
 	for (const courier of couriersSubset) {
 		urls.push(couriers[courier].tracking_url + trackingNumber)
 	}
+
 	return urls
 }
