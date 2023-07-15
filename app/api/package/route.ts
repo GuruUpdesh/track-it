@@ -201,7 +201,7 @@ export async function GET(request: NextRequest) {
 		const errorMessage =
 			process.env.NODE_ENV === "development"
 				? error
-				: "Internal server error"
+				: error // ! TODO: remove this line in production
 		return new NextResponse(
 			JSON.stringify({
 				error: errorMessage,
