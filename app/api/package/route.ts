@@ -70,6 +70,7 @@ export interface PackageInfo {
 	trackingNumber: string
 	courier: TCourier
 	status: TrackingHistory
+	eta: string | null
 	trackingHistory: TrackingHistory[]
 }
 
@@ -173,16 +174,30 @@ export async function GET(request: NextRequest) {
 
 		const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
 
+		let packageInfoSimple: PackageInfo
+
 		// convert into simpler format
-		const packageInfoSimple = {
-			trackingNumber: packageInfo.tracking_number,
-			courier: packageInfo.carrier,
-			status: simplifyStatusObject(
-				packageInfo.tracking_status as ShippoTrackingHistory
-			),
-			trackingHistory: packageInfo.tracking_history.map((history) =>
-				simplifyStatusObject(history)
-			),
+		try {
+			packageInfoSimple = {
+				trackingNumber: packageInfo.tracking_number,
+				courier: packageInfo.carrier,
+				eta: packageInfo.eta,
+				status: simplifyStatusObject(
+					packageInfo.tracking_status as ShippoTrackingHistory
+				),
+				trackingHistory: packageInfo.tracking_history.map((history) =>
+					simplifyStatusObject(history)
+				),
+			}
+		} catch (error) {
+			return new NextResponse(
+				JSON.stringify({
+					error: "Invalid Tracking Info",
+				}),
+				{
+					status: 400,
+				}
+			)
 		}
 
 		return new Response(
@@ -198,11 +213,9 @@ export async function GET(request: NextRequest) {
 			}
 		)
 	} catch (error) {
-		const errorMessage =
-			process.env.NODE_ENV === "development" ? error : error // ! TODO: remove this line in production
 		return new NextResponse(
 			JSON.stringify({
-				error: errorMessage,
+				error: "Something went wrong",
 			}),
 			{
 				status: 500,

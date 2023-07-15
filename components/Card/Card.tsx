@@ -20,6 +20,7 @@ import {
 	AiOutlineLoading3Quarters,
 	AiOutlineMail,
 	AiOutlineNumber,
+	AiOutlineWarning,
 } from "react-icons/ai"
 import { BiCopy } from "react-icons/bi"
 // todo transition to radix-ui/react-icons
@@ -45,29 +46,35 @@ type Props = {
 }
 
 const Card = ({ pkg, dispatchPackages }: Props) => {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
-	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
-	const journeyPercentCircleRef = React.useRef<HTMLDivElement>(null)
 	const [editName, setEditName] = useState(false)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
 		useState(false)
+
+	const [error, setError] = useState<null | string>(null)
+	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
+	const journeyPercentCircleRef = React.useRef<HTMLDivElement>(null)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
 		const getPackageInfo = async () => {
-			try {
-				const res = await axios.get(`/api/package`, {
+			axios
+				.get(`/api/package`, {
 					params: {
 						trackingNumber: pkg.trackingNumber,
 						courier: pkg.courier,
 					},
 				})
-				console.log(res.data.packageInfo)
-				setPackageInfo(res.data.packageInfo as PackageInfo)
-			} catch (error) {
-				console.error(error)
-			}
+				.then((res) => {
+					setPackageInfo(res.data.packageInfo as PackageInfo)
+				})
+				.catch((error) => {
+					if (error.response.status === 400) {
+						setError(error.response.data.error)
+					} else {
+						setError("Something went wrong")
+					}
+				})
 		}
 
 		getPackageInfo()
@@ -89,6 +96,19 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 
 	function renderHistory(index: number) {
 		let historyItem: TrackingHistory | null = null
+
+		if (error) {
+			return (
+				<div className="flex items-center justify-center px-2 py-1 flex-col">
+					<p className="text-left text-xs tracking-tighter text-red-400/75">
+						Error!
+					</p>
+					<p className="text-left text-xs tracking-tighter text-yellow-50/25">
+						{error}
+					</p>
+				</div>
+			)
+		}
 
 		if (!packageInfo) {
 			return (
@@ -174,7 +194,6 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 			navigator.clipboard.writeText(pkg.trackingNumber)
 		},
 		getCourierWebsite: () => {
-			console.log("menuFunctions > getCourierWebsite")
 			const url = getCourierUrlsFromTrackingNumber(pkg.trackingNumber)[0]
 			return url
 		},
@@ -232,7 +251,9 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 											" bg-black/25 backdrop-blur-[2px]")
 									}
 								>
-									{!packageInfo ? (
+									{error ? (
+										<AiOutlineWarning />
+									) : !packageInfo ? (
 										<AiOutlineLoading3Quarters className="animate-spin" />
 									) : null}
 								</div>
