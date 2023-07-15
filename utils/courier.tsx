@@ -100,7 +100,7 @@ export function getCouriersFromTrackingNumber(
 	return matchingCouriers
 }
 
-function getCourierUrlsFromTrackingNumber(trackingNumber: string) {
+export function getCourierUrlsFromTrackingNumber(trackingNumber: string) {
 	const couriersSubset = getCouriersFromTrackingNumber(trackingNumber)
 	const urls: string[] = []
 	for (const courier of couriersSubset) {

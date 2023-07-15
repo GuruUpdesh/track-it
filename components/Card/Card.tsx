@@ -6,6 +6,7 @@ import {
 	couriers,
 	getCourierIconFromCode,
 	getCourierStringFromCode,
+	getCourierUrlsFromTrackingNumber,
 } from "@/utils/courier"
 import { getIconForStatus } from "@/utils/package"
 import * as Dialog from "@radix-ui/react-dialog"
@@ -170,11 +171,12 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 	const menuFunctions = {
 		copyTrackingNumber: () => {
 			console.log("menuFunctions > copyTrackingNumber")
-			navigator.clipboard.writeText("test")
+			navigator.clipboard.writeText(pkg.trackingNumber)
 		},
-		openCourierWebsite: () => {
-			console.log("menuFunctions > openCourierWebsite")
-			window.open("https://www.shipmentracker.com/")
+		getCourierWebsite: () => {
+			console.log("menuFunctions > getCourierWebsite")
+			const url = getCourierUrlsFromTrackingNumber(pkg.trackingNumber)[0]
+			return url
 		},
 		edit: {
 			name: () => {
@@ -284,7 +286,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 								)}
 								<a
 									className="underline-link flex items-center gap-1 text-xs text-indigo-300"
-									href="https://www.shipmentracker.com/"
+									href={menuFunctions.getCourierWebsite()}
 									target="_blank"
 								>
 									{getCourierIconFromCode(pkg.courier)}
@@ -317,15 +319,20 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 										<AiOutlineNumber className="absolute left-4" />
 										Copy Tracking Number
 									</DropdownMenu.Item>
-									<DropdownMenu.Item
-										onSelect={
-											menuFunctions.openCourierWebsite
-										}
-										className="DropdownMenu-item"
+									<a
+										href={menuFunctions.getCourierWebsite()}
+										target="_blank"
 									>
-										<MdOutlineExplore className="absolute left-4" />
-										Open Courier Website
-									</DropdownMenu.Item>
+										<DropdownMenu.Item
+											onSelect={
+												menuFunctions.getCourierWebsite
+											}
+											className="DropdownMenu-item"
+										>
+											<MdOutlineExplore className="absolute left-4" />
+											Open Courier Website
+										</DropdownMenu.Item>
+									</a>
 									<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
 									<DropdownMenu.Sub>
 										<DropdownMenu.SubTrigger className="DropdownMenu-item">
@@ -337,7 +344,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 										</DropdownMenu.SubTrigger>
 										<DropdownMenu.Item
 											onSelect={
-												menuFunctions.openCourierWebsite
+												menuFunctions.getCourierWebsite
 											}
 											className="DropdownMenu-item"
 										>
