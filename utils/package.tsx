@@ -20,12 +20,24 @@ export function convertLocationObjectToString(
 	location: TLocation | null
 ): string {
 	if (!location) return "Location not found"
-	return `${location.city}, ${location.state}`
+
+	let locationString = ""
+	if (location.city) locationString += location.city
+	if (location.state) {
+		if (!location.city) locationString += location.state
+		else locationString += `, ${location.state}`
+	}
+	if (location.country && !location.state) {
+		if (!location.city) locationString += location.country
+		else locationString += `, ${location.country}`
+	}
+
+	return locationString
 }
 
 export function extractDeliveryLocation(statusUpdate: string): string | null {
 	const deliveredRegex = /delivered/i
-	const frontDoorRegex = /front door/i
+	const frontDoorRegex = /(front door|doorstep|entrance|gate)/i
 	const mailboxRegex = /mailbox/i
 
 	if (deliveredRegex.test(statusUpdate)) {
