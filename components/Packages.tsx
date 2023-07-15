@@ -1,9 +1,9 @@
 "use client"
 
-import React from "react"
+import { TCourier } from "@/app/api/package/route"
 import Card from "@/components/Card/Card"
 import useLocalStorage from "@/hooks/useLocalStorageHook"
-import { TCourier } from "@/app/api/package/route"
+import React from "react"
 
 export type TPackage = {
 	id: number

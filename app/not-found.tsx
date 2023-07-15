@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect } from "react"
+
 function getRandomDelay(): number {
 	return Math.floor(Math.random() * 1)
 }

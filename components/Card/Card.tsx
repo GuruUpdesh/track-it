@@ -1,40 +1,42 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
-import {
-	MdMoreVert,
-	MdOutlineExplore,
-	MdOutlineEditNote,
-	MdClose,
-} from "react-icons/md" // todo transition to radix-ui/react-icons
-import { BsChevronRight, BsCheckLg, BsHouseCheck } from "react-icons/bs"
-import {
-	AiOutlineNumber,
-	AiOutlineDelete,
-	AiOutlineEdit,
-	AiOutlineMail,
-	AiOutlineLoading3Quarters,
-} from "react-icons/ai"
-import { BiCopy } from "react-icons/bi"
-import { TbEditCircle } from "react-icons/tb"
-import Image from "next/image"
-import * as Dialog from "@radix-ui/react-dialog"
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
-import "./menu.css"
-import "./modal.css"
+import { PackageInfo, TCourier, TrackingHistory } from "@/app/api/package/route"
 import useTextOverflow from "@/hooks/useTextOverflow"
-import { PackageAction, TPackage } from "../Packages"
 import {
 	couriers,
 	getCourierIconFromCode,
 	getCourierStringFromCode,
 } from "@/utils/courier"
-import { PackageInfo, TCourier, TrackingHistory } from "@/app/api/package/route"
+import { getIconForStatus } from "@/utils/package"
+import * as Dialog from "@radix-ui/react-dialog"
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
+import axios from "axios"
+import Image from "next/image"
+import React, { useEffect, useState } from "react"
+import {
+	AiOutlineDelete,
+	AiOutlineEdit,
+	AiOutlineLoading3Quarters,
+	AiOutlineMail,
+	AiOutlineNumber,
+} from "react-icons/ai"
+import { BiCopy } from "react-icons/bi"
+// todo transition to radix-ui/react-icons
+import { BsCheckLg, BsChevronRight, BsHouseCheck } from "react-icons/bs"
+import {
+	MdClose,
+	MdMoreVert,
+	MdOutlineEditNote,
+	MdOutlineExplore,
+} from "react-icons/md"
+import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
-import { getIconForStatus } from "@/utils/package"
+
 import Tooltip from "../Base/Tooltip"
-import axios from "axios"
+import { PackageAction, TPackage } from "../Packages"
+import "./menu.css"
+import "./modal.css"
 
 type Props = {
 	pkg: TPackage

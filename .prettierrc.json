@@ -4,5 +4,8 @@
 	"singleQuote": false,
 	"tabWidth": 4,
 	"useTabs": true,
-	"endOfLine": "crlf"
+	"endOfLine": "crlf",
+	"importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true
 }

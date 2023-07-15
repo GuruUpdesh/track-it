@@ -1,17 +1,17 @@
-import {
-	formatDate,
-	getTimeFromDate,
-	convertLocationObjectToString,
-	extractDeliveryLocation,
-} from "../utils/package"
-
 import { render } from "@testing-library/react"
+
 import {
-	getCourierStringFromCode,
 	getCourierIconFromCode,
+	getCourierStringFromCode,
 	getCourierUrlsFromTrackingNumber,
 	getCouriersFromTrackingNumber,
 } from "../utils/courier"
+import {
+	convertLocationObjectToString,
+	extractDeliveryLocation,
+	formatDate,
+	getTimeFromDate,
+} from "../utils/package"
 
 describe("package utils", () => {
 	describe("Testing date formatting functions", () => {

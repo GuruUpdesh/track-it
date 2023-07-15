@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server"
+
 import { PackageInfo } from "../package/route"
 
 export async function GET(request: NextRequest) {

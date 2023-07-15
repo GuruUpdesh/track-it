@@ -1,5 +1,5 @@
 import { TCourier } from "@/app/api/package/route"
-import { FaUps, FaFedex } from "react-icons/fa"
+import { FaFedex, FaUps } from "react-icons/fa"
 import { MdOutlineExplore } from "react-icons/md"
 import { SiUsps } from "react-icons/si"
 

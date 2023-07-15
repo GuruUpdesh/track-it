@@ -1,5 +1,8 @@
 import { TLocation, TStatus } from "@/app/api/package/route"
 import { format, formatDistance } from "date-fns"
+import { AiOutlineWarning } from "react-icons/ai"
+import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
+import { TbTruckLoading } from "react-icons/tb"
 
 export function formatRelativeDate(date: string): string {
 	const dateObject = new Date(date)
@@ -51,9 +54,6 @@ export function extractDeliveryLocation(statusUpdate: string): string | null {
 	return null
 }
 
-import { BsHouseDoor, BsMailbox, BsTruck, BsQuestion } from "react-icons/bs"
-import { TbTruckLoading } from "react-icons/tb"
-import { AiOutlineWarning } from "react-icons/ai"
 export function getIconForStatus(
 	status: TStatus,
 	deliveryLocation?: string | null

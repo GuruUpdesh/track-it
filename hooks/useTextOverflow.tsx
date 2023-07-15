@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, RefObject, DependencyList } from "react"
+import { DependencyList, RefObject, useEffect, useRef, useState } from "react"
 
 function useTextOverflow<T extends HTMLElement>(
 	dependencies: DependencyList = []

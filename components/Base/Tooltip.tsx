@@ -1,5 +1,5 @@
-import React from "react"
 import * as UITooltip from "@radix-ui/react-tooltip"
+import React from "react"
 
 type Props = {
 	children: React.ReactNode

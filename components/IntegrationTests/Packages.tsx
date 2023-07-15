@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useReducer } from "react"
-import Card from "@/components/Card/Card"
 import { TCourier } from "@/app/api/package/route"
+import Card from "@/components/Card/Card"
+import React, { useReducer } from "react"
 
 export type TPackage = {
 	id: number

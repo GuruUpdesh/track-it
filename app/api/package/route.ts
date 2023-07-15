@@ -1,5 +1,3 @@
-import { NextRequest, NextResponse } from "next/server"
-import axios from "axios"
 import {
 	convertLocationObjectToString,
 	extractDeliveryLocation,
@@ -7,6 +5,8 @@ import {
 	formatRelativeDate,
 	getTimeFromDate,
 } from "@/utils/package"
+import axios from "axios"
+import { NextRequest, NextResponse } from "next/server"
 
 export type TLocation = {
 	city: string
@@ -199,9 +199,7 @@ export async function GET(request: NextRequest) {
 		)
 	} catch (error) {
 		const errorMessage =
-			process.env.NODE_ENV === "development"
-				? error
-				: error // ! TODO: remove this line in production
+			process.env.NODE_ENV === "development" ? error : error // ! TODO: remove this line in production
 		return new NextResponse(
 			JSON.stringify({
 				error: errorMessage,

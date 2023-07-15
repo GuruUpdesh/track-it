@@ -1,8 +1,9 @@
 import "@testing-library/jest-dom"
 import { fireEvent, render, screen } from "@testing-library/react"
-import Card from "../components/Card/Card"
-import MockAdapter from "axios-mock-adapter"
 import axios from "axios"
+import MockAdapter from "axios-mock-adapter"
+
+import Card from "../components/Card/Card"
 
 describe("Card Component", () => {
 	let mockDispatch
