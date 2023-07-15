@@ -75,7 +75,9 @@ export function getCourierStringFromCode(code: string) {
 }
 
 export function getCourierIconFromCode(code: string) {
-	const icon = couriers[code].icon
+	const courier = couriers[code]
+	if (!courier) return <MdOutlineExplore />
+	const icon = courier.icon
 	if (!icon) {
 		if (code !== "shippo") console.error("Invalid Courier Code", code)
 		return <MdOutlineExplore />

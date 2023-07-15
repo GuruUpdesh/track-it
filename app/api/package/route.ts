@@ -154,6 +154,7 @@ function simplifyStatusObject(
 }
 
 export async function GET(request: NextRequest) {
+	console.log("GET /api/package")
 	try {
 		const url = new URL(request.url)
 		const trackingNumber = url.searchParams.get("trackingNumber")

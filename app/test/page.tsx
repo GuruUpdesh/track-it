@@ -1,4 +1,4 @@
-import Grid from "@/components/Test/Packages"
+import Grid from "@/components/IntegrationTests/Packages"
 
 const Home = () => {
 	return (

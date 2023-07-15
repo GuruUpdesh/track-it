@@ -34,6 +34,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 import { getIconForStatus } from "@/utils/package"
 import Tooltip from "../Base/Tooltip"
+import axios from "axios"
 
 type Props = {
 	pkg: TPackage
@@ -51,19 +52,22 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const res = await fetch(
-				`/api/package?trackingNumber=${encodeURIComponent(
-					pkg.trackingNumber
-				)}&courier=${encodeURIComponent(pkg.courier)}`
-			)
-			const data = await res.json()
-			console.log(data.packageInfo)
-			setPackageInfo(data.packageInfo as PackageInfo)
-			// random number between 0 and 100
+		const getPackageInfo = async () => {
+			try {
+				const res = await axios.get(`/api/package`, {
+					params: {
+						trackingNumber: pkg.trackingNumber,
+						courier: pkg.courier,
+					},
+				})
+				console.log(res.data.packageInfo)
+				setPackageInfo(res.data.packageInfo as PackageInfo)
+			} catch (error) {
+				console.error(error)
+			}
 		}
 
-		fetchData()
+		getPackageInfo()
 	}, [pkg.trackingNumber, pkg.courier])
 
 	useEffect(() => {
@@ -200,7 +204,10 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 
 	return (
 		<>
-			<div className="border border-indigo-400/25 bg-[#110F1B]">
+			<div
+				className="border border-indigo-400/25 bg-[#110F1B]"
+				data-testid="card"
+			>
 				<div className="relative min-w-[220px] max-w-[350px] select-none border-b border-b-indigo-400/25">
 					<div
 						ref={journeyPercentRef}
