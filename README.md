@@ -3,7 +3,7 @@ TrackIt is a web-based application that simplifies shipment tracking by providin
 ## Features
 
 -   Centralized tracking dashboard with a consolidated view of shipments and their current statuses
--   Supports tracking for multiple couriers, including UPS, USPS, FedEx, OnTrac, and DHL
+-   Supports tracking for multiple couriers, including UPS, USPS, FedEx, and OnTrac
 -   Integration with Google Maps for a visual overview of the shipment's journey
 -   Detailed tracking history with status indications, location, and timing information
 -   Add, delete, and update tracking numbers

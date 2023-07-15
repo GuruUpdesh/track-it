@@ -15,7 +15,7 @@ export type TLocation = {
 	country: string
 }
 
-export type TCourier = "ups" | "usps" | "ontrac" | "dhl" | "fedex" | "shippo"
+export type TCourier = "ups" | "usps" | "ontrac" | "fedex" | "shippo"
 
 // ref https://docs.goshippo.com/docs/tracking/tracking/
 export type TStatus =
@@ -135,7 +135,6 @@ function isTCourier(courier: string): courier is TCourier {
 		"ups",
 		"usps",
 		"ontrac",
-		"dhl",
 		"fedex",
 		"shippo",
 	]

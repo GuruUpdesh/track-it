@@ -1,4 +1,4 @@
-import { FaDhl, FaUps, FaFedex } from "react-icons/fa"
+import { FaUps, FaFedex } from "react-icons/fa"
 import { MdOutlineExplore } from "react-icons/md"
 import { SiUsps } from "react-icons/si"
 
@@ -31,16 +31,6 @@ export const couriers = {
 		tracking_url: "http://www.ontrac.com/trackres.asp?tracking_number=",
 		icon: <MdOutlineExplore />,
 	},
-	dhl: {
-		patterns: [
-			new RegExp(
-				/\b(\d{4}[- ]?\d{4}[- ]?\d{2}|\d{3}[- ]?\d{8}|[A-Z]{3}\d{7})\b/i
-			),
-		],
-		tracking_url:
-			"http://www.dhl.com/content/g0/en/express/tracking.shtml?brand=DHL&AWB=",
-		icon: <FaDhl />,
-	},
 	fedex: {
 		patterns: [
 			new RegExp(
@@ -60,8 +50,6 @@ export function getCourierStringFromCode(code: string) {
 			return "USPS"
 		case "ontrac":
 			return "OnTrac"
-		case "dhl":
-			return "DHL"
 		case "fedex":
 			return "FedEx"
 		case "shippo":
@@ -80,8 +68,6 @@ export function getCourierIconFromCode(code: string) {
 			return couriers.usps.icon
 		case "ontrac":
 			return couriers.ontrac.icon
-		case "dhl":
-			return couriers.dhl.icon
 		case "fedex":
 			return couriers.fedex.icon
 		case "shippo":

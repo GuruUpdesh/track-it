@@ -23,7 +23,7 @@ describe("Packages Grid", () => {
 					id: 1,
 					name: "Test Package",
 					trackingNumber: "1234567890",
-					courier: "dhl",
+					courier: "ups",
 				},
 			])
 		)
