@@ -460,8 +460,8 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 				modal={true}
 			>
 				<Dialog.Portal>
-					<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 h-full w-full" />
-					<Dialog.Content className="Modal-content absolute left-[50%] top-[50%] min-h-[200px] translate-x-[-50%] translate-y-[-50%] p-6">
+					<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 h-full w-full z-40" />
+					<Dialog.Content className="Modal-content absolute left-[50%] top-[50%] min-h-[200px] translate-x-[-50%] translate-y-[-50%] p-6 z-50">
 						<div className="mb-4 flex items-center justify-between">
 							<h1 className="text-lg font-bold">
 								Edit Tracking Number
