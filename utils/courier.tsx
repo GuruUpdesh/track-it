@@ -82,6 +82,7 @@ export function getCourierIconFromCode(code: string) {
 		if (code !== "shippo") console.error("Invalid Courier Code", code)
 		return <MdOutlineExplore />
 	}
+	return icon
 }
 
 export function getCouriersFromTrackingNumber(
