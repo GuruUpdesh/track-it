@@ -8,7 +8,12 @@ import {
 	getCourierStringFromCode,
 	getCourierUrlsFromTrackingNumber,
 } from "@/utils/courier"
-import { getIconForStatus } from "@/utils/package"
+import {
+	formatDate,
+	formatRelativeDate,
+	getIconForStatus,
+	getTimeFromDate,
+} from "@/utils/package"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import axios from "axios"
@@ -147,7 +152,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 					</p>
 				</div>
 				<Tooltip text={historyItem.detailedStatus}>
-					<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400">
+					<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
 						{historyItem.status.toLocaleLowerCase()}
 						{getIconForStatus(
 							historyItem.status,
@@ -305,16 +310,42 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 										</h3>
 									</Tooltip>
 								)}
-								<a
-									className="underline-link flex items-center gap-1 text-xs text-indigo-300"
-									href={menuFunctions.getCourierWebsite()}
-									target="_blank"
-								>
-									{getCourierIconFromCode(pkg.courier)}
-									<p>
-										{getCourierStringFromCode(pkg.courier)}
-									</p>
-								</a>
+								<div className="flex items-center justify-start gap-2">
+									<a
+										className="underline-link flex items-center gap-1 text-xs text-indigo-300"
+										href={menuFunctions.getCourierWebsite()}
+										target="_blank"
+									>
+										{getCourierIconFromCode(pkg.courier)}
+										<p>
+											{getCourierStringFromCode(
+												pkg.courier
+											)}
+										</p>
+									</a>
+									<Tooltip
+										text={
+											(packageInfo &&
+												packageInfo.eta &&
+												formatDate(packageInfo.eta) +
+													" by " +
+													getTimeFromDate(
+														packageInfo.eta
+													)) ||
+											""
+										}
+									>
+										<p className="text-left text-xs tracking-tighter text-yellow-50/25 hover:text-yellow-50/50">
+											{packageInfo
+												? packageInfo.eta &&
+												  "arrives " +
+														formatRelativeDate(
+															packageInfo.eta
+														)
+												: null}
+										</p>
+									</Tooltip>
+								</div>
 							</div>
 						</div>
 						<DropdownMenu.Root>
