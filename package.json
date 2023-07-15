@@ -12,6 +12,12 @@
 		"test": "jest",
 		"test-dev": "jest --watch"
 	},
+	"lint-staged": {
+		"*.{js,jsx,ts,tsx}": [
+			"prettier --write",
+			"next lint"
+		]
+	},	  
 	"dependencies": {
 		"@radix-ui/react-dialog": "^1.0.4",
 		"@radix-ui/react-dropdown-menu": "^2.0.5",
@@ -46,6 +52,7 @@
 		"husky": "^8.0.3",
 		"jest": "^29.6.1",
 		"jest-environment-jsdom": "^29.6.0",
+		"lint-staged": "^13.2.3",
 		"prettier": "^2.8.8",
 		"prettier-plugin-tailwindcss": "^0.3.0",
 		"pretty-quick": "^3.1.3"
