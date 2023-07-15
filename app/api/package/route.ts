@@ -131,13 +131,7 @@ async function fetchTrackingInfo(
 }
 
 function isTCourier(courier: string): courier is TCourier {
-	const couriers: TCourier[] = [
-		"ups",
-		"usps",
-		"ontrac",
-		"fedex",
-		"shippo",
-	]
+	const couriers: TCourier[] = ["ups", "usps", "ontrac", "fedex", "shippo"]
 	return couriers.includes(courier as TCourier)
 }
 
