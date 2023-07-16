@@ -1,9 +1,6 @@
 import {
 	convertLocationObjectToString,
 	extractDeliveryLocation,
-	formatDate,
-	formatRelativeDate,
-	getTimeFromDate,
 } from "@/utils/package"
 import axios from "axios"
 import { NextRequest, NextResponse } from "next/server"
@@ -78,11 +75,7 @@ export interface TrackingHistory {
 	status: TStatus
 	detailedStatus: string
 	location: string
-	date: {
-		relative: string
-		absolute: string
-		time: string
-	}
+	date: string
 	deliveryLocation: string | null
 }
 
@@ -143,11 +136,7 @@ function simplifyStatusObject(
 		status: trackingHistory.status,
 		detailedStatus: trackingHistory.status_details,
 		location: convertLocationObjectToString(trackingHistory.location),
-		date: {
-			relative: formatRelativeDate(trackingHistory.status_date),
-			absolute: formatDate(trackingHistory.status_date),
-			time: getTimeFromDate(trackingHistory.status_date),
-		},
+		date: trackingHistory.status_date,
 		deliveryLocation: extractDeliveryLocation(
 			trackingHistory.status_details
 		),

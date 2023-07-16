@@ -147,9 +147,12 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 					<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75">
 						{historyItem.location}
 					</h1>
-					<p className="text-left text-xs tracking-tighter text-yellow-50/25">
-						{historyItem.date.time} - {historyItem.date.relative}
-					</p>
+					<Tooltip text={formatRelativeDate(historyItem.date)}>
+						<p className="text-left text-xs tracking-tighter text-yellow-50/25 hover:text-yellow-50/50">
+							{formatDate(historyItem.date)} at
+							{" " + getTimeFromDate(historyItem.date)}
+						</p>
+					</Tooltip>
 				</div>
 				<Tooltip text={historyItem.detailedStatus}>
 					<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
@@ -339,7 +342,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 											""
 										}
 									>
-										<p className="text-left text-xs tracking-tighter text-yellow-50/25 hover:text-yellow-50/50">
+										<p className="text-left text-xs tracking-tighter text-yellow-50/50 hover:text-yellow-50/75">
 											{packageInfo
 												? packageInfo.eta &&
 												  "arrives " +
