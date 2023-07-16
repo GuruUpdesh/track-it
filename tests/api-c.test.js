@@ -19,16 +19,13 @@ const testCases = [
 			packageInfo: {
 				trackingNumber: "SHIPPO_TRANSIT",
 				courier: "shippo",
+				eta: "2023-07-16T21:51:02.603Z",
 				status: {
 					status: "TRANSIT",
 					detailedStatus:
 						"Your shipment has departed from the origin.",
 					location: "San Francisco, CA",
-					date: {
-						relative: "3 days ago",
-						absolute: "July 11, 2023",
-						time: "1:57 PM",
-					},
+					date: "2023-07-11T20:57:44.89Z",
 					deliveryLocation: null,
 				},
 				trackingHistory: [
@@ -37,11 +34,7 @@ const testCases = [
 						detailedStatus:
 							"The carrier has received the electronic shipment information.",
 						location: "Location not found",
-						date: {
-							relative: "5 days ago",
-							absolute: "July 10, 2023",
-							time: "9:57 AM",
-						},
+						date: "2023-07-10T16:57:44.89Z",
 						deliveryLocation: null,
 					},
 					{
@@ -49,11 +42,7 @@ const testCases = [
 						detailedStatus:
 							"Your shipment has departed from the origin.",
 						location: "San Francisco, CA",
-						date: {
-							relative: "3 days ago",
-							absolute: "July 11, 2023",
-							time: "1:57 PM",
-						},
+						date: "2023-07-11T20:57:44.89Z",
 						deliveryLocation: null,
 					},
 				],
@@ -61,7 +50,6 @@ const testCases = [
 		},
 		expected: {
 			location: "San Francisco, CA",
-			time: "1:57 PM - 3 days ago",
 			status: "transit",
 		},
 	},
@@ -77,16 +65,13 @@ const testCases = [
 			packageInfo: {
 				trackingNumber: "SHIPPO_PRE_TRANSIT",
 				courier: "shippo",
+				eta: "2023-07-16T21:51:02.606Z",
 				status: {
 					status: "PRE_TRANSIT",
 					detailedStatus:
 						"The carrier has received the electronic shipment information.",
 					location: "Location not found",
-					date: {
-						relative: "5 days ago",
-						absolute: "July 10, 2023",
-						time: "10:19 AM",
-					},
+					date: "2023-07-10T16:57:48.086Z",
 					deliveryLocation: null,
 				},
 				trackingHistory: [
@@ -95,11 +80,7 @@ const testCases = [
 						detailedStatus:
 							"The carrier has received the electronic shipment information.",
 						location: "Location not found",
-						date: {
-							relative: "5 days ago",
-							absolute: "July 10, 2023",
-							time: "10:19 AM",
-						},
+						date: "2023-07-10T16:57:48.086Z",
 						deliveryLocation: null,
 					},
 				],
@@ -107,7 +88,6 @@ const testCases = [
 		},
 		expected: {
 			location: "Location not found",
-			time: "10:19 AM - 5 days ago",
 			status: "pre_transit",
 		},
 	},
@@ -124,15 +104,12 @@ const testCases = [
 			packageInfo: {
 				trackingNumber: "SHIPPO_DELIVERED",
 				courier: "shippo",
+				eta: "2023-07-16T21:51:02.602Z",
 				status: {
 					status: "DELIVERED",
 					detailedStatus: "Your shipment has been delivered.",
 					location: "Chicago, IL",
-					date: {
-						relative: "2 days ago",
-						absolute: "July 12, 2023",
-						time: "2:19 PM",
-					},
+					date: "2023-07-15T16:00:07.408Z",
 					deliveryLocation: null,
 				},
 				trackingHistory: [
@@ -141,11 +118,7 @@ const testCases = [
 						detailedStatus:
 							"The carrier has received the electronic shipment information.",
 						location: "Location not found",
-						date: {
-							relative: "5 days ago",
-							absolute: "July 10, 2023",
-							time: "10:19 AM",
-						},
+						date: "2023-07-13T12:00:07.408Z",
 						deliveryLocation: null,
 					},
 					{
@@ -153,11 +126,7 @@ const testCases = [
 						detailedStatus:
 							"Your shipment has departed from the origin.",
 						location: "San Francisco, CA",
-						date: {
-							relative: "3 days ago",
-							absolute: "July 11, 2023",
-							time: "2:19 PM",
-						},
+						date: "2023-07-14T16:00:07.408Z",
 						deliveryLocation: null,
 					},
 					{
@@ -165,22 +134,14 @@ const testCases = [
 						detailedStatus:
 							"The Postal Service has identified a problem with the processing of this item and you should contact support to get further information.",
 						location: "Memphis, TN",
-						date: {
-							relative: "2 days ago",
-							absolute: "July 13, 2023",
-							time: "2:19 AM",
-						},
+						date: "2023-07-16T04:00:07.408Z",
 						deliveryLocation: null,
 					},
 					{
 						status: "DELIVERED",
 						detailedStatus: "Your shipment has been delivered.",
 						location: "Chicago, IL",
-						date: {
-							relative: "2 days ago",
-							absolute: "July 12, 2023",
-							time: "2:19 PM",
-						},
+						date: "2023-07-15T16:00:07.408Z",
 						deliveryLocation: null,
 					},
 				],
@@ -188,7 +149,6 @@ const testCases = [
 		},
 		expected: {
 			location: "Chicago, IL",
-			time: "2:19 PM - 2 days ago",
 			status: "delivered",
 		},
 	},
@@ -204,16 +164,13 @@ const testCases = [
 			packageInfo: {
 				trackingNumber: "SHIPPO_RETURNED",
 				courier: "shippo",
+				eta: "2023-07-16T21:51:02.602Z",
 				status: {
 					status: "RETURNED",
 					detailedStatus:
 						"Your shipment has been returned to the original sender.",
 					location: "San Francisco, CA",
-					date: {
-						relative: "1 day ago",
-						absolute: "July 13, 2023",
-						time: "9:57 AM",
-					},
+					date: "2023-07-13T16:58:07.286Z",
 					deliveryLocation: null,
 				},
 				trackingHistory: [
@@ -222,11 +179,7 @@ const testCases = [
 						detailedStatus:
 							"The carrier has received the electronic shipment information.",
 						location: "Location not found",
-						date: {
-							relative: "5 days ago",
-							absolute: "July 10, 2023",
-							time: "9:57 AM",
-						},
+						date: "2023-07-10T16:58:07.286Z",
 						deliveryLocation: null,
 					},
 					{
@@ -234,11 +187,7 @@ const testCases = [
 						detailedStatus:
 							"Your shipment has departed from the origin.",
 						location: "San Francisco, CA",
-						date: {
-							relative: "3 days ago",
-							absolute: "July 11, 2023",
-							time: "1:57 PM",
-						},
+						date: "2023-07-11T20:58:07.286Z",
 						deliveryLocation: null,
 					},
 					{
@@ -246,22 +195,14 @@ const testCases = [
 						detailedStatus:
 							"The Postal Service has identified a problem with the processing of this item and you should contact support to get further information.",
 						location: "Memphis, TN",
-						date: {
-							relative: "2 days ago",
-							absolute: "July 13, 2023",
-							time: "1:57 AM",
-						},
+						date: "2023-07-13T08:58:07.286Z",
 						deliveryLocation: null,
 					},
 					{
 						status: "DELIVERED",
 						detailedStatus: "Your shipment has been delivered.",
 						location: "Chicago, IL",
-						date: {
-							relative: "2 days ago",
-							absolute: "July 12, 2023",
-							time: "1:57 PM",
-						},
+						date: "2023-07-12T20:58:07.286Z",
 						deliveryLocation: null,
 					},
 					{
@@ -269,11 +210,7 @@ const testCases = [
 						detailedStatus:
 							"Your shipment has been returned to the original sender.",
 						location: "San Francisco, CA",
-						date: {
-							relative: "1 day ago",
-							absolute: "July 13, 2023",
-							time: "9:57 AM",
-						},
+						date: "2023-07-13T16:58:07.286Z",
 						deliveryLocation: null,
 					},
 				],
@@ -281,7 +218,6 @@ const testCases = [
 		},
 		expected: {
 			location: "San Francisco, CA",
-			time: "9:57 AM - 1 day ago",
 			status: "returned",
 		},
 	},
@@ -297,16 +233,13 @@ const testCases = [
 			packageInfo: {
 				trackingNumber: "SHIPPO_FAILURE",
 				courier: "shippo",
+				eta: "2023-07-16T21:51:02.603Z",
 				status: {
 					status: "FAILURE",
 					detailedStatus:
 						"The Postal Service has identified a problem with the processing of this item and you should contact support to get further information.",
 					location: "Memphis, TN",
-					date: {
-						relative: "about 19 hours ago",
-						absolute: "July 14, 2023",
-						time: "3:18 AM",
-					},
+					date: "2023-07-14T08:41:22.227Z",
 					deliveryLocation: null,
 				},
 				trackingHistory: [
@@ -315,11 +248,7 @@ const testCases = [
 						detailedStatus:
 							"The carrier has received the electronic shipment information.",
 						location: "Location not found",
-						date: {
-							relative: "3 days ago",
-							absolute: "July 11, 2023",
-							time: "11:18 AM",
-						},
+						date: "2023-07-11T16:41:22.227Z",
 						deliveryLocation: null,
 					},
 					{
@@ -327,11 +256,7 @@ const testCases = [
 						detailedStatus:
 							"Your shipment has departed from the origin.",
 						location: "San Francisco, CA",
-						date: {
-							relative: "2 days ago",
-							absolute: "July 12, 2023",
-							time: "3:18 PM",
-						},
+						date: "2023-07-12T20:41:22.227Z",
 						deliveryLocation: null,
 					},
 					{
@@ -339,11 +264,7 @@ const testCases = [
 						detailedStatus:
 							"The Postal Service has identified a problem with the processing of this item and you should contact support to get further information.",
 						location: "Memphis, TN",
-						date: {
-							relative: "about 19 hours ago",
-							absolute: "July 14, 2023",
-							time: "3:18 AM",
-						},
+						date: "2023-07-14T08:41:22.227Z",
 						deliveryLocation: null,
 					},
 				],
@@ -351,7 +272,6 @@ const testCases = [
 		},
 		expected: {
 			location: "Memphis, TN",
-			time: "3:18 AM - about 19 hours ago",
 			status: "failure",
 		},
 	},
@@ -387,9 +307,6 @@ describe("shippo mock cards", () => {
 				testCase.expected.location
 			)
 			expect(historyLocation).toBeInTheDocument()
-
-			const historyTime = await screen.getByText(testCase.expected.time)
-			expect(historyTime).toBeInTheDocument()
 
 			const historyStatus = await screen.getByText(
 				testCase.expected.status

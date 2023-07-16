@@ -5,11 +5,8 @@ import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
 import { TbTruckLoading } from "react-icons/tb"
 
 export function formatRelativeDate(date: string): string {
-	console.log("formatRelativeDate", date)
 	const dateObject = new Date(date)
-	console.log("dateObject", dateObject)
 	const relative = formatDistance(dateObject, new Date(), { addSuffix: true })
-	console.log("relative", relative)
 	return relative
 }
 
