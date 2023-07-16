@@ -285,7 +285,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 												handleSaveName()
 											}
 										}}
-										className="max-w-full bg-transparent text-lg font-semibold tracking-tighter text-yellow-50 outline-none"
+										className="w-[20ch] max-w-full bg-transparent text-lg font-semibold tracking-tighter text-yellow-50 outline-none"
 									/>
 								) : (
 									<Tooltip
@@ -296,10 +296,14 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 											ref={textRef}
 											onClick={handleEditName}
 											className="w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
-											style={{
-												WebkitMaskImage:
-													"linear-gradient(to right, black 90%, transparent)",
-											}}
+											style={
+												isTextOverflowed
+													? {
+															WebkitMaskImage:
+																"linear-gradient(to right, black 90%, transparent)",
+													  }
+													: {}
+											}
 											data-overflow={
 												isTextOverflowed
 													? "true"
