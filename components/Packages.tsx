@@ -1,19 +1,24 @@
 "use client"
 
-import { TCourier } from "@/app/api/package/typesAndSchemas"
+import { TCourier, courierEnum } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/Card/Card"
 import useLocalStorage from "@/hooks/useLocalStorageHook"
 import React from "react"
+import { z } from "zod"
 
-export type TPackage = {
-	id: number
-	name: string
-	trackingNumber: string
-	courier: TCourier
-}
+import AddInput from "./AddInput"
+
+export const packageSchema = z.object({
+	id: z.number(),
+	name: z.string(),
+	trackingNumber: z.string().trim(),
+	courier: courierEnum,
+})
+
+export type TPackage = z.infer<typeof packageSchema>
 
 export type PackageAction =
-	| { type: "add" }
+	| { type: "add"; new: TPackage }
 	| { type: "delete"; id: number }
 	| { type: "updateName"; id: number; name: string }
 	| { type: "updateTrackingNumber"; id: number; trackingNumber: string }
@@ -23,15 +28,8 @@ export type PackageAction =
 function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 	switch (action.type) {
 		case "add":
-			return [
-				...state,
-				{
-					id: Date.now(),
-					name: "",
-					trackingNumber: "tracking number",
-					courier: "ups",
-				},
-			]
+			packageSchema.parse(action.new)
+			return [...state, action.new]
 		case "delete":
 			return state.filter((pkg) => pkg.id !== action.id)
 		case "updateName":
@@ -76,9 +74,9 @@ const Grid = () => {
 
 	return (
 		<div>
-			<button onClick={() => dispatchPackages({ type: "add" })}>
-				add
-			</button>
+			<div className="mb-6">
+				<AddInput dispatch={dispatchPackages} />
+			</div>
 			<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{packages.map((pkg) => (
 					<Card

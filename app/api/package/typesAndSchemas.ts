@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export type TCourier = "ups" | "usps" | "ontrac" | "fedex" | "shippo"
-const courierEnum = z.enum(["ups", "usps", "ontrac", "fedex", "shippo"])
+export const courierEnum = z.enum(["ups", "usps", "ontrac", "fedex", "shippo"])
 
 // ref https://docs.goshippo.com/docs/tracking/tracking/
 export type TStatus =
