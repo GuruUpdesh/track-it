@@ -1,6 +1,10 @@
 "use client"
 
-import { PackageInfo, TCourier, TrackingHistory } from "@/app/api/package/route"
+import {
+	PackageInfo,
+	TCourier,
+	TrackingHistory,
+} from "@/app/api/package/typesAndSchemas"
 import useTextOverflow from "@/hooks/useTextOverflow"
 import {
 	couriers,
