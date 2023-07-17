@@ -52,22 +52,25 @@ import "./styles/modal.css"
 type Props = {
 	pkg: TPackage
 	dispatchPackages: React.Dispatch<PackageAction>
+	inSearchResults: boolean
 }
 
-const Card = ({ pkg, dispatchPackages }: Props) => {
+const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
 	const [editName, setEditName] = useState(false)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
 		useState(false)
+	const [editTrackingNumberValue, setEditTrackingNumberValue] = useState(
+		pkg.trackingNumber
+	)
 
 	const [error, setError] = useState<null | string>(null)
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
 	const journeyPercentCircleRef = React.useRef<HTMLDivElement>(null)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
 
-	// todo move fetch up to Packages.tsx
 	useEffect(() => {
-		if (packageInfo) return
+		console.log("fetching package info", pkg)
 		const getPackageInfo = async () => {
 			axios
 				.get(`/api/package`, {
@@ -78,8 +81,11 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 				})
 				.then((res) => {
 					setPackageInfo(res.data.packageInfo as PackageInfo)
+					setError(null)
+					console.log("packageInfo", res.data.packageInfo)
 				})
 				.catch((error) => {
+					setPackageInfo(null)
 					if (error.response.status === 400) {
 						setError(error.response.data.error)
 					} else {
@@ -239,6 +245,7 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 		},
 	}
 
+	if (!inSearchResults) return null
 	return (
 		<>
 			<div
@@ -548,22 +555,55 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 								<MdClose fontSize="large" />
 							</button>
 						</div>
-						<form className="text-yellow-50">
+						<form
+							className="text-yellow-50"
+							onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+								e.preventDefault()
+								dispatchPackages({
+									type: "updateTrackingNumber",
+									id: pkg.id,
+									trackingNumber: editTrackingNumberValue,
+								})
+								setOpenEditTrackingNumberModal(false)
+							}}
+						>
 							<input
-								className="w-full rounded-md border border-yellow-50/25 bg-transparent p-2 outline-none focus-within:outline-2 focus-within:outline-indigo-400"
+								className="w-full rounded-md border border-yellow-50/25 bg-transparent p-2 outline-none outline-offset-2 focus-within:outline-2 focus-within:outline-indigo-400"
 								id="tracking-number-input"
 								placeholder="Type tracking number..."
 								autoFocus={true}
 								type="text"
-								value={pkg.trackingNumber}
+								value={editTrackingNumberValue}
 								onChange={(e) => {
-									dispatchPackages({
-										type: "updateTrackingNumber",
-										id: pkg.id,
-										trackingNumber: e.target.value,
-									})
+									setEditTrackingNumberValue(e.target.value)
 								}}
 							/>
+							<div className="flex items-center justify-between mt-6">
+								<button
+									className="py-2 px-4 bg-white/10 rounded-md"
+									onClick={() => {
+										setOpenEditTrackingNumberModal(false)
+									}}
+								>
+									Cancel
+								</button>
+								<button
+									type="submit"
+									className={
+										"py-2 px-4 rounded-md" +
+										(editTrackingNumberValue ===
+										pkg.trackingNumber
+											? " bg-white/10"
+											: " bg-green-400/50")
+									}
+									disabled={
+										editTrackingNumberValue ===
+										pkg.trackingNumber
+									}
+								>
+									Save changes
+								</button>
+							</div>
 						</form>
 					</Dialog.Content>
 				</Dialog.Portal>

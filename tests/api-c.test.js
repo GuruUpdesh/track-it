@@ -295,7 +295,11 @@ describe("shippo mock cards", () => {
 
 			await act(async () => {
 				render(
-					<Card pkg={testCase.pkg} dispatchPackages={mockDispatch} />
+					<Card
+						pkg={testCase.pkg}
+						dispatchPackages={mockDispatch}
+						inSearchResults={true}
+					/>
 				)
 			})
 

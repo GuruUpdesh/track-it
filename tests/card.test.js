@@ -21,6 +21,7 @@ describe("Card Component", () => {
 					trackingNumber: "",
 				}}
 				dispatchPackages={mockDispatch}
+				inSearchResults={true}
 			/>
 		)
 
@@ -79,6 +80,7 @@ describe("Card Component", () => {
 					trackingNumber: "",
 				}}
 				dispatchPackages={mockDispatch}
+				inSearchResults={true}
 			/>
 		)
 		render(card)

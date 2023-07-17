@@ -63,7 +63,7 @@ const AddInput = ({ dispatch }: Props) => {
 		<form
 			onSubmit={handleSubmit}
 			className={
-				"group bg-[#110F1B] w-fit border focus-within:outline focus-within:outline-1 focus-within:outline-indigo-300/75 flex" +
+				"group bg-[#110F1B] w-fit border focus-within:outline  outline-offset-2 focus-within:outline-2 focus-within:outline-indigo-400 flex" +
 				(error
 					? " border-red-700/75"
 					: valid

@@ -124,6 +124,7 @@ const Grid = () => {
 						key={pkg.id}
 						pkg={pkg}
 						dispatchPackages={dispatchPackages}
+						inSearchResults={true}
 					/>
 				))}
 			</div>

@@ -101,7 +101,7 @@ const Grid = () => {
 					<Image src="/logo.svg" width={30} height={30} alt="logo" />
 				</a>
 				<AddInput dispatch={dispatchPackages} />
-				<div className="flex relative items-center px-4 border focus-within:outline focus-within:outline-1 focus-within:outline-indigo-300/75 border-indigo-400/25 bg-[#110F1B] rounded-full">
+				<div className="flex relative items-center px-4 border outline-offset-2 focus-within:outline focus-within:outline-2 focus-within:outline-indigo-400 border-indigo-400/25 bg-[#110F1B] rounded-full">
 					<AiOutlineSearch className="mr-1" />
 					<input
 						type="text"
@@ -121,11 +121,12 @@ const Grid = () => {
 				</div>
 			</div>
 			<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{searchResults.map((pkg) => (
+				{packages.map((pkg) => (
 					<Card
 						key={pkg.id}
 						pkg={pkg}
 						dispatchPackages={dispatchPackages}
+						inSearchResults={searchResults.includes(pkg)}
 					/>
 				))}
 			</div>
