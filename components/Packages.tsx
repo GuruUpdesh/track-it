@@ -95,17 +95,17 @@ const Grid = () => {
 	}, [searchString, packages])
 
 	return (
-		<div>
-			<div className="flex items-center justify-between mb-6">
-				<a href="/">
+		<>
+			<nav className="sticky w-full top-0 flex items-center justify-between z-50">
+				<a href="/" className="min-w-[30px]">
 					<Image src="/logo.svg" width={30} height={30} alt="logo" />
 				</a>
 				<AddInput dispatch={dispatchPackages} />
-				<div className="flex relative items-center px-4 border outline-offset-2 focus-within:outline focus-within:outline-2 focus-within:outline-indigo-400 border-indigo-400/25 bg-[#110F1B] rounded-full">
+				<div className="flex relative items-center px-4 border outline-offset-2 focus-within:outline focus-within:outline-2 focus-within:outline-indigo-400 border-indigo-400/25 bg-[#110F1B] rounded-full min-w-[5rem] scale-75 md:scale-90 lg:scale-100">
 					<AiOutlineSearch className="mr-1" />
 					<input
 						type="text"
-						className="py-2 bg-transparent outline-none"
+						className="py-2 bg-transparent outline-none min-w-0"
 						placeholder="Search"
 						value={searchString}
 						onChange={(e) => setSearchString(e.target.value)}
@@ -119,8 +119,8 @@ const Grid = () => {
 						</button>
 					)}
 				</div>
-			</div>
-			<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+			</nav>
+			<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6">
 				{packages.map((pkg) => (
 					<Card
 						key={pkg.id}
@@ -130,7 +130,7 @@ const Grid = () => {
 					/>
 				))}
 			</div>
-		</div>
+		</>
 	)
 }
 

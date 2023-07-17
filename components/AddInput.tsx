@@ -63,7 +63,7 @@ const AddInput = ({ dispatch }: Props) => {
 		<form
 			onSubmit={handleSubmit}
 			className={
-				"group bg-[#110F1B] w-fit border focus-within:outline  outline-offset-2 focus-within:outline-2 focus-within:outline-indigo-400 flex" +
+				"group bg-[#110F1B] w-fit border focus-within:outline  outline-offset-2 focus-within:outline-2 focus-within:outline-indigo-400 flex min-w-[10rem] scale-75 md:scale-90 lg:scale-100" +
 				(error
 					? " border-red-700/75"
 					: valid
@@ -78,7 +78,7 @@ const AddInput = ({ dispatch }: Props) => {
 				id="trackingNumber"
 				placeholder="Type tracking number..."
 				type="text"
-				className="bg-transparent py-2 px-4 outline-none"
+				className="bg-transparent py-2 px-4 outline-none min-w-0"
 				value={trackingNumber}
 				onChange={handleChange}
 				aria-invalid={error ? "true" : "false"}
