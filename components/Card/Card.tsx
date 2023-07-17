@@ -65,7 +65,9 @@ const Card = ({ pkg, dispatchPackages }: Props) => {
 	const journeyPercentCircleRef = React.useRef<HTMLDivElement>(null)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
 
+	// todo move fetch up to Packages.tsx
 	useEffect(() => {
+		if (packageInfo) return
 		const getPackageInfo = async () => {
 			axios
 				.get(`/api/package`, {
