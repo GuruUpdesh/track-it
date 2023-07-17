@@ -19,7 +19,7 @@ const Tooltip = ({ children, text, disabled = false }: Props) => {
 							side="bottom"
 							data-testid="Tooltip-content"
 						>
-							<UITooltip.Arrow className="arrow translate-y-[1px] fill-indigo-400/50" />
+							<UITooltip.Arrow className="arrow fill-black stroke-white z-10" />
 							{text}
 						</UITooltip.Content>
 					) : null}
