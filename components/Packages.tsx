@@ -3,6 +3,7 @@
 import { TCourier, courierEnum } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/Card/Card"
 import useLocalStorage from "@/hooks/useLocalStorageHook"
+import Image from "next/image"
 import React from "react"
 import { z } from "zod"
 
@@ -74,7 +75,10 @@ const Grid = () => {
 
 	return (
 		<div>
-			<div className="mb-6">
+			<div className="flex items-center justify-between mb-6">
+				<a href="/">
+					<Image src="/logo.svg" width={30} height={30} alt="logo" />
+				</a>
 				<AddInput dispatch={dispatchPackages} />
 			</div>
 			<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
