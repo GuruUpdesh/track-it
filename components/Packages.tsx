@@ -1,6 +1,6 @@
 "use client"
 
-import { TCourier } from "@/app/api/package/route"
+import { TCourier } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/Card/Card"
 import useLocalStorage from "@/hooks/useLocalStorageHook"
 import React from "react"

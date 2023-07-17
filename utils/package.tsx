@@ -1,4 +1,4 @@
-import { TLocation, TStatus } from "@/app/api/package/route"
+import { TLocation, TStatus } from "@/app/api/package/typesAndSchemas"
 import { format, formatDistance } from "date-fns"
 import { AiOutlineWarning } from "react-icons/ai"
 import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
