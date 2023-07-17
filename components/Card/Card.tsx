@@ -42,8 +42,8 @@ import "react-loading-skeleton/dist/skeleton.css"
 
 import Tooltip from "../Base/Tooltip"
 import { PackageAction, TPackage } from "../Packages"
-import "./menu.css"
-import "./modal.css"
+import "./styles/menu.css"
+import "./styles/modal.css"
 
 type Props = {
 	pkg: TPackage
