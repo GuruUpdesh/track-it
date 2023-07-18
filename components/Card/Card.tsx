@@ -430,7 +430,7 @@ const Card = ({
 		if (pkg.name === "" && editNameValue === "") {
 			setEditName(true)
 		}
-	}, [pkg.name])
+	}, [pkg.name, editNameValue])
 
 	function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
 		setEditNameValue(e.target.value)
