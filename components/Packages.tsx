@@ -2,12 +2,12 @@
 
 import AddInput from "./AddInput"
 import DetailsModal from "./DetailsModal"
-import Card from "./card/Card"
 import {
 	PackageInfo,
 	TCourier,
 	courierEnum,
 } from "@/app/api/package/typesAndSchemas"
+import Card from "@/components/card/Card"
 import useLocalStorage from "@/hooks/useLocalStorageHook"
 import Fuse from "fuse.js"
 import Image from "next/image"
