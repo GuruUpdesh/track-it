@@ -427,7 +427,7 @@ const Card = ({
 	}
 
 	useEffect(() => {
-		if (pkg.name === "") {
+		if (pkg.name === "" && editNameValue === "") {
 			setEditName(true)
 		}
 	}, [pkg.name])
@@ -437,7 +437,7 @@ const Card = ({
 	}
 
 	function handleSaveName() {
-		if (pkg.name === "") {
+		if (editNameValue === "") {
 			return
 		}
 		dispatchPackages({
