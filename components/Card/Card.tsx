@@ -313,7 +313,7 @@ export const HistoryLine = ({ historyItem }: HistoryLineProps) => {
 					{historyItem.location}
 				</h1>
 				<Tooltip text={formatRelativeDate(historyItem.date)}>
-					<p className="text-left text-xs tracking-tighter text-yellow-50/25 hover:text-yellow-50/50">
+					<p className="text-left text-xs tracking-tighter text-yellow-50/25 ">
 						{formatDate(historyItem.date)} at
 						{" " + getTimeFromDate(historyItem.date)}
 					</p>
@@ -617,7 +617,7 @@ const Card = ({
 											""
 										}
 									>
-										<p className="text-left text-xs tracking-tighter text-yellow-50/50 hover:text-yellow-50/75">
+										<p className="text-left text-xs tracking-tighter text-yellow-50/50">
 											{packageInfo
 												? packageInfo.eta &&
 												  "Arrives " +
