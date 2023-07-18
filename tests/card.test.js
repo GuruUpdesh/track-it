@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom"
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import axios from "axios"
 import MockAdapter from "axios-mock-adapter"
 
@@ -40,13 +40,11 @@ describe("Card Component", () => {
 		const input = screen.getByPlaceholderText("Type name...")
 		fireEvent.change(input, { target: { value: "Test Name" } })
 		fireEvent.keyDown(input, { key: "Enter", code: "Enter" })
-		waitFor(() =>
-			expect(mockDispatch).toHaveBeenCalledWith({
-				type: "updateName",
-				id: "1",
-				name: "Test Name",
-			})
-		)
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: "updateName",
+			id: "1",
+			name: "Test Name",
+		})
 	})
 
 	it("saves name on blur", () => {
@@ -54,13 +52,11 @@ describe("Card Component", () => {
 		const input = screen.getByPlaceholderText("Type name...")
 		fireEvent.change(input, { target: { value: "Test Name" } })
 		fireEvent.blur(input)
-		waitFor(() =>
-			expect(mockDispatch).toHaveBeenCalledWith({
-				type: "updateName",
-				id: "1",
-				name: "Test Name",
-			})
-		)
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: "updateName",
+			id: "1",
+			name: "Test Name",
+		})
 	})
 
 	it("saves name on Enter key press", () => {
@@ -68,13 +64,11 @@ describe("Card Component", () => {
 		const input = screen.getByPlaceholderText("Type name...")
 		fireEvent.change(input, { target: { value: "Test Name" } })
 		fireEvent.keyDown(input, { key: "Enter", code: "Enter" })
-		waitFor(() =>
-			expect(mockDispatch).toHaveBeenCalledWith({
-				type: "updateName",
-				id: "1",
-				name: "Test Name",
-			})
-		)
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: "updateName",
+			id: "1",
+			name: "Test Name",
+		})
 	})
 
 	it("edit of name", async () => {
@@ -97,12 +91,10 @@ describe("Card Component", () => {
 		const input = screen.getByPlaceholderText("Type name...")
 		fireEvent.change(input, { target: { value: "Test Name Edited" } })
 		fireEvent.blur(input)
-		waitFor(() =>
-			expect(mockDispatch).toHaveBeenCalledWith({
-				type: "updateName",
-				id: "1",
-				name: "Test Name Edited",
-			})
-		)
+		expect(mockDispatch).toHaveBeenCalledWith({
+			type: "updateName",
+			id: "1",
+			name: "Test Name Edited",
+		})
 	})
 })
