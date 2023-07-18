@@ -56,6 +56,15 @@ type Props = {
 }
 
 const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
+	const [shouldRender, setShouldRender] = useState(true)
+	useEffect(() => {
+		if (inSearchResults === false) {
+			setShouldRender(false)
+		} else {
+			setShouldRender(true)
+		}
+	}, [inSearchResults])
+
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
 	const [editName, setEditName] = useState(false)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
@@ -245,7 +254,8 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 		},
 	}
 
-	if (!inSearchResults) return null
+	if (!shouldRender) return null
+
 	return (
 		<>
 			<div
