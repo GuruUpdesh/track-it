@@ -1,6 +1,6 @@
 import { PackageAction, TPackage } from "./Packages"
+import { HistoryLine } from "./card/Card"
 import { PackageInfo } from "@/app/api/package/typesAndSchemas"
-import { HistoryLine } from "@/components/card/Card"
 import {
 	getCourierIconFromCode,
 	getCourierStringFromCode,
