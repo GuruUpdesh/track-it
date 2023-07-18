@@ -21,7 +21,6 @@ import {
 } from "@/utils/package"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
-import * as Popover from "@radix-ui/react-popover"
 import axios from "axios"
 import Image from "next/image"
 import React, { useEffect, useState } from "react"
@@ -33,7 +32,7 @@ import {
 	AiOutlineNumber,
 	AiOutlineWarning,
 } from "react-icons/ai"
-import { BiCopy } from "react-icons/bi"
+import { BiCopy, BiExpand } from "react-icons/bi"
 // todo transition to radix-ui/react-icons
 import { BsCheckLg, BsChevronRight, BsHouseCheck } from "react-icons/bs"
 import {
@@ -47,42 +46,307 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 
 import Tooltip from "../Base/Tooltip"
-import { PackageAction, TPackage } from "../Packages"
+import { PackageAction, TPackage, TPackageWithInfo } from "../Packages"
 import "./styles/menu.css"
 import "./styles/modal.css"
+
+type CardDowndownProps = {
+	pkg: TPackage
+	menuFunctions: {
+		copyTrackingNumber: () => void
+		edit: {
+			name: () => void
+			trackingNumber: () => void
+			courier: (courier: TCourier) => void
+		}
+		duplicate: () => void
+		delete: () => void
+	}
+}
+
+export const CardDropdownMenu = ({ pkg, menuFunctions }: CardDowndownProps) => {
+	const [open, setOpen] = useState(false)
+	return (
+		<DropdownMenu.Root onOpenChange={setOpen}>
+			<DropdownMenu.Trigger asChild>
+				<button
+					aria-label="Package Controls"
+					className={
+						"aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10" +
+						(open ? " bg-yellow-50/10" : "")
+					}
+				>
+					<MdMoreVert />
+				</button>
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Portal>
+				<DropdownMenu.Content
+					className="DropdownMenu-content text-center"
+					onCloseAutoFocus={(e) => e.preventDefault()}
+				>
+					<DropdownMenu.Item
+						onSelect={menuFunctions.copyTrackingNumber}
+						className="DropdownMenu-item"
+					>
+						<AiOutlineNumber className="absolute left-4" />
+						Copy Tracking Number
+					</DropdownMenu.Item>
+					<a
+						href={
+							getCourierUrlsFromTrackingNumber(
+								pkg.trackingNumber
+							)[0]
+						}
+						target="_blank"
+					>
+						<DropdownMenu.Item className="DropdownMenu-item">
+							<MdOutlineExplore className="absolute left-4" />
+							Open Courier Website
+						</DropdownMenu.Item>
+					</a>
+					<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
+					<DropdownMenu.Sub>
+						<DropdownMenu.SubTrigger className="DropdownMenu-item">
+							<MdOutlineEditNote className="absolute left-4" />
+							Edit
+							<div className="float-right">
+								<BsChevronRight />
+							</div>
+						</DropdownMenu.SubTrigger>
+						<DropdownMenu.Item className="DropdownMenu-item">
+							<BsHouseCheck className="absolute left-4" />
+							Mark as Delivered
+						</DropdownMenu.Item>
+						<DropdownMenu.Portal>
+							<DropdownMenu.SubContent
+								className="DropdownMenu-content"
+								sideOffset={5}
+								alignOffset={-5}
+							>
+								<DropdownMenu.Item
+									onSelect={menuFunctions.edit.name}
+									className="DropdownMenu-item"
+								>
+									<AiOutlineEdit className="absolute left-4" />
+									Name
+								</DropdownMenu.Item>
+								<DropdownMenu.Item
+									onSelect={menuFunctions.edit.trackingNumber}
+									className="DropdownMenu-item"
+								>
+									<TbEditCircle className="absolute left-4" />
+									Tracking Number
+								</DropdownMenu.Item>
+								<DropdownMenu.Sub>
+									<DropdownMenu.SubTrigger className="DropdownMenu-item bg-orange-500/25 text-orange-400">
+										<AiOutlineMail className="absolute left-4" />
+										Override Courier
+										<div className="float-right">
+											<BsChevronRight />
+										</div>
+									</DropdownMenu.SubTrigger>
+									<DropdownMenu.Portal>
+										<DropdownMenu.SubContent
+											className="DropdownMenu-content"
+											sideOffset={5}
+											alignOffset={-5}
+										>
+											<DropdownMenu.RadioGroup
+												value={pkg.courier}
+												onValueChange={(value) =>
+													menuFunctions.edit.courier(
+														value as TCourier
+													)
+												}
+											>
+												<DropdownMenu.Label className="p-2 text-xs text-orange-400">
+													Warning this could cause
+													errors!
+												</DropdownMenu.Label>
+												{Object.keys(couriers).map(
+													(courier) => (
+														<DropdownMenu.RadioItem
+															key={courier}
+															className="DropdownMenu-item"
+															value={courier}
+														>
+															<DropdownMenu.ItemIndicator className="absolute left-4">
+																<BsCheckLg />
+															</DropdownMenu.ItemIndicator>
+															{getCourierStringFromCode(
+																courier
+															)}
+														</DropdownMenu.RadioItem>
+													)
+												)}
+											</DropdownMenu.RadioGroup>
+										</DropdownMenu.SubContent>
+									</DropdownMenu.Portal>
+								</DropdownMenu.Sub>
+							</DropdownMenu.SubContent>
+						</DropdownMenu.Portal>
+					</DropdownMenu.Sub>
+					<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
+					<DropdownMenu.Item
+						onSelect={menuFunctions.duplicate}
+						className="DropdownMenu-item"
+					>
+						<BiCopy className="absolute left-4" />
+						Duplicate
+					</DropdownMenu.Item>
+					<DropdownMenu.Item
+						onSelect={menuFunctions.delete}
+						className="DropdownMenu-item bg-red-500/25 text-red-400"
+					>
+						<AiOutlineDelete className="absolute left-4" />
+						Delete
+					</DropdownMenu.Item>
+					<DropdownMenu.Arrow className="fill-indigo-400/75" />
+				</DropdownMenu.Content>
+			</DropdownMenu.Portal>
+		</DropdownMenu.Root>
+	)
+}
+
+type EditTrackingNumberModalProps = {
+	open: boolean
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>
+	pkg: TPackage
+	dispatchPackages: React.Dispatch<PackageAction>
+}
+
+export const EditTrackingNumberModal = ({
+	open,
+	setOpen,
+	pkg,
+	dispatchPackages,
+}: EditTrackingNumberModalProps) => {
+	const [trackingNumber, setTrackingNumber] = useState(pkg.trackingNumber)
+	return (
+		<Dialog.Root open={open} onOpenChange={setOpen} modal={true}>
+			<Dialog.Portal>
+				<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 h-full w-full z-40" />
+				<Dialog.Content className="Modal-content absolute left-[50%] top-[50%] min-h-[200px] translate-x-[-50%] translate-y-[-50%] p-6 z-50">
+					<div className="mb-4 flex items-center justify-between">
+						<h1 className="text-lg font-bold">
+							Edit Tracking Number
+						</h1>
+						<button
+							onClick={() => setOpen(false)}
+							className="text-yellow-50/50 hover:text-yellow-50/90 active:text-yellow-50"
+							aria-label="close modal"
+						>
+							<MdClose fontSize="large" />
+						</button>
+					</div>
+					<form
+						className="text-yellow-50"
+						onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+							e.preventDefault()
+							dispatchPackages({
+								type: "updateTrackingNumber",
+								id: pkg.id,
+								trackingNumber: trackingNumber,
+							})
+							setOpen(false)
+						}}
+					>
+						<input
+							className="w-full rounded-md border border-yellow-50/25 bg-transparent p-2 outline-none outline-offset-2 focus-within:outline-2 focus-within:outline-indigo-400"
+							id="tracking-number-input"
+							placeholder="Type tracking number..."
+							autoFocus={true}
+							type="text"
+							value={trackingNumber}
+							onChange={(e) => {
+								setTrackingNumber(e.target.value)
+							}}
+						/>
+						<div className="flex items-center justify-between mt-6">
+							<button
+								className="py-2 px-4 bg-white/10 rounded-md"
+								onClick={() => {
+									setOpen(false)
+								}}
+							>
+								Cancel
+							</button>
+							<button
+								type="submit"
+								className={
+									"py-2 px-4 rounded-md" +
+									(trackingNumber === pkg.trackingNumber
+										? " bg-white/10"
+										: " bg-green-400/50")
+								}
+								disabled={trackingNumber === pkg.trackingNumber}
+							>
+								Save changes
+							</button>
+						</div>
+					</form>
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog.Root>
+	)
+}
+
+type HistoryLineProps = {
+	historyItem: TrackingHistory | null
+}
+
+export const HistoryLine = ({ historyItem }: HistoryLineProps) => {
+	if (!historyItem) return null
+	return (
+		<div className="flex items-center justify-between px-2 py-1">
+			<div>
+				<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75">
+					{historyItem.location}
+				</h1>
+				<Tooltip text={formatRelativeDate(historyItem.date)}>
+					<p className="text-left text-xs tracking-tighter text-yellow-50/25 hover:text-yellow-50/50">
+						{formatDate(historyItem.date)} at
+						{" " + getTimeFromDate(historyItem.date)}
+					</p>
+				</Tooltip>
+			</div>
+			<Tooltip text={historyItem.detailedStatus}>
+				<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
+					{historyItem.status.toLocaleLowerCase()}
+					{getIconForStatus(
+						historyItem.status,
+						historyItem.deliveryLocation
+					)}
+				</div>
+			</Tooltip>
+		</div>
+	)
+}
 
 type Props = {
 	pkg: TPackage
 	dispatchPackages: React.Dispatch<PackageAction>
 	inSearchResults: boolean
+	setSelectedPackage: (pkg: TPackageWithInfo) => void
 }
 
-const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
-	const [shouldRender, setShouldRender] = useState(true)
-	useEffect(() => {
-		if (inSearchResults === false) {
-			setShouldRender(false)
-		} else {
-			setShouldRender(true)
-		}
-	}, [inSearchResults])
-
+const Card = ({
+	pkg,
+	dispatchPackages,
+	inSearchResults,
+	setSelectedPackage,
+}: Props) => {
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
 	const [editName, setEditName] = useState(false)
 	const [editNameValue, setEditNameValue] = useState(pkg.name)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
 		useState(false)
-	const [editTrackingNumberValue, setEditTrackingNumberValue] = useState(
-		pkg.trackingNumber
-	)
 
 	const [error, setError] = useState<null | string>(null)
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
-	const journeyPercentCircleRef = React.useRef<HTMLDivElement>(null)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
-		console.log("fetching package info", pkg)
 		const getPackageInfo = async () => {
 			axios
 				.get(`/api/package`, {
@@ -92,9 +356,18 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 					},
 				})
 				.then((res) => {
-					setPackageInfo(res.data.packageInfo as PackageInfo)
+					const packageInfo = res.data.packageInfo as PackageInfo
+					if (journeyPercentRef.current) {
+						journeyPercentRef.current.style.width = `${estimateProgress(
+							packageInfo.eta,
+							packageInfo.status.status,
+							packageInfo.trackingHistory[0].date,
+							packageInfo.status.date
+						)}%`
+						journeyPercentRef.current.style.opacity = "1"
+					}
+					setPackageInfo(packageInfo)
 					setError(null)
-					console.log("packageInfo", res.data.packageInfo)
 				})
 				.catch((error) => {
 					setPackageInfo(null)
@@ -105,21 +378,8 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 					}
 				})
 		}
-
 		getPackageInfo()
 	}, [pkg.trackingNumber, pkg.courier])
-
-	useEffect(() => {
-		if (journeyPercentRef.current && packageInfo) {
-			journeyPercentRef.current.style.width = `${estimateProgress(
-				packageInfo.eta,
-				packageInfo.status.status,
-				packageInfo.trackingHistory[0].date,
-				packageInfo.status.date
-			)}%`
-			journeyPercentRef.current.style.opacity = "1"
-		}
-	}, [packageInfo])
 
 	function renderHistory(index: number) {
 		let historyItem: TrackingHistory | null = null
@@ -163,68 +423,7 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 			return
 		}
 
-		return (
-			<Popover.Root>
-				<Popover.Trigger asChild>
-					<div className="flex items-center justify-between px-2 py-1">
-						<div>
-							<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75">
-								{historyItem.location}
-							</h1>
-							<Tooltip
-								text={formatRelativeDate(historyItem.date)}
-							>
-								<p className="text-left text-xs tracking-tighter text-yellow-50/25 hover:text-yellow-50/50">
-									{formatDate(historyItem.date)} at
-									{" " + getTimeFromDate(historyItem.date)}
-								</p>
-							</Tooltip>
-						</div>
-						<Tooltip text={historyItem.detailedStatus}>
-							<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
-								{historyItem.status.toLocaleLowerCase()}
-								{getIconForStatus(
-									historyItem.status,
-									historyItem.deliveryLocation
-								)}
-							</div>
-						</Tooltip>
-					</div>
-				</Popover.Trigger>
-				{/* <Popover.Portal>
-					<Popover.Content className="outline-none">
-						<div className="bg-[#5E81F8] text-[#110F1B] px-5 py-1 rounded-lg max-w-[330px]">
-							<h1 className="text-md font-semibold tracking-tighter mb-1">
-								Package Info
-							</h1>
-							<button className="flex items-center gap-1">
-								{getCourierIconFromCode(pkg.courier)}
-								<span className="opacity-50">
-									{pkg.trackingNumber}
-								</span>
-								<BiCopy />
-							</button>
-							<p className=" border-r border-r-black/10">
-								From <b>California</b>, US to <b>Oregon</b>, US
-							</p>
-							{packageInfo.eta && (
-								<p>
-									Estimated delivery:{" "}
-									<b>{formatDate(packageInfo.eta)}</b>
-								</p>
-							)}
-							<div className="bg-[#110F1B] text-[#5E81F8] rounded-full px-2 py-1 text-xs whitespace-nowrap">
-								<BiTargetLock/> <MdLocationOn/> <BsHouseDoor/>
-							</div>
-							<div className="bg-[#110F1B] text-[#5E81F8] rounded-full px-2 py-1 text-xs whitespace-nowrap">
-								At Destination Sorting Facility
-							</div>
-						</div>
-						<Popover.Arrow className="fill-[#5E81F8]" />
-					</Popover.Content>
-				</Popover.Portal> */}
-			</Popover.Root>
-		)
+		return <HistoryLine historyItem={historyItem} />
 	}
 
 	useEffect(() => {
@@ -262,10 +461,6 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 			console.log("menuFunctions > copyTrackingNumber")
 			navigator.clipboard.writeText(pkg.trackingNumber)
 		},
-		getCourierWebsite: () => {
-			const url = getCourierUrlsFromTrackingNumber(pkg.trackingNumber)[0]
-			return url
-		},
 		edit: {
 			name: () => {
 				console.log("menuFunctions > edit > name")
@@ -294,27 +489,25 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 		},
 	}
 
-	if (!shouldRender) return null
+	if (!inSearchResults) return null
 
 	return (
 		<>
 			<div
-				className="border border-indigo-400/25 bg-[#110F1B]"
+				className="group border border-indigo-400/25 bg-[#110F1B]"
 				data-testid="card"
+				// layoutId={`card-${pkg.id}`}
 			>
+				{/* Card Header */}
 				<div className="relative min-w-[220px] max-w-[350px] select-none border-b border-b-indigo-400/25">
 					<div
 						ref={journeyPercentRef}
 						className="journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/75 opacity-50"
 					/>
-					<div className="flex justify-between p-2">
+					<div className="flex items-center justify-between p-2 relative">
 						<div className="flex max-w-[80%] gap-2">
-							<div className="relative flex aspect-square min-w-[50px] items-center justify-center rounded-full ">
-								<div
-									ref={journeyPercentCircleRef}
-									className="journeyPercentCircle absolute z-0 flex h-[calc(100%+2px)] w-[calc(100%+2px)] items-center justify-center rounded-full"
-								/>
-								<div className="absolute z-0 flex h-full w-[calc(100%)] items-center justify-center rounded-full bg-[#110F1B]" />
+							{/* Image */}
+							<div className="relative flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/25">
 								<div
 									className={
 										"absolute z-20 flex h-full w-full items-center justify-center rounded-full" +
@@ -337,6 +530,7 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 									className="pointer-events-none z-10 h-auto"
 								/>
 							</div>
+							{/* Name */}
 							<div className="relative flex max-w-[calc(100%-50px)] flex-col items-start">
 								{editName ? (
 									<input
@@ -361,7 +555,7 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 										<h3
 											ref={textRef}
 											onClick={handleEditName}
-											className="w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
+											className="flex items-center w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
 											style={
 												isTextOverflowed
 													? {
@@ -383,7 +577,11 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 								<div className="flex items-center justify-start gap-2">
 									<a
 										className="underline-link flex items-center gap-1 text-xs text-indigo-300"
-										href={menuFunctions.getCourierWebsite()}
+										href={
+											getCourierUrlsFromTrackingNumber(
+												pkg.trackingNumber
+											)[0]
+										}
 										target="_blank"
 									>
 										{getCourierIconFromCode(pkg.courier)}
@@ -418,246 +616,35 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 								</div>
 							</div>
 						</div>
-						<DropdownMenu.Root>
-							<DropdownMenu.Trigger asChild>
-								<button
-									aria-label="Package Controls"
-									className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10"
-								>
-									<MdMoreVert />
-								</button>
-							</DropdownMenu.Trigger>
-							<DropdownMenu.Portal>
-								<DropdownMenu.Content
-									className="DropdownMenu-content text-center"
-									onCloseAutoFocus={(e) => e.preventDefault()}
-								>
-									<DropdownMenu.Item
-										onSelect={
-											menuFunctions.copyTrackingNumber
-										}
-										className="DropdownMenu-item"
-									>
-										<AiOutlineNumber className="absolute left-4" />
-										Copy Tracking Number
-									</DropdownMenu.Item>
-									<a
-										href={menuFunctions.getCourierWebsite()}
-										target="_blank"
-									>
-										<DropdownMenu.Item
-											onSelect={
-												menuFunctions.getCourierWebsite
-											}
-											className="DropdownMenu-item"
-										>
-											<MdOutlineExplore className="absolute left-4" />
-											Open Courier Website
-										</DropdownMenu.Item>
-									</a>
-									<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
-									<DropdownMenu.Sub>
-										<DropdownMenu.SubTrigger className="DropdownMenu-item">
-											<MdOutlineEditNote className="absolute left-4" />
-											Edit
-											<div className="float-right">
-												<BsChevronRight />
-											</div>
-										</DropdownMenu.SubTrigger>
-										<DropdownMenu.Item
-											onSelect={
-												menuFunctions.getCourierWebsite
-											}
-											className="DropdownMenu-item"
-										>
-											<BsHouseCheck className="absolute left-4" />
-											Mark as Delivered
-										</DropdownMenu.Item>
-										<DropdownMenu.Portal>
-											<DropdownMenu.SubContent
-												className="DropdownMenu-content"
-												sideOffset={5}
-												alignOffset={-5}
-											>
-												<DropdownMenu.Item
-													onSelect={
-														menuFunctions.edit.name
-													}
-													className="DropdownMenu-item"
-												>
-													<AiOutlineEdit className="absolute left-4" />
-													Name
-												</DropdownMenu.Item>
-												<DropdownMenu.Item
-													onSelect={
-														menuFunctions.edit
-															.trackingNumber
-													}
-													className="DropdownMenu-item"
-												>
-													<TbEditCircle className="absolute left-4" />
-													Tracking Number
-												</DropdownMenu.Item>
-												<DropdownMenu.Sub>
-													<DropdownMenu.SubTrigger className="DropdownMenu-item bg-orange-500/25 text-orange-400">
-														<AiOutlineMail className="absolute left-4" />
-														Override Courier
-														<div className="float-right">
-															<BsChevronRight />
-														</div>
-													</DropdownMenu.SubTrigger>
-													<DropdownMenu.Portal>
-														<DropdownMenu.SubContent
-															className="DropdownMenu-content"
-															sideOffset={5}
-															alignOffset={-5}
-														>
-															<DropdownMenu.RadioGroup
-																value={
-																	pkg.courier
-																}
-																onValueChange={(
-																	value
-																) =>
-																	menuFunctions.edit.courier(
-																		value as TCourier
-																	)
-																}
-															>
-																<DropdownMenu.Label className="p-2 text-xs text-orange-400">
-																	Warning this
-																	could cause
-																	errors!
-																</DropdownMenu.Label>
-																{Object.keys(
-																	couriers
-																).map(
-																	(
-																		courier
-																	) => (
-																		<DropdownMenu.RadioItem
-																			key={
-																				courier
-																			}
-																			className="DropdownMenu-item"
-																			value={
-																				courier
-																			}
-																		>
-																			<DropdownMenu.ItemIndicator className="absolute left-4">
-																				<BsCheckLg />
-																			</DropdownMenu.ItemIndicator>
-																			{getCourierStringFromCode(
-																				courier
-																			)}
-																		</DropdownMenu.RadioItem>
-																	)
-																)}
-															</DropdownMenu.RadioGroup>
-														</DropdownMenu.SubContent>
-													</DropdownMenu.Portal>
-												</DropdownMenu.Sub>
-											</DropdownMenu.SubContent>
-										</DropdownMenu.Portal>
-									</DropdownMenu.Sub>
-									<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
-									<DropdownMenu.Item
-										onSelect={menuFunctions.duplicate}
-										className="DropdownMenu-item"
-									>
-										<BiCopy className="absolute left-4" />
-										Duplicate
-									</DropdownMenu.Item>
-									<DropdownMenu.Item
-										onSelect={menuFunctions.delete}
-										className="DropdownMenu-item bg-red-500/25 text-red-400"
-									>
-										<AiOutlineDelete className="absolute left-4" />
-										Delete
-									</DropdownMenu.Item>
-									<DropdownMenu.Arrow className="fill-indigo-400/75" />
-								</DropdownMenu.Content>
-							</DropdownMenu.Portal>
-						</DropdownMenu.Root>
+						<Tooltip text="Open">
+							<button
+								onClick={() => {
+									if (packageInfo) {
+										setSelectedPackage({
+											pkg,
+											info: packageInfo,
+										})
+									}
+								}}
+								className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10 opacity-0 group-hover:opacity-100 transition-opacity"
+							>
+								<BiExpand />
+							</button>
+						</Tooltip>
+						<CardDropdownMenu
+							pkg={pkg}
+							menuFunctions={menuFunctions}
+						/>
 					</div>
 				</div>
 				{renderHistory(-1)}
 			</div>
-			<Dialog.Root
+			<EditTrackingNumberModal
 				open={openTrackingNumberModal}
-				onOpenChange={setOpenEditTrackingNumberModal}
-				modal={true}
-			>
-				<Dialog.Portal>
-					<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 h-full w-full z-40" />
-					<Dialog.Content className="Modal-content absolute left-[50%] top-[50%] min-h-[200px] translate-x-[-50%] translate-y-[-50%] p-6 z-50">
-						<div className="mb-4 flex items-center justify-between">
-							<h1 className="text-lg font-bold">
-								Edit Tracking Number
-							</h1>
-							<button
-								onClick={() =>
-									setOpenEditTrackingNumberModal(false)
-								}
-								className="text-yellow-50/50 hover:text-yellow-50/90 active:text-yellow-50"
-								aria-label="close modal"
-							>
-								<MdClose fontSize="large" />
-							</button>
-						</div>
-						<form
-							className="text-yellow-50"
-							onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-								e.preventDefault()
-								dispatchPackages({
-									type: "updateTrackingNumber",
-									id: pkg.id,
-									trackingNumber: editTrackingNumberValue,
-								})
-								setOpenEditTrackingNumberModal(false)
-							}}
-						>
-							<input
-								className="w-full rounded-md border border-yellow-50/25 bg-transparent p-2 outline-none outline-offset-2 focus-within:outline-2 focus-within:outline-indigo-400"
-								id="tracking-number-input"
-								placeholder="Type tracking number..."
-								autoFocus={true}
-								type="text"
-								value={editTrackingNumberValue}
-								onChange={(e) => {
-									setEditTrackingNumberValue(e.target.value)
-								}}
-							/>
-							<div className="flex items-center justify-between mt-6">
-								<button
-									className="py-2 px-4 bg-white/10 rounded-md"
-									onClick={() => {
-										setOpenEditTrackingNumberModal(false)
-									}}
-								>
-									Cancel
-								</button>
-								<button
-									type="submit"
-									className={
-										"py-2 px-4 rounded-md" +
-										(editTrackingNumberValue ===
-										pkg.trackingNumber
-											? " bg-white/10"
-											: " bg-green-400/50")
-									}
-									disabled={
-										editTrackingNumberValue ===
-										pkg.trackingNumber
-									}
-								>
-									Save changes
-								</button>
-							</div>
-						</form>
-					</Dialog.Content>
-				</Dialog.Portal>
-			</Dialog.Root>
+				setOpen={setOpenEditTrackingNumberModal}
+				pkg={pkg}
+				dispatchPackages={dispatchPackages}
+			/>
 		</>
 	)
 }

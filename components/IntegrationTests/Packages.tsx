@@ -4,6 +4,8 @@ import { TCourier } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/Card/Card"
 import React, { useReducer } from "react"
 
+import { TPackageWithInfo } from "../Packages"
+
 export type TPackage = {
 	id: number
 	name: string
@@ -116,6 +118,11 @@ const Grid = () => {
 		packageReducer,
 		testPackages
 	)
+
+	//eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [selectedPackage, setSelectedPackage] =
+		React.useState<TPackageWithInfo | null>(null)
+
 	return (
 		<div>
 			<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -125,6 +132,7 @@ const Grid = () => {
 						pkg={pkg}
 						dispatchPackages={dispatchPackages}
 						inSearchResults={true}
+						setSelectedPackage={setSelectedPackage}
 					/>
 				))}
 			</div>

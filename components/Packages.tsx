@@ -1,6 +1,10 @@
 "use client"
 
-import { TCourier, courierEnum } from "@/app/api/package/typesAndSchemas"
+import {
+	PackageInfo,
+	TCourier,
+	courierEnum,
+} from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/Card/Card"
 import useLocalStorage from "@/hooks/useLocalStorageHook"
 import Fuse from "fuse.js"
@@ -11,6 +15,7 @@ import { MdClose } from "react-icons/md"
 import { z } from "zod"
 
 import AddInput from "./AddInput"
+import DetailsModal from "./DetailsModal"
 
 export const packageSchema = z.object({
 	id: z.number(),
@@ -18,6 +23,11 @@ export const packageSchema = z.object({
 	trackingNumber: z.string().trim(),
 	courier: courierEnum,
 })
+
+export interface TPackageWithInfo {
+	pkg: TPackage
+	info: PackageInfo
+}
 
 export type TPackage = z.infer<typeof packageSchema>
 
@@ -94,6 +104,11 @@ const Grid = () => {
 		setSearchResults(results.map((result) => result.item))
 	}, [searchString, packages])
 
+	const [selectedPackage, setSelectedPackage] =
+		React.useState<TPackageWithInfo | null>(null)
+
+	console.log(selectedPackage)
+
 	return (
 		<>
 			<nav className="sticky w-full top-0 flex items-center justify-between z-40">
@@ -127,9 +142,20 @@ const Grid = () => {
 						pkg={pkg}
 						dispatchPackages={dispatchPackages}
 						inSearchResults={searchResults.includes(pkg)}
+						setSelectedPackage={setSelectedPackage}
 					/>
 				))}
 			</div>
+			{selectedPackage && (
+				<DetailsModal
+					pkg={selectedPackage.pkg}
+					pkgInfo={selectedPackage.info}
+					dispatchPackages={dispatchPackages}
+					handleClose={(open: boolean) => {
+						if (!open) setSelectedPackage(null)
+					}}
+				/>
+			)}
 		</>
 	)
 }
