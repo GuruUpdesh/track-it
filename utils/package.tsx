@@ -1,5 +1,6 @@
 import { TLocation, TStatus } from "@/app/api/package/typesAndSchemas"
 import { format, formatDistance } from "date-fns"
+import { differenceInDays } from "date-fns"
 import { AiOutlineWarning } from "react-icons/ai"
 import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
 import { TbTruckLoading } from "react-icons/tb"
@@ -76,4 +77,49 @@ export function getIconForStatus(
 		default:
 			return <></>
 	}
+}
+
+export const estimateProgress = (
+	currentEta: string | null,
+	status: TStatus,
+	firstUpdate: string,
+	lastUpdate: string
+): number => {
+	const eta = currentEta ? new Date(currentEta) : null
+	const firstUpdateDate = new Date(firstUpdate)
+	const lastUpdateDate = new Date(lastUpdate)
+
+	// todo support more robust progress estimation
+	if (
+		status === "PRE_TRANSIT" ||
+		status === "UNKNOWN" ||
+		status === "RETURNED" ||
+		status === "FAILURE"
+	) {
+		console.log("estimateProgress", 0)
+		return 0
+	} else if (status === "TRANSIT") {
+		if (!eta) return 0
+		const totalTransitTime = differenceInDays(new Date(), firstUpdateDate)
+		const expectedTransitTime = differenceInDays(eta, firstUpdateDate)
+		const progress = Math.round(
+			(totalTransitTime / expectedTransitTime) * 100
+		)
+		console.log(
+			"estimateProgress",
+			progress,
+			"totalTransitTime",
+			totalTransitTime,
+			"expectedTransitTime",
+			expectedTransitTime,
+			formatDate(currentEta || ""),
+			formatDate(firstUpdate),
+			formatDate(lastUpdate)
+		)
+		return progress
+	} else if (status === "DELIVERED") {
+		console.log("estimateProgress", 100)
+		return 100
+	}
+	return 0
 }

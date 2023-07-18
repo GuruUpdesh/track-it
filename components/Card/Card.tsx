@@ -13,6 +13,7 @@ import {
 	getCourierUrlsFromTrackingNumber,
 } from "@/utils/courier"
 import {
+	estimateProgress,
 	formatDate,
 	formatRelativeDate,
 	getIconForStatus,
@@ -67,6 +68,7 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
 	const [editName, setEditName] = useState(false)
+	const [editNameValue, setEditNameValue] = useState(pkg.name)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
 		useState(false)
 	const [editTrackingNumberValue, setEditTrackingNumberValue] = useState(
@@ -108,15 +110,13 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 
 	useEffect(() => {
 		if (journeyPercentRef.current && packageInfo) {
-			journeyPercentRef.current.style.width = `${Math.random() * 100}%`
+			journeyPercentRef.current.style.width = `${estimateProgress(
+				packageInfo.eta,
+				packageInfo.status.status,
+				packageInfo.trackingHistory[0].date,
+				packageInfo.status.date
+			)}%`
 			journeyPercentRef.current.style.opacity = "1"
-		}
-
-		if (journeyPercentCircleRef.current && packageInfo) {
-			journeyPercentCircleRef.current.style.background = `conic-gradient(
-				rgb(129 140 248 / 0.75) ${Math.random() * 360}deg,
-				rgb(129 140 248 / 0.25) 0deg
-			);`
 		}
 	}, [packageInfo])
 
@@ -195,17 +195,18 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 	}, [pkg.name])
 
 	function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-		dispatchPackages({
-			type: "updateName",
-			id: pkg.id,
-			name: e.target.value,
-		})
+		setEditNameValue(e.target.value)
 	}
 
 	function handleSaveName() {
 		if (pkg.name === "") {
 			return
 		}
+		dispatchPackages({
+			type: "updateName",
+			id: pkg.id,
+			name: editNameValue,
+		})
 		setEditName(false)
 	}
 
@@ -303,7 +304,7 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 										ref={nameInputRef}
 										autoFocus
 										placeholder="Type name..."
-										value={pkg.name}
+										value={editNameValue}
 										onChange={handleNameChange}
 										onBlur={handleSaveName}
 										onKeyDown={(event) => {
