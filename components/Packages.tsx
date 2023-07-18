@@ -7,7 +7,7 @@ import {
 	TCourier,
 	courierEnum,
 } from "@/app/api/package/typesAndSchemas"
-import Card from "@/components/Card/Card"
+import Card from "@/components/card/Card"
 import useLocalStorage from "@/hooks/useLocalStorageHook"
 import Fuse from "fuse.js"
 import Image from "next/image"

@@ -21,3 +21,8 @@ Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2
 ### Fetch SHIPPO_UNKNOWN tracking info
 GET https://api.goshippo.com/tracks/shippo/SHIPPO_UNKNOWN
 Authorization: ShippoToken shippo_test_77bc26afbd727d4f0a6888dbd8f84da1d48fbbb2
+
+
+### Fetch SHIPPO
+GET https://api.goshippo.com/tracks/fedex/652472976194
+Authorization: ShippoToken shippo_live_70067c1d7a5921de994010993d240d442651266c

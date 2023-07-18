@@ -2,7 +2,7 @@
 
 import { TPackageWithInfo } from "../Packages"
 import { TCourier } from "@/app/api/package/typesAndSchemas"
-import Card from "@/components/Card/Card"
+import Card from "@/components/card/Card"
 import React, { useReducer } from "react"
 
 export type TPackage = {

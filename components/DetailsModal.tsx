@@ -1,5 +1,5 @@
-import { HistoryLine } from "./Card/Card"
 import { PackageAction, TPackage } from "./Packages"
+import { HistoryLine } from "./card/Card"
 import { PackageInfo } from "@/app/api/package/typesAndSchemas"
 import {
 	getCourierIconFromCode,

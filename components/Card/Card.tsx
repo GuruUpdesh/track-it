@@ -1,7 +1,7 @@
 "use client"
 
-import Tooltip from "../Base/Tooltip"
 import { PackageAction, TPackage, TPackageWithInfo } from "../Packages"
+import Tooltip from "../ui/Tooltip"
 import "./styles/menu.css"
 import "./styles/modal.css"
 import {
