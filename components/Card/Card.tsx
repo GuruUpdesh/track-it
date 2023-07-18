@@ -63,12 +63,18 @@ type CardDowndownProps = {
 		duplicate: () => void
 		delete: () => void
 	}
+	open: boolean
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const CardDropdownMenu = ({ pkg, menuFunctions }: CardDowndownProps) => {
-	const [open, setOpen] = useState(false)
+export const CardDropdownMenu = ({
+	pkg,
+	menuFunctions,
+	open,
+	setOpen,
+}: CardDowndownProps) => {
 	return (
-		<DropdownMenu.Root onOpenChange={setOpen}>
+		<DropdownMenu.Root open={open} onOpenChange={setOpen}>
 			<DropdownMenu.Trigger asChild>
 				<button
 					aria-label="Package Controls"
@@ -346,12 +352,14 @@ const Card = ({
 	setSelectedPackage,
 }: Props) => {
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
+	const [menuOpen, setMenuOpen] = useState(false)
 	const [editName, setEditName] = useState(false)
 	const [editNameValue, setEditNameValue] = useState(pkg.name)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
 		useState(false)
 
 	const [error, setError] = useState<null | string>(null)
+	// todo fix the journey percent resets after a state change
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
 
@@ -508,8 +516,12 @@ const Card = ({
 	return (
 		<>
 			<div
-				className="group border border-indigo-400/25 bg-[#110F1B]"
+				className="group border border-indigo-400/25 bg-[#110F1B] hover:bg-[#181527] focus-within:bg-[#181527] "
 				data-testid="card"
+				onContextMenu={(e) => {
+					e.preventDefault()
+					setMenuOpen(true)
+				}}
 				// layoutId={`card-${pkg.id}`}
 			>
 				{/* Card Header */}
@@ -641,10 +653,17 @@ const Card = ({
 						<CardDropdownMenu
 							pkg={pkg}
 							menuFunctions={menuFunctions}
+							open={menuOpen}
+							setOpen={setMenuOpen}
 						/>
 					</div>
 				</div>
-				{renderHistory(-1)}
+				<div
+					className="hover:bg-indigo-400/25 cursor-pointer"
+					onClick={menuFunctions.openDetailedView}
+				>
+					{renderHistory(-1)}
+				</div>
 			</div>
 			<EditTrackingNumberModal
 				open={openTrackingNumberModal}
