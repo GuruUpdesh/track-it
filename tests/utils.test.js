@@ -1,5 +1,3 @@
-import { render } from "@testing-library/react"
-
 import {
 	getCourierIconFromCode,
 	getCourierStringFromCode,
@@ -12,6 +10,7 @@ import {
 	formatDate,
 	getTimeFromDate,
 } from "../utils/package"
+import { render } from "@testing-library/react"
 
 describe("package utils", () => {
 	describe("Testing date formatting functions", () => {

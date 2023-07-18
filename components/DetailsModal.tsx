@@ -1,3 +1,4 @@
+import { PackageAction, TPackage } from "./Packages"
 import { PackageInfo } from "@/app/api/package/typesAndSchemas"
 import {
 	getCourierIconFromCode,
@@ -9,8 +10,6 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import React from "react"
 import "react-loading-skeleton/dist/skeleton.css"
-
-import { PackageAction, TPackage } from "./Packages"
 
 type Props = {
 	pkg: TPackage
@@ -51,7 +50,9 @@ const DetailsModal = ({
 									/>
 								</div>
 								<div className="relative flex max-w-[calc(100%-50px)] flex-col items-start">
-									<motion.h3>{pkg.name}</motion.h3>
+									<motion.h3 className="flex items-center w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50">
+										{pkg.name}
+									</motion.h3>
 									<motion.a
 										className="underline-link flex items-center gap-1 text-xs text-indigo-300"
 										href={

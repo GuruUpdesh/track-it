@@ -1,5 +1,9 @@
 "use client"
 
+import Tooltip from "../Base/Tooltip"
+import { PackageAction, TPackage, TPackageWithInfo } from "../Packages"
+import "./styles/menu.css"
+import "./styles/modal.css"
 import {
 	PackageInfo,
 	TCourier,
@@ -44,11 +48,6 @@ import {
 import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
-
-import Tooltip from "../Base/Tooltip"
-import { PackageAction, TPackage, TPackageWithInfo } from "../Packages"
-import "./styles/menu.css"
-import "./styles/modal.css"
 
 type CardDowndownProps = {
 	pkg: TPackage
@@ -536,7 +535,7 @@ const Card = ({
 							<div className="relative flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/25">
 								<div
 									className={
-										"absolute z-20 flex h-full w-full items-center justify-center rounded-full" +
+										"absolute flex z-20 h-full w-full items-center justify-center rounded-full" +
 										(!packageInfo &&
 											" bg-black/25 backdrop-blur-[2px]")
 									}
@@ -581,7 +580,7 @@ const Card = ({
 										<h3
 											ref={textRef}
 											onClick={handleEditName}
-											className="flex items-center w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
+											className="cursor-pointer flex items-center w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
 											style={
 												isTextOverflowed
 													? {
@@ -629,7 +628,7 @@ const Card = ({
 											""
 										}
 									>
-										<p className="text-left text-xs tracking-tighter text-yellow-50/50">
+										<p className="text-left text-xs tracking-tighter text-yellow-50/50 cursor-pointer">
 											{packageInfo
 												? packageInfo.eta &&
 												  "Arrives " +

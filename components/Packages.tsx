@@ -1,5 +1,7 @@
 "use client"
 
+import AddInput from "./AddInput"
+import DetailsModal from "./DetailsModal"
 import {
 	PackageInfo,
 	TCourier,
@@ -13,9 +15,6 @@ import React from "react"
 import { AiOutlineSearch } from "react-icons/ai"
 import { MdClose } from "react-icons/md"
 import { z } from "zod"
-
-import AddInput from "./AddInput"
-import DetailsModal from "./DetailsModal"
 
 export const packageSchema = z.object({
 	id: z.number(),

@@ -1,10 +1,9 @@
+import Card from "../components/Card/Card"
 import "@testing-library/jest-dom"
 import { render, screen } from "@testing-library/react"
 import axios from "axios"
 import MockAdapter from "axios-mock-adapter"
 import { act } from "react-dom/test-utils"
-
-import Card from "../components/Card/Card"
 
 const testCases = [
 	{

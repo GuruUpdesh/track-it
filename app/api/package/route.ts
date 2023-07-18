@@ -1,12 +1,4 @@
 import {
-	convertLocationObjectToString,
-	extractDeliveryLocation,
-} from "@/utils/package"
-import axios from "axios"
-import { NextRequest } from "next/server"
-import { z } from "zod"
-
-import {
 	PackageInfo,
 	PackageInfoSchema,
 	ShippoResponse,
@@ -16,6 +8,13 @@ import {
 	shippoResponseSchema,
 } from "./typesAndSchemas"
 import { createErrorResponse, createSuccessResponse } from "./utils"
+import {
+	convertLocationObjectToString,
+	extractDeliveryLocation,
+} from "@/utils/package"
+import axios from "axios"
+import { NextRequest } from "next/server"
+import { z } from "zod"
 
 const SHIPPO_API_KEY = "ShippoToken " + process.env.SHIPPO_KEY
 const SHIPPO_TEST_API_KEY = "ShippoToken " + process.env.SHIPPO_TEST

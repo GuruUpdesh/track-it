@@ -1,6 +1,5 @@
-import { Work_Sans } from "next/font/google"
-
 import "./globals.css"
+import { Work_Sans } from "next/font/google"
 
 const workSans = Work_Sans({ subsets: ["latin"] })
 

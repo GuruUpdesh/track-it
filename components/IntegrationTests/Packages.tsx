@@ -1,10 +1,9 @@
 "use client"
 
+import { TPackageWithInfo } from "../Packages"
 import { TCourier } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/Card/Card"
 import React, { useReducer } from "react"
-
-import { TPackageWithInfo } from "../Packages"
 
 export type TPackage = {
 	id: number

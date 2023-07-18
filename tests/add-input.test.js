@@ -1,8 +1,7 @@
+import AddInput from "../components/AddInput"
 import { getCouriersFromTrackingNumber } from "@/utils/courier"
 import "@testing-library/jest-dom"
 import { fireEvent, render, screen } from "@testing-library/react"
-
-import AddInput from "../components/AddInput"
 
 jest.mock("../utils/courier", () => ({
 	getCouriersFromTrackingNumber: jest.fn(),

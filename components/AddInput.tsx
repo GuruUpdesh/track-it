@@ -1,10 +1,9 @@
 "use client"
 
+import { PackageAction } from "./Packages"
 import { getCouriersFromTrackingNumber } from "@/utils/courier"
 import React, { useEffect, useState } from "react"
 import { BsPlus } from "react-icons/bs"
-
-import { PackageAction } from "./Packages"
 
 type Props = {
 	dispatch: React.Dispatch<PackageAction>
