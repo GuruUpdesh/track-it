@@ -21,6 +21,7 @@ import {
 } from "@/utils/package"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
+import * as Popover from "@radix-ui/react-popover"
 import axios from "axios"
 import Image from "next/image"
 import React, { useEffect, useState } from "react"
@@ -163,28 +164,66 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 		}
 
 		return (
-			<div className="flex items-center justify-between px-2 py-1">
-				<div>
-					<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75">
-						{historyItem.location}
-					</h1>
-					<Tooltip text={formatRelativeDate(historyItem.date)}>
-						<p className="text-left text-xs tracking-tighter text-yellow-50/25 hover:text-yellow-50/50">
-							{formatDate(historyItem.date)} at
-							{" " + getTimeFromDate(historyItem.date)}
-						</p>
-					</Tooltip>
-				</div>
-				<Tooltip text={historyItem.detailedStatus}>
-					<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
-						{historyItem.status.toLocaleLowerCase()}
-						{getIconForStatus(
-							historyItem.status,
-							historyItem.deliveryLocation
-						)}
+			<Popover.Root>
+				<Popover.Trigger asChild>
+					<div className="flex items-center justify-between px-2 py-1">
+						<div>
+							<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75">
+								{historyItem.location}
+							</h1>
+							<Tooltip
+								text={formatRelativeDate(historyItem.date)}
+							>
+								<p className="text-left text-xs tracking-tighter text-yellow-50/25 hover:text-yellow-50/50">
+									{formatDate(historyItem.date)} at
+									{" " + getTimeFromDate(historyItem.date)}
+								</p>
+							</Tooltip>
+						</div>
+						<Tooltip text={historyItem.detailedStatus}>
+							<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
+								{historyItem.status.toLocaleLowerCase()}
+								{getIconForStatus(
+									historyItem.status,
+									historyItem.deliveryLocation
+								)}
+							</div>
+						</Tooltip>
 					</div>
-				</Tooltip>
-			</div>
+				</Popover.Trigger>
+				{/* <Popover.Portal>
+					<Popover.Content className="outline-none">
+						<div className="bg-[#5E81F8] text-[#110F1B] px-5 py-1 rounded-lg max-w-[330px]">
+							<h1 className="text-md font-semibold tracking-tighter mb-1">
+								Package Info
+							</h1>
+							<button className="flex items-center gap-1">
+								{getCourierIconFromCode(pkg.courier)}
+								<span className="opacity-50">
+									{pkg.trackingNumber}
+								</span>
+								<BiCopy />
+							</button>
+							<p className=" border-r border-r-black/10">
+								From <b>California</b>, US to <b>Oregon</b>, US
+							</p>
+							{packageInfo.eta && (
+								<p>
+									Estimated delivery:{" "}
+									<b>{formatDate(packageInfo.eta)}</b>
+								</p>
+							)}
+							<div className="bg-[#110F1B] text-[#5E81F8] rounded-full px-2 py-1 text-xs whitespace-nowrap">
+								<BiTargetLock/> <MdLocationOn/> <BsHouseDoor/>
+							</div>
+							<div className="bg-[#110F1B] text-[#5E81F8] rounded-full px-2 py-1 text-xs whitespace-nowrap">
+								At Destination Sorting Facility
+							</div>
+						</div>
+						<Popover.Arrow className="fill-[#5E81F8]" />
+					</Popover.Content>
+				</Popover.Portal> */}
+			</Popover.Root>
 		)
 	}
 
@@ -369,7 +408,7 @@ const Card = ({ pkg, dispatchPackages, inSearchResults }: Props) => {
 										<p className="text-left text-xs tracking-tighter text-yellow-50/50 hover:text-yellow-50/75">
 											{packageInfo
 												? packageInfo.eta &&
-												  "arrives " +
+												  "Arrives " +
 														formatRelativeDate(
 															packageInfo.eta
 														)
