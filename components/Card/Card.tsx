@@ -53,6 +53,7 @@ import "./styles/modal.css"
 type CardDowndownProps = {
 	pkg: TPackage
 	menuFunctions: {
+		openDetailedView: () => void
 		copyTrackingNumber: () => void
 		edit: {
 			name: () => void
@@ -84,6 +85,14 @@ export const CardDropdownMenu = ({ pkg, menuFunctions }: CardDowndownProps) => {
 					className="DropdownMenu-content text-center"
 					onCloseAutoFocus={(e) => e.preventDefault()}
 				>
+					<DropdownMenu.Item
+						onSelect={menuFunctions.openDetailedView}
+						className="DropdownMenu-item"
+					>
+						<BiExpand className="absolute left-4" />
+						Open Detailed View
+					</DropdownMenu.Item>
+					<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
 					<DropdownMenu.Item
 						onSelect={menuFunctions.copyTrackingNumber}
 						className="DropdownMenu-item"
@@ -457,6 +466,11 @@ const Card = ({
 	])
 
 	const menuFunctions = {
+		openDetailedView: () => {
+			if (packageInfo) {
+				setSelectedPackage({ pkg, info: packageInfo })
+			}
+		},
 		copyTrackingNumber: () => {
 			console.log("menuFunctions > copyTrackingNumber")
 			navigator.clipboard.writeText(pkg.trackingNumber)
@@ -618,14 +632,7 @@ const Card = ({
 						</div>
 						<Tooltip text="Open">
 							<button
-								onClick={() => {
-									if (packageInfo) {
-										setSelectedPackage({
-											pkg,
-											info: packageInfo,
-										})
-									}
-								}}
+								onClick={menuFunctions.openDetailedView}
 								className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10 opacity-0 group-hover:opacity-100 transition-opacity"
 							>
 								<BiExpand />
