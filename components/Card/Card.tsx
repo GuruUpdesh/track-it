@@ -26,6 +26,7 @@ import {
 import * as Dialog from "@radix-ui/react-dialog"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import axios from "axios"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import React, { useEffect, useState } from "react"
 import {
@@ -453,7 +454,7 @@ const Card = ({
 	}
 
 	function handleSaveName() {
-		if (editNameValue === "") {
+		if (editNameValue === "" || editNameValue === pkg.name) {
 			return
 		}
 		dispatchPackages({
@@ -514,14 +515,19 @@ const Card = ({
 
 	return (
 		<>
-			<div
+			<motion.div
 				className="group border border-indigo-400/25 bg-[#110F1B] hover:bg-[#181527] focus-within:bg-[#181527] "
 				data-testid="card"
 				onContextMenu={(e) => {
 					e.preventDefault()
 					setMenuOpen(true)
 				}}
-				// layoutId={`card-${pkg.id}`}
+				layoutId={`card-${pkg.id}`}
+				transition={{ duration: 0.3, ease: [0.075, 0.82, 0.165, 1] }}
+				initial={false}
+				animate={{ opacity: 1, y: 0 }}
+				exit={{ opacity: 0, y: 50 }}
+				key={pkg.id}
 			>
 				{/* Card Header */}
 				<div className="relative min-w-[220px] max-w-[350px] select-none border-b border-b-indigo-400/25">
@@ -579,7 +585,7 @@ const Card = ({
 									>
 										<h3
 											ref={textRef}
-											onClick={handleEditName}
+											onDoubleClick={handleEditName}
 											className="cursor-pointer flex items-center w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
 											style={
 												isTextOverflowed
@@ -663,7 +669,7 @@ const Card = ({
 				>
 					{renderHistory(-1)}
 				</div>
-			</div>
+			</motion.div>
 			<EditTrackingNumberModal
 				open={openTrackingNumberModal}
 				setOpen={setOpenEditTrackingNumberModal}
