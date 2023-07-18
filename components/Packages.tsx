@@ -96,7 +96,7 @@ const Grid = () => {
 
 	return (
 		<>
-			<nav className="sticky w-full top-0 flex items-center justify-between z-50">
+			<nav className="sticky w-full top-0 flex items-center justify-between z-40">
 				<a href="/" className="min-w-[30px]">
 					<Image src="/logo.svg" width={30} height={30} alt="logo" />
 				</a>
