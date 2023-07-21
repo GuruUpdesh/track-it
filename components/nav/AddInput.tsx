@@ -60,7 +60,7 @@ const AddInput = () => {
 		<form
 			onSubmit={handleSubmit}
 			className={
-				"group flex-item bg-[#110F1B] w-full sm:w-fit border focus-within:outline outline-offset-2 focus-within:outline-2 focus-within:outline-indigo-400 flex min-w-0" +
+				"flex-item group flex w-full min-w-0 border bg-[#110F1B] outline-offset-2 focus-within:outline focus-within:outline-2 focus-within:outline-indigo-400 sm:w-fit" +
 				(error
 					? " border-red-700/75"
 					: valid
@@ -75,7 +75,7 @@ const AddInput = () => {
 				id="trackingNumber"
 				placeholder="Type tracking number..."
 				type="text"
-				className="bg-transparent py-2 px-4 w-full outline-none text-xs sm:text-sm md:text-md"
+				className="md:text-md w-full bg-transparent px-4 py-2 text-xs outline-none sm:text-sm"
 				value={trackingNumber}
 				onChange={handleChange}
 				aria-invalid={error ? "true" : "false"}
@@ -84,9 +84,9 @@ const AddInput = () => {
 			<button
 				type="submit"
 				className={
-					"bg-black/25 p-[12px] border-l" +
+					"border-l bg-black/25 p-[12px]" +
 					(valid
-						? " text-white/75 hover:text-white hover:bg-indigo-400/10"
+						? " text-white/75 hover:bg-indigo-400/10 hover:text-white"
 						: " text-white/50") +
 					(error
 						? " border-l-red-700/75"

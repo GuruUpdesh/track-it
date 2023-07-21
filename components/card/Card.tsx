@@ -36,7 +36,7 @@ import {
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
 // todo transition to radix-ui/react-icons
-import { BsCheckLg, BsChevronRight, BsHouseCheck } from "react-icons/bs"
+import { BsCheckLg, BsChevronRight, BsHouseCheck, BsDot } from "react-icons/bs"
 import {
 	MdClose,
 	MdMoreVert,
@@ -237,8 +237,8 @@ export const EditTrackingNumberModal = ({
 	return (
 		<Dialog.Root open={open} onOpenChange={setOpen} modal={true}>
 			<Dialog.Portal>
-				<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 h-full w-full z-40" />
-				<Dialog.Content className="Modal-content absolute left-[50%] top-[50%] min-h-[200px] translate-x-[-50%] translate-y-[-50%] p-6 z-50">
+				<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 z-40 h-full w-full" />
+				<Dialog.Content className="Modal-content absolute left-[50%] top-[50%] z-50 min-h-[200px] translate-x-[-50%] translate-y-[-50%] p-6">
 					<div className="mb-4 flex items-center justify-between">
 						<h1 className="text-lg font-bold">
 							Edit Tracking Number
@@ -274,9 +274,9 @@ export const EditTrackingNumberModal = ({
 								setTrackingNumber(e.target.value)
 							}}
 						/>
-						<div className="flex items-center justify-between mt-6">
+						<div className="mt-6 flex items-center justify-between">
 							<button
-								className="py-2 px-4 bg-white/10 rounded-md"
+								className="rounded-md bg-white/10 px-4 py-2"
 								onClick={() => {
 									setOpen(false)
 								}}
@@ -286,7 +286,7 @@ export const EditTrackingNumberModal = ({
 							<button
 								type="submit"
 								className={
-									"py-2 px-4 rounded-md" +
+									"rounded-md px-4 py-2" +
 									(trackingNumber === pkg.trackingNumber
 										? " bg-white/10"
 										: " bg-green-400/50")
@@ -306,52 +306,99 @@ export const EditTrackingNumberModal = ({
 type HistoryLineProps = {
 	historyItem: TrackingHistory | null
 	detailedView?: boolean
+	topItem?: boolean
 }
 
 export const HistoryLine = ({
 	historyItem,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	detailedView = false,
+	topItem = false,
 }: HistoryLineProps) => {
 	if (!historyItem) return null
-	return (
-		<div className="flex items-center justify-between px-2 py-1 z-10">
-			<div className="flex gap-6">
-				{detailedView && (
-					<div className="bg-indigo-400/25 px-4 py-1 text-sm rounded-full aspect-square flex items-center justify-center text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400 h-[50px]">
-						{getIconForStatus(
-							historyItem.status,
-							historyItem.deliveryLocation
-						)}
-					</div>
-				)}
+	const delivered = historyItem.status === "DELIVERED"
+	// return (
+	// 	<div className="z-10 flex items-center justify-between px-2 py-1">
+	// 		<div className="flex gap-6">
+	// 			{detailedView && (
+	// 				<div className="flex aspect-square h-[50px] items-center justify-center rounded-full bg-[#20233e] px-4 py-1 text-sm text-indigo-400 hover:bg-indigo-400 hover:text-indigo-900">
+	// 					{getIconForStatus(
+	// 						historyItem.status,
+	// 						historyItem.deliveryLocation
+	// 					)}
+	// 				</div>
+	// 			)}
 
-				<div>
-					<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75 flex ">
-						{historyItem.location}
-					</h1>
-					<Tooltip text={formatRelativeDate(historyItem.date)}>
-						<p className="text-left text-xs tracking-tighter text-yellow-50/25 line-clamp-1">
-							{formatDate(historyItem.date)} at
-							{" " + getTimeFromDate(historyItem.date)}
-						</p>
-					</Tooltip>
+	// 			<div>
+	// 				<h1 className="flex text-left text-lg font-light tracking-tighter text-yellow-50/75 ">
+	// 					{historyItem.location}
+	// 				</h1>
+	// 				<Tooltip text={formatRelativeDate(historyItem.date)}>
+	// 					<p className="line-clamp-1 text-left text-xs tracking-tighter text-yellow-50/25">
+	// 						{formatDate(historyItem.date)} at
+	// 						{" " + getTimeFromDate(historyItem.date)}
+	// 					</p>
+	// 				</Tooltip>
+	// 			</div>
+	// 		</div>
+	// 		{detailedView ? (
+	// 			<p className="ml-2 whitespace-nowrap text-left text-sm text-yellow-50/50">
+	// 				{historyItem.detailedStatus}
+	// 			</p>
+	// 		) : (
+	// 			<Tooltip text={historyItem.detailedStatus}>
+	// 				<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:bg-indigo-400 hover:text-indigo-900">
+	// 					{historyItem.status.toLocaleLowerCase()}
+	// 					{getIconForStatus(
+	// 						historyItem.status,
+	// 						historyItem.deliveryLocation
+	// 					)}
+	// 				</div>
+	// 			</Tooltip>
+	// 		)}
+	// 	</div>
+	// )
+	return (
+		<div
+			className={
+				"flex items-center rounded-lg px-6 py-3" +
+				(topItem
+					? delivered
+						? " bg-gradient-to-r from-indigo-900 to-indigo-700 py-1 shadow-xl shadow-indigo-600/25"
+						: " bg-[#1a1a18] py-1"
+					: " ")
+			}
+		>
+			{topItem ? (
+				<div className="rounded-full border border-white/50 p-2 text-sm text-white/75 outline outline-white/10">
+					{getIconForStatus(
+						historyItem.status,
+						historyItem.deliveryLocation
+					)}
+				</div>
+			) : (
+				<>
+					<BsDot className="h-[32px] w-[32px] text-yellow-50/50" />
+				</>
+			)}
+			<div className="pl-4">
+				<h5 className="line-clamp-1">{historyItem.detailedStatus}</h5>
+				<div className="flex items-center text-yellow-50/50">
+					{historyItem.location === "Location not found" ? null : (
+						<>
+							<p className="whitespace-nowrap">
+								{historyItem.location}
+							</p>
+							<BsDot />
+						</>
+					)}
+					<p className="whitespace-nowrap">
+						{formatDate(historyItem.date) +
+							" " +
+							getTimeFromDate(historyItem.date)}
+					</p>
 				</div>
 			</div>
-			{detailedView ? (
-				<p className="text-left text-sm text-yellow-50/50 ml-2 whitespace-nowrap">
-					{historyItem.detailedStatus}
-				</p>
-			) : (
-				<Tooltip text={historyItem.detailedStatus}>
-					<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
-						{historyItem.status.toLocaleLowerCase()}
-						{getIconForStatus(
-							historyItem.status,
-							historyItem.deliveryLocation
-						)}
-					</div>
-				</Tooltip>
-			)}
 		</div>
 	)
 }
@@ -424,7 +471,7 @@ const Card = ({
 
 		if (error) {
 			return (
-				<div className="flex items-center justify-center px-2 py-1 flex-col">
+				<div className="flex flex-col items-center justify-center px-2 py-1">
 					<p className="text-left text-xs tracking-tighter text-red-400/75">
 						Error!
 					</p>
@@ -543,7 +590,7 @@ const Card = ({
 	return (
 		<>
 			<motion.div
-				className="group border border-indigo-400/25 bg-[#110F1B] hover:bg-[#181527] focus-within:bg-[#181527] "
+				className="group border border-indigo-400/25 bg-[#110F1B] focus-within:bg-[#181527] hover:bg-[#181527] "
 				data-testid="card"
 				onContextMenu={(e) => {
 					e.preventDefault()
@@ -562,13 +609,13 @@ const Card = ({
 						ref={journeyPercentRef}
 						className="journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/75 opacity-50"
 					/>
-					<div className="flex items-center justify-between p-2 relative">
+					<div className="relative flex items-center justify-between p-2">
 						<div className="flex max-w-[80%] gap-2">
 							{/* Image */}
 							<div className="relative flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/25">
 								<div
 									className={
-										"absolute flex z-20 h-full w-full items-center justify-center rounded-full" +
+										"absolute z-20 flex h-full w-full items-center justify-center rounded-full" +
 										(!packageInfo &&
 											" bg-black/25 backdrop-blur-[2px]")
 									}
@@ -613,7 +660,7 @@ const Card = ({
 										<h3
 											ref={textRef}
 											onDoubleClick={handleEditName}
-											className="cursor-pointer flex items-center w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
+											className="flex w-[20ch] max-w-full cursor-pointer items-center overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
 											style={
 												isTextOverflowed
 													? {
@@ -664,7 +711,7 @@ const Card = ({
 											""
 										}
 									>
-										<p className="text-left text-xs tracking-tighter text-yellow-50/50 cursor-pointer">
+										<p className="cursor-pointer text-left text-xs tracking-tighter text-yellow-50/50">
 											{packageInfo
 												? packageInfo.eta &&
 												  (packageInfo.status.status ===
@@ -683,7 +730,7 @@ const Card = ({
 						<Tooltip text="Open">
 							<button
 								onClick={menuFunctions.openDetailedView}
-								className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10 opacity-0 group-hover:opacity-100 transition-opacity"
+								className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 opacity-0 outline-none transition-opacity hover:bg-yellow-50/10 focus:bg-yellow-50/10 group-hover:opacity-100"
 							>
 								<BiExpand />
 							</button>
@@ -697,7 +744,7 @@ const Card = ({
 					</div>
 				</div>
 				<div
-					className="bg-black hover:bg-[#111] cursor-pointer"
+					className="cursor-pointer bg-black hover:bg-[#111]"
 					onClick={menuFunctions.openDetailedView}
 				>
 					{renderHistory(-1)}

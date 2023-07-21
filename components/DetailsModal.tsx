@@ -9,10 +9,11 @@ import {
 } from "@/utils/courier"
 import * as Dialog from "@radix-ui/react-dialog"
 import { AnimatePresence, motion } from "framer-motion"
-import Image from "next/image"
+// import Image from "next/image"
 import React from "react"
-// import { BiCopy } from "react-icons/bi"
-import { MdMoreVert, MdClose } from "react-icons/md"
+import { MdClose } from "react-icons/md"
+import { BiChevronDown } from "react-icons/bi"
+// import { BsArrowLeft } from "react-icons/bs"
 import Balancer from "react-wrap-balancer"
 
 type ToAndFromLocationProps = {
@@ -67,11 +68,13 @@ const DetailsModal = ({
 	dispatchPackages,
 	setOpen,
 }: Props) => {
+	const [trackingHistoryExpanded, setTrackingHistoryExpanded] =
+		React.useState(false)
 	return (
 		<Dialog.Root open={true} modal={true} onOpenChange={setOpen}>
 			<Dialog.Portal>
-				<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 h-full w-full z-40" />
-				<Dialog.Content className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-50 outline-none">
+				<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 z-40 h-full w-full" />
+				<Dialog.Content className="absolute left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] outline-none">
 					<AnimatePresence>
 						<motion.div
 							transition={{
@@ -82,27 +85,25 @@ const DetailsModal = ({
 							initial={{ opacity: 0, y: 50 }}
 							animate={{ opacity: 1, y: 0 }}
 							exit={{ opacity: 0, y: 50 }}
-							className="bg-[#000000] border border-indigo-400/25 rounded-xl  min-h-[80vh] max-h-[80vh] flex flex-col overflow-hidden w-[350px] sm:w-[500px] md:w-[650px] lg:w-[700px]"
+							className="flex max-h-[80vh] min-h-[80vh] w-[350px]  flex-col overflow-hidden rounded-xl border border-indigo-400/25 bg-[#000000] sm:w-[500px] md:w-[650px] lg:w-[700px]"
 						>
 							<motion.div
 								layout
-								className="flex justify-between border-b border-b-indigo-400/20 bg-[#110F1B] p-4"
+								className="flex justify-between bg-gradient-to-b from-[#110F1B] to-transparent p-4"
 							>
 								<div className="flex gap-2">
-									<div className="relative flex h-[50px] aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/25">
-										<Image
-											src="/package.svg"
-											alt="Package Box"
-											width={27}
-											height={27}
-											priority
-											className="pointer-events-none z-10 h-auto"
-										/>
-									</div>
+									{/* <button
+										className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10"
+										onClick={() => {
+											setOpen(false)
+										}}
+									>
+										<BsArrowLeft />
+									</button> */}
 									<div className="relative flex flex-col items-start">
-										<motion.h3 className="flex items-center w-[20ch] max-w-full overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50">
+										<motion.h1 className="flex w-[20ch] max-w-full items-center overflow-hidden whitespace-nowrap text-left text-2xl tracking-tighter text-yellow-50">
 											{pkg.name}
-										</motion.h3>
+										</motion.h1>
 										<motion.a
 											className="underline-link flex items-center gap-1 text-xs text-indigo-300"
 											href={
@@ -134,9 +135,9 @@ const DetailsModal = ({
 									</button>
 								</div> */}
 
-								<button className="flex-none aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 w-min">
+								{/* <button className="aspect-square w-min flex-none cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10">
 									<MdMoreVert />
-								</button>
+								</button> */}
 								<button
 									className="absolute right-2 top-2 aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10"
 									onClick={() => {
@@ -146,76 +147,142 @@ const DetailsModal = ({
 									<MdClose />
 								</button>
 							</motion.div>
-							{/* <motion.div className="text-sm flex flex-col w-fit gap-2 py-2">
-								<p className="py-1 px-4 bg-sky-400/10 rounded-full text-sky-400 flex items-center gap-2">
-									<GrStatusCriticalSmall />
-									{pkgInfo.status.detailedStatus}
-								</p>
-								<ToAndFromLocation
-									startLocation={pkgInfo.startLocation}
-									endLocation={pkgInfo.endLocation}
-								/>
-								{pkgInfo.eta && (
-									<p className="py-1 px-4 bg-green-400/10 rounded-full text-green-400 flex gap-1 items-center">
-										<AiFillClockCircle />
-										Expected delivery on
-										{" " + formatDate(pkgInfo.eta) + " by "}
-										{getTimeFromDate(pkgInfo.eta)}
-									</p>
-								)}
-							</motion.div> */}
-							<h3
-							// className="whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50 pl-4"
-							>
-								Tracking History
-							</h3>
 							<motion.div
 								layoutScroll
-								className="before:content-[''] relative before:absolute before:left-[calc(25px+0.5rem)] before:top-0 before:h-full before:z-0 before:w-1 before:bg-indigo-400/25"
+								className="relative isolate flex flex-col-reverse px-20"
 							>
+								<motion.div
+									className="absolute left-[calc(5rem+2.4rem)] h-full w-1 origin-top rounded-full bg-gradient-to-b from-indigo-900 to-indigo-700/10"
+									initial={{ scaleY: 0 }}
+									animate={{ scaleY: 1 }}
+									transition={{
+										delay: 0.3,
+										duration: 2,
+										ease: [0.075, 0.82, 0.165, 1],
+									}}
+								/>
 								{pkgInfo && (
 									<>
-										{pkgInfo.trackingHistory.map(
-											(
-												historyItem: TrackingHistory,
-												idx: number
-											) => (
-												<motion.div
-													key={historyItem.date}
-													transition={{
-														delay: idx * 0.05,
-														duration: 0.5,
-														ease: [
-															0.075, 0.82, 0.165,
-															1,
-														],
-													}}
-													initial={{
-														opacity: 0,
-														transform:
-															"translateY(-50px) scaleY(0.8)",
-													}}
-													animate={{
-														opacity: 1,
-														transform:
-															"translateY(0px) scaleY(1)",
-													}}
-													exit={{
-														opacity: 0,
-														transform:
-															"translateY(-50px) scaleY(0.8)",
-													}}
-													// className="border-b border-b-white/10 last:border-b-0"
-												>
-													<HistoryLine
-														historyItem={
-															historyItem
-														}
-														detailedView={true}
-													/>
-												</motion.div>
-											)
+										{pkgInfo.trackingHistory.length > 3 && (
+											<motion.button
+												onClick={() =>
+													setTrackingHistoryExpanded(
+														!trackingHistoryExpanded
+													)
+												}
+												transition={{
+													delay:
+														(pkgInfo.trackingHistory
+															.length -
+															1) *
+														0.05,
+													duration: 0.5,
+													ease: [
+														0.075, 0.82, 0.165, 1,
+													],
+												}}
+												initial={{
+													opacity: 0,
+													transform:
+														"translateY(-50px) scaleY(0.8)",
+												}}
+												animate={{
+													opacity: 1,
+													transform:
+														"translateY(0px) scaleY(1)",
+												}}
+												exit={{
+													opacity: 0,
+													transform:
+														"translateY(-50px) scaleY(0.8)",
+												}}
+												className="flex items-center rounded-lg px-6 py-3 text-indigo-200/50 hover:text-indigo-200"
+											>
+												<BiChevronDown
+													className={
+														"h-[32px] w-[32px] " +
+														(trackingHistoryExpanded
+															? " rotate-180"
+															: " ")
+													}
+												/>
+												<p className=" ml-4 text-left ">
+													{trackingHistoryExpanded
+														? `Collapse`
+														: `See ${
+																pkgInfo
+																	.trackingHistory
+																	.length - 3
+														  } more updates`}
+												</p>
+											</motion.button>
 										)}
+										{pkgInfo.trackingHistory
+											.slice(
+												trackingHistoryExpanded ? 0 : -3
+											)
+											.map(
+												(
+													historyItem: TrackingHistory,
+													idx: number
+												) => {
+													const length =
+														trackingHistoryExpanded
+															? pkgInfo
+																	.trackingHistory
+																	.length
+															: pkgInfo.trackingHistory.slice(
+																	-3
+															  ).length
+													return (
+														<motion.div
+															key={
+																historyItem.date
+															}
+															transition={{
+																delay:
+																	(length -
+																		idx) *
+																	0.05,
+																duration: 0.5,
+																ease: [
+																	0.075, 0.82,
+																	0.165, 1,
+																],
+															}}
+															initial={{
+																opacity: 0,
+																transform:
+																	"translateY(-50px) scaleY(0.8)",
+															}}
+															animate={{
+																opacity: 1,
+																transform:
+																	"translateY(0px) scaleY(1)",
+															}}
+															exit={{
+																opacity: 0,
+																transform:
+																	"translateY(-50px) scaleY(0.8)",
+															}}
+															className="z-0"
+														>
+															<HistoryLine
+																historyItem={
+																	historyItem
+																}
+																detailedView={
+																	true
+																}
+																topItem={
+																	idx ===
+																	length - 1
+																}
+															/>
+														</motion.div>
+													)
+												}
+											)}
 									</>
 								)}
 							</motion.div>

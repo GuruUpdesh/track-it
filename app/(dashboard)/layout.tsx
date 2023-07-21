@@ -12,8 +12,8 @@ function DashboardLayout({ children }: Props) {
 	return (
 		<PackageContextProvider>
 			<UndoStackContextProvider>
-				<div className="w-[350px] sm:w-auto mt-1 sm:mt-6 px-4 md:px-12">
-					<nav className="sticky w-full top-0 gap-2 flex items-center justify-between z-40 overflow-hidden sm:overflow-visible py-1">
+				<div className="mt-1 w-[350px] min-w-[50vw] px-4 sm:mt-6 sm:w-auto md:px-12">
+					<nav className="sticky top-0 z-40 flex w-full items-center justify-between gap-2 overflow-hidden py-1 sm:overflow-visible">
 						<a href="/" className="min-w-[30px]">
 							<Image
 								src="/logo.svg"
@@ -25,7 +25,7 @@ function DashboardLayout({ children }: Props) {
 						<AddInput />
 						<SearchInput />
 					</nav>
-					<main className="flex flex-col items-center relative">
+					<main className="relative flex flex-col items-center">
 						{children}
 					</main>
 				</div>

@@ -36,7 +36,7 @@ const UndoNotification = ({ open, setOpen }: UndoNotificationProps) => {
 	return (
 		<Toast.Provider swipeDirection="down" duration={3000}>
 			<Toast.Root
-				className="ToastRoot bg-[#080808] hover:bg-[#181818] border border-indigo-400/25 text-yellow-50/75 hover:text-yellow-50 font-semibold rounded-sm py-1 px-2 grid items-center"
+				className="ToastRoot grid items-center rounded-sm border border-indigo-400/25 bg-[#080808] px-2 py-1 font-semibold text-yellow-50/75 hover:bg-[#181818] hover:text-yellow-50"
 				open={open}
 				onOpenChange={setOpen}
 			>
@@ -63,7 +63,7 @@ const UndoNotification = ({ open, setOpen }: UndoNotificationProps) => {
 					</>
 				</Toast.Action>
 			</Toast.Root>
-			<Toast.Viewport className="fixed bottom-3 right-[50%] translate-x-[50%] flex flex-col gap-3 max-w-[100vw] z-50" />
+			<Toast.Viewport className="fixed bottom-3 right-[50%] z-50 flex max-w-[100vw] translate-x-[50%] flex-col gap-3" />
 		</Toast.Provider>
 	)
 }
@@ -95,20 +95,38 @@ const Grid = () => {
 
 	return (
 		<>
-			<div className="grid gap-2 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2 sm:mt-6">
-				{packages.map((pkg) => (
-					<Card
-						key={pkg.id}
-						pkg={pkg}
-						dispatchPackages={dispatchPackages}
-						inSearchResults={true}
-						setSelectedPackage={setSelectedPackage}
-						triggerUndoNotification={() =>
-							setUndoNotificationOpen(true)
-						}
-					/>
-				))}
-			</div>
+			{packages.length === 0 && (
+				<div className="mt-2 flex min-w-full flex-grow flex-col items-center gap-2 text-center text-yellow-50/50 sm:mt-6">
+					<p>You are not tracking any shipments yet.</p>
+					<button
+						className="grid items-center rounded-sm bg-yellow-50/10 px-2 py-1 font-semibold text-yellow-50/75 hover:bg-yellow-50/25 hover:text-yellow-50"
+						onClick={() => {
+							const addInput = document.getElementById(
+								"trackingNumber"
+							) as HTMLInputElement
+							addInput.focus()
+						}}
+					>
+						Add
+					</button>
+				</div>
+			)}
+			{packages.length > 0 && (
+				<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					{packages.map((pkg) => (
+						<Card
+							key={pkg.id}
+							pkg={pkg}
+							dispatchPackages={dispatchPackages}
+							inSearchResults={true}
+							setSelectedPackage={setSelectedPackage}
+							triggerUndoNotification={() =>
+								setUndoNotificationOpen(true)
+							}
+						/>
+					))}
+				</div>
+			)}
 			{selectedPackage && (
 				<DetailsModal
 					pkg={selectedPackage.pkg}

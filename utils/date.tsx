@@ -8,10 +8,14 @@ export function formatRelativeDate(date: string): string {
 
 export function formatDate(date: string): string {
 	const dateObject = new Date(date)
-	return format(dateObject, "MMMM d, yyyy") // e.g., January 1, 2023
+	// if this year
+	if (dateObject.getFullYear() === new Date().getFullYear()) {
+		return format(dateObject, "MMM d") // e.g., January 1
+	}
+	return format(dateObject, "MMM d, yyyy") // e.g., January 1, 2023
 }
 
 export function getTimeFromDate(date: string): string {
 	const dateObject = new Date(date)
-	return format(dateObject, "h:mm aa") // e.g., 2:30 PM
+	return format(dateObject, "h:mmaaa") // e.g., 2:30 PM
 }

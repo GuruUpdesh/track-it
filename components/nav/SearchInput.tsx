@@ -8,18 +8,18 @@ import { MdClose } from "react-icons/md"
 const SearchInput = () => {
 	const [searchString, setSearchString] = useState("")
 	return (
-		<div className="flex flex-item relative items-center px-4 border outline-offset-2 focus-within:outline focus-within:outline-2 focus-within:outline-indigo-400 border-indigo-400/25 bg-[#110F1B] rounded-full min-w-[5rem]">
+		<div className="flex-item relative flex min-w-[5rem] items-center rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 outline-offset-2 focus-within:outline focus-within:outline-2 focus-within:outline-indigo-400">
 			<AiOutlineSearch className="mr-1" />
 			<input
 				type="text"
-				className="py-2 bg-transparent outline-none min-w-0 text-xs sm:text-sm md:text-md"
+				className="md:text-md min-w-0 bg-transparent py-2 text-xs outline-none sm:text-sm"
 				placeholder="Search"
 				value={searchString}
 				onChange={(e) => setSearchString(e.target.value)}
 			/>
 			{searchString && (
 				<button
-					className="absolute right-4 bg-[#110F1B] rounded-full p-1"
+					className="absolute right-4 rounded-full bg-[#110F1B] p-1"
 					onClick={() => setSearchString("")}
 				>
 					<MdClose />

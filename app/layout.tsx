@@ -61,7 +61,7 @@ export default function RootLayout({ children }: Props) {
 			<body
 				className={cn(
 					workSans.className,
-					"min-h-screen antialiased flex justify-center"
+					"flex min-h-screen justify-center antialiased"
 				)}
 			>
 				{children}

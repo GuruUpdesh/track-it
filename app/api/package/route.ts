@@ -4,6 +4,7 @@ import {
 	ShippoResponse,
 	ShippoTrackingHistory,
 	TCourier,
+	TStatus,
 	TrackingHistory,
 	shippoResponseSchema,
 } from "./typesAndSchemas"
@@ -79,12 +80,39 @@ function getEta(eta: string | null): string | null {
 	}
 }
 
+function simplifyDetailMessage(message: string, status: TStatus): string {
+	const lowercaseMessage = message.toLowerCase()
+
+	if (status === "DELIVERED") {
+		return "Delivered"
+	}
+
+	if (status === "TRANSIT") {
+		if (lowercaseMessage.includes("departed")) {
+			return "Departed"
+		} else if (lowercaseMessage.includes("arrived")) {
+			return "Arrived at facility"
+		} else if (lowercaseMessage.includes("in transit")) {
+			return "In transit"
+		}
+	}
+
+	// if (status = "PRE_TRANSIT") {
+	// 	return "Shipment information received"
+	// }
+
+	return message
+}
+
 function simplifyTrackingHistory(
 	trackingHistory: ShippoTrackingHistory
 ): TrackingHistory {
 	return {
 		status: trackingHistory.status,
-		detailedStatus: trackingHistory.status_details,
+		detailedStatus: simplifyDetailMessage(
+			trackingHistory.status_details,
+			trackingHistory.status
+		),
 		location: convertLocationObjectToString(trackingHistory.location),
 		date: trackingHistory.status_date,
 		deliveryLocation: extractDeliveryLocation(
