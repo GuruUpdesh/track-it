@@ -1,9 +1,5 @@
-"use client"
-
 import { TCourier } from "@/app/api/package/typesAndSchemas"
 import { TPackage, packageSchema } from "@/components/Packages"
-import useLocalStorage from "@/hooks/useLocalStorageHook"
-import React, { createContext } from "react"
 
 export type PackageAction =
 	| { type: "add"; new: TPackage }
@@ -53,27 +49,4 @@ function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 	}
 }
 
-export type PackageContextProps = {
-	packages: TPackage[]
-	dispatchPackages: React.Dispatch<PackageAction>
-}
-
-export const PackageContext = createContext<PackageContextProps>({
-	packages: [],
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	dispatchPackages: () => {},
-})
-
-export function Providers({ children }: { children: React.ReactNode }) {
-	const [packages, dispatchPackages] = useLocalStorage(
-		"packages",
-		[],
-		packageReducer
-	)
-
-	return (
-		<PackageContext.Provider value={{ packages, dispatchPackages }}>
-			{children}
-		</PackageContext.Provider>
-	)
-}
+export default packageReducer

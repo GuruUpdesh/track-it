@@ -4,12 +4,12 @@ import { TPackage, TPackageWithInfo } from "../Packages"
 import Tooltip from "../ui/Tooltip"
 import "./styles/menu.css"
 import "./styles/modal.css"
-import { PackageAction } from "@/app/(dashboard)/Providers"
 import {
 	PackageInfo,
 	TCourier,
 	TrackingHistory,
 } from "@/app/api/package/typesAndSchemas"
+import { PackageAction } from "@/context/packageContext/packageReducer"
 import useTextOverflow from "@/hooks/useTextOverflow"
 import {
 	couriers,

@@ -1,7 +1,7 @@
 import { TPackage } from "./Packages"
-import { PackageAction } from "@/app/(dashboard)/Providers"
 import { TrackingHistory, PackageInfo } from "@/app/api/package/typesAndSchemas"
 import { HistoryLine } from "@/components/card/Card"
+import { PackageAction } from "@/context/packageContext/packageReducer"
 import {
 	getCourierIconFromCode,
 	getCourierStringFromCode,

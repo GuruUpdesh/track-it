@@ -2,9 +2,9 @@
 
 import AddInput from "./AddInput"
 import DetailsModal from "./DetailsModal"
-import { usePackageContext } from "@/app/(dashboard)/usePackageContext"
 import { PackageInfo, courierEnum } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/card/Card"
+import { usePackageContext } from "@/context/packageContext/usePackageContext"
 import Fuse from "fuse.js"
 import Image from "next/image"
 import React from "react"

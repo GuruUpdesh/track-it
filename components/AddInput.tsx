@@ -1,6 +1,6 @@
 "use client"
 
-import { PackageAction } from "@/app/(dashboard)/Providers"
+import { PackageAction } from "@/context/packageContext/packageReducer"
 import { getCouriersFromTrackingNumber } from "@/utils/courier"
 import React, { useEffect, useState } from "react"
 import { BsPlus } from "react-icons/bs"
