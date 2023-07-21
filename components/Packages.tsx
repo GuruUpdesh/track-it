@@ -50,8 +50,6 @@ const Grid = () => {
 	const [selectedPackage, setSelectedPackage] =
 		React.useState<TPackageWithInfo | null>(null)
 
-	console.log(selectedPackage)
-
 	return (
 		<>
 			<nav className="sticky w-full top-0 flex items-center justify-between z-40">
