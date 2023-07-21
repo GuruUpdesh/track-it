@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { Work_Sans } from "next/font/google"
 
-const workSans = Work_Sans({ subsets: ["latin"] })
+const workSans = Work_Sans({ subsets: ["latin"], display: "swap" })
 
 export const metadata: Metadata = {
 	title: siteConfig.name,
@@ -59,7 +59,10 @@ export default function RootLayout({ children }: Props) {
 		<html lang="en">
 			<head />
 			<body
-				className={cn(workSans.className, "min-h-screen antialiased")}
+				className={cn(
+					workSans.className,
+					"min-h-screen antialiased flex justify-center"
+				)}
 			>
 				{children}
 			</body>
