@@ -71,12 +71,11 @@ function getEta(eta: string | null): string | null {
 	const etaDate = new Date(eta)
 
 	if (isEqual(etaDate, startOfDay(etaDate))) {
-		console.log("not start of day")
-		return eta
-	} else {
+		console.log("start of day")
 		const endOfEtaDay = endOfDay(etaDate)
-		console.log("end of day")
 		return format(endOfEtaDay, "yyyy-MM-dd HH:mm:ss")
+	} else {
+		return eta
 	}
 }
 
