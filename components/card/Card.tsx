@@ -10,6 +10,7 @@ import {
 	TrackingHistory,
 } from "@/app/api/package/typesAndSchemas"
 import { PackageAction } from "@/context/packageContext/packageReducer"
+import { useUndoStackContext } from "@/context/undoStackContext/useUndoStackContext"
 import useTextOverflow from "@/hooks/useTextOverflow"
 import {
 	couriers,
@@ -313,10 +314,10 @@ export const HistoryLine = ({
 }: HistoryLineProps) => {
 	if (!historyItem) return null
 	return (
-		<div className="flex items-center justify-between px-2 py-1">
+		<div className="flex items-center justify-between px-2 py-1 z-10">
 			<div className="flex gap-6">
 				{detailedView && (
-					<div className="bg-indigo-400/25 px-4 py-1 text-sm rounded-full aspect-square flex items-center justify-center text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
+					<div className="bg-indigo-400/25 px-4 py-1 text-sm rounded-full aspect-square flex items-center justify-center text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400 h-[50px]">
 						{getIconForStatus(
 							historyItem.status,
 							historyItem.deliveryLocation
@@ -360,6 +361,7 @@ type Props = {
 	dispatchPackages: React.Dispatch<PackageAction>
 	inSearchResults: boolean
 	setSelectedPackage: (pkg: TPackageWithInfo) => void
+	triggerUndoNotification: () => void
 }
 
 const Card = ({
@@ -367,7 +369,9 @@ const Card = ({
 	dispatchPackages,
 	inSearchResults,
 	setSelectedPackage,
+	triggerUndoNotification,
 }: Props) => {
+	const { dispatchUndoStack } = useUndoStackContext()
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
 	const [menuOpen, setMenuOpen] = useState(false)
 	const [editName, setEditName] = useState(false)
@@ -524,7 +528,13 @@ const Card = ({
 		},
 		delete: () => {
 			console.log("menuFunctions > delete")
+			const pkgCopy = { ...pkg }
 			dispatchPackages({ type: "delete", id: pkg.id })
+			dispatchUndoStack({
+				type: "push",
+				new: pkgCopy,
+			})
+			triggerUndoNotification()
 		},
 	}
 
@@ -687,7 +697,7 @@ const Card = ({
 					</div>
 				</div>
 				<div
-					className="hover:bg-indigo-400/25 cursor-pointer"
+					className="bg-black hover:bg-[#111] cursor-pointer"
 					onClick={menuFunctions.openDetailedView}
 				>
 					{renderHistory(-1)}

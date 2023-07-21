@@ -132,6 +132,8 @@ const Grid = () => {
 						dispatchPackages={dispatchPackages}
 						inSearchResults={true}
 						setSelectedPackage={setSelectedPackage}
+						// eslint-disable-next-line @typescript-eslint/no-empty-function
+						triggerUndoNotification={() => {}}
 					/>
 				))}
 			</div>

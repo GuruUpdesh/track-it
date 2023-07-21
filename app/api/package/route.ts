@@ -13,6 +13,7 @@ import {
 	extractDeliveryLocation,
 } from "@/utils/package"
 import axios from "axios"
+import { startOfDay, endOfDay, isEqual, format } from "date-fns"
 import { NextRequest } from "next/server"
 import { z } from "zod"
 
@@ -61,6 +62,24 @@ function isTCourier(courier: string): courier is TCourier {
 	return couriers.includes(courier as TCourier)
 }
 
+function getEta(eta: string | null): string | null {
+	if (!eta) {
+		return null
+	}
+	console.log(eta)
+
+	const etaDate = new Date(eta)
+
+	if (isEqual(etaDate, startOfDay(etaDate))) {
+		console.log("not start of day")
+		return eta
+	} else {
+		const endOfEtaDay = endOfDay(etaDate)
+		console.log("end of day")
+		return format(endOfEtaDay, "yyyy-MM-dd HH:mm:ss")
+	}
+}
+
 function simplifyTrackingHistory(
 	trackingHistory: ShippoTrackingHistory
 ): TrackingHistory {
@@ -94,7 +113,7 @@ export async function GET(request: NextRequest) {
 		const packageInfoSimple: PackageInfo = {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
-			eta: packageInfo.eta,
+			eta: getEta(packageInfo.eta),
 			startLocation: convertLocationObjectToString(
 				packageInfo.address_from
 			),
