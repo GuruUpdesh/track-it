@@ -86,7 +86,7 @@ describe("Card Component", () => {
 		render(card)
 
 		const name = screen.getByText("Test Name")
-		fireEvent.click(name)
+		fireEvent.doubleClick(name)
 		const input = screen.getByPlaceholderText("Type name...")
 		fireEvent.change(input, { target: { value: "Test Name Edited" } })
 		fireEvent.blur(input)

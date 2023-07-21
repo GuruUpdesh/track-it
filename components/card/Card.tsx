@@ -1,9 +1,10 @@
 "use client"
 
-import { PackageAction, TPackage, TPackageWithInfo } from "../Packages"
+import { TPackage, TPackageWithInfo } from "../Packages"
 import Tooltip from "../ui/Tooltip"
 import "./styles/menu.css"
 import "./styles/modal.css"
+import { PackageAction } from "@/app/(dashboard)/Providers"
 import {
 	PackageInfo,
 	TCourier,
@@ -308,32 +309,53 @@ export const EditTrackingNumberModal = ({
 
 type HistoryLineProps = {
 	historyItem: TrackingHistory | null
+	detailedView?: boolean
 }
 
-export const HistoryLine = ({ historyItem }: HistoryLineProps) => {
+export const HistoryLine = ({
+	historyItem,
+	detailedView = false,
+}: HistoryLineProps) => {
 	if (!historyItem) return null
 	return (
 		<div className="flex items-center justify-between px-2 py-1">
-			<div>
-				<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75">
-					{historyItem.location}
-				</h1>
-				<Tooltip text={formatRelativeDate(historyItem.date)}>
-					<p className="text-left text-xs tracking-tighter text-yellow-50/25 ">
-						{formatDate(historyItem.date)} at
-						{" " + getTimeFromDate(historyItem.date)}
-					</p>
-				</Tooltip>
-			</div>
-			<Tooltip text={historyItem.detailedStatus}>
-				<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
-					{historyItem.status.toLocaleLowerCase()}
-					{getIconForStatus(
-						historyItem.status,
-						historyItem.deliveryLocation
-					)}
+			<div className="flex gap-6">
+				{detailedView && (
+					<div className="bg-indigo-400/25 px-4 py-1 text-sm rounded-full aspect-square flex items-center justify-center text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
+						{getIconForStatus(
+							historyItem.status,
+							historyItem.deliveryLocation
+						)}
+					</div>
+				)}
+
+				<div>
+					<h1 className="text-left text-lg font-light tracking-tighter text-yellow-50/75 flex ">
+						{historyItem.location}
+					</h1>
+					<Tooltip text={formatRelativeDate(historyItem.date)}>
+						<p className="text-left text-xs tracking-tighter text-yellow-50/25 line-clamp-1">
+							{formatDate(historyItem.date)} at
+							{" " + getTimeFromDate(historyItem.date)}
+						</p>
+					</Tooltip>
 				</div>
-			</Tooltip>
+			</div>
+			{detailedView ? (
+				<p className="text-left text-sm text-yellow-50/50 ml-2 whitespace-nowrap">
+					{historyItem.detailedStatus}
+				</p>
+			) : (
+				<Tooltip text={historyItem.detailedStatus}>
+					<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:text-indigo-900 hover:bg-indigo-400">
+						{historyItem.status.toLocaleLowerCase()}
+						{getIconForStatus(
+							historyItem.status,
+							historyItem.deliveryLocation
+						)}
+					</div>
+				</Tooltip>
+			)}
 		</div>
 	)
 }
@@ -627,7 +649,10 @@ const Card = ({
 											(packageInfo &&
 												packageInfo.eta &&
 												formatDate(packageInfo.eta) +
-													" by " +
+													(packageInfo.status
+														.status === "DELIVERED"
+														? " at "
+														: " by ") +
 													getTimeFromDate(
 														packageInfo.eta
 													)) ||
@@ -637,7 +662,10 @@ const Card = ({
 										<p className="text-left text-xs tracking-tighter text-yellow-50/50 cursor-pointer">
 											{packageInfo
 												? packageInfo.eta &&
-												  "Arrives " +
+												  (packageInfo.status.status ===
+												  "DELIVERED"
+														? "Arrived "
+														: "Arrives ") +
 														formatRelativeDate(
 															packageInfo.eta
 														)

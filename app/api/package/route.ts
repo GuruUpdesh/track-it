@@ -95,6 +95,10 @@ export async function GET(request: NextRequest) {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
 			eta: packageInfo.eta,
+			startLocation: convertLocationObjectToString(
+				packageInfo.address_from
+			),
+			endLocation: convertLocationObjectToString(packageInfo.address_to),
 			status: simplifyTrackingHistory(
 				packageInfo.tracking_status as ShippoTrackingHistory
 			),

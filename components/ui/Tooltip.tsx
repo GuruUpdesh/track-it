@@ -10,7 +10,7 @@ type Props = {
 const Tooltip = ({ children, text, disabled = false }: Props) => {
 	return (
 		<UITooltip.Provider>
-			<UITooltip.Root defaultOpen={false}>
+			<UITooltip.Root defaultOpen={false} delayDuration={350}>
 				<UITooltip.Trigger asChild>{children}</UITooltip.Trigger>
 				<UITooltip.Portal>
 					{!disabled ? (
