@@ -1,25 +1,9 @@
+import { formatDate } from "./date"
 import { TLocation, TStatus } from "@/app/api/package/typesAndSchemas"
-import { format, formatDistance } from "date-fns"
 import { differenceInDays } from "date-fns"
 import { AiOutlineWarning } from "react-icons/ai"
 import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
 import { TbTruckLoading } from "react-icons/tb"
-
-export function formatRelativeDate(date: string): string {
-	const dateObject = new Date(date)
-	const relative = formatDistance(dateObject, new Date(), { addSuffix: true })
-	return relative
-}
-
-export function formatDate(date: string): string {
-	const dateObject = new Date(date)
-	return format(dateObject, "MMMM d, yyyy") // e.g., January 1, 2023
-}
-
-export function getTimeFromDate(date: string): string {
-	const dateObject = new Date(date)
-	return format(dateObject, "h:mm aa") // e.g., 2:30 PM
-}
 
 export function convertLocationObjectToString(
 	location: TLocation | null

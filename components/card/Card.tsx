@@ -17,13 +17,8 @@ import {
 	getCourierStringFromCode,
 	getCourierUrlsFromTrackingNumber,
 } from "@/utils/courier"
-import {
-	estimateProgress,
-	formatDate,
-	formatRelativeDate,
-	getIconForStatus,
-	getTimeFromDate,
-} from "@/utils/package"
+import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
+import { estimateProgress, getIconForStatus } from "@/utils/package"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import axios from "axios"
@@ -51,7 +46,7 @@ import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 
-type CardDowndownProps = {
+type CardDropdownProps = {
 	pkg: TPackage
 	menuFunctions: {
 		openDetailedView: () => void
@@ -73,7 +68,7 @@ export const CardDropdownMenu = ({
 	menuFunctions,
 	open,
 	setOpen,
-}: CardDowndownProps) => {
+}: CardDropdownProps) => {
 	return (
 		<DropdownMenu.Root open={open} onOpenChange={setOpen}>
 			<DropdownMenu.Trigger asChild>
