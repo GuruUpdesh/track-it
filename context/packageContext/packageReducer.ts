@@ -4,6 +4,7 @@ import { TPackage, packageSchema } from "@/components/Packages"
 export type PackageAction =
 	| { type: "add"; new: TPackage }
 	| { type: "delete"; id: number }
+	| { type: "batchDelete"; ids: string[] }
 	| { type: "updateName"; id: number; name: string }
 	| { type: "updateTrackingNumber"; id: number; trackingNumber: string }
 	| { type: "updateCourier"; id: number; courier: TCourier }
@@ -16,6 +17,10 @@ function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 			return [...state, action.new]
 		case "delete":
 			return state.filter((pkg) => pkg.id !== action.id)
+		case "batchDelete":
+			const ids = action.ids
+			console.log("batch delete", ids)
+			return state.filter((pkg) => !ids.includes(`${pkg.id}`))
 		case "updateName":
 			return state.map((pkg) =>
 				pkg.id === action.id ? { ...pkg, name: action.name } : pkg

@@ -306,6 +306,7 @@ type Props = {
 	setSelectedPackage: (pkg: TPackageWithInfo) => void
 	triggerUndoNotification: () => void
 	inSearchResults: boolean
+	isSelected: boolean
 }
 
 const Card = ({
@@ -314,6 +315,7 @@ const Card = ({
 	setSelectedPackage,
 	triggerUndoNotification,
 	inSearchResults,
+	isSelected,
 }: Props) => {
 	const { dispatchUndoStack } = useUndoStackContext()
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
@@ -486,9 +488,14 @@ const Card = ({
 	return (
 		<>
 			<motion.div
-				className="group border border-indigo-400/25 bg-gradient-to-b from-[#110F1B] to-transparent focus-within:bg-[#181527] hover:bg-[#181527] "
+				className={
+					"card group border border-indigo-400/25 bg-gradient-to-b from-[#110F1B] to-transparent focus-within:bg-[#181527] hover:bg-[#181527] " +
+					(isSelected ? "border-indigo-400/75" : "")
+				}
 				data-testid="card"
+				id={`${pkg.id}`}
 				onContextMenu={(e) => {
+					if (isSelected) return
 					e.preventDefault()
 					setMenuOpen(true)
 				}}

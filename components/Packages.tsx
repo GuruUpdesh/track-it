@@ -10,7 +10,10 @@ import { useUndoStackContext } from "@/context/undoStackContext/useUndoStackCont
 import * as Toast from "@radix-ui/react-toast"
 import Fuse from "fuse.js"
 import React, { useEffect } from "react"
+import Selecto from "react-selecto"
 import { z } from "zod"
+import * as ContextMenu from "@radix-ui/react-context-menu"
+import { AiOutlineDelete } from "react-icons/ai"
 
 export const packageSchema = z.object({
 	id: z.number(),
@@ -75,6 +78,8 @@ const Grid = () => {
 	const { undoStack, dispatchUndoStack } = useUndoStackContext()
 	const { search } = useSearchContext()
 	const [searchResults, setSearchResults] = React.useState(new Set())
+	const [selectedIds, setSelectedIds] = React.useState<string[]>([])
+	const [contextOpen, setContextOpen] = React.useState(false)
 
 	React.useEffect(() => {
 		if (search === "") {
@@ -138,22 +143,63 @@ const Grid = () => {
 				</div>
 			)}
 			{packages.length > 0 && (
-				<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-					{packages.map((pkg) => {
-						return (
-							<Card
-								key={pkg.id}
-								pkg={pkg}
-								dispatchPackages={dispatchPackages}
-								setSelectedPackage={setSelectedPackage}
-								triggerUndoNotification={() =>
-									setUndoNotificationOpen(true)
-								}
-								inSearchResults={searchResults.has(pkg.id)}
+				<ContextMenu.Root onOpenChange={setContextOpen}>
+					<ContextMenu.Trigger disabled={selectedIds.length < 1}>
+						<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+							<Selecto
+								selectableTargets={[".card"]}
+								hitRate={15}
+								onSelect={(e) => {
+									if (contextOpen) return
+									const selected = e.selected
+									const selectedIds = selected.map(
+										(el) => el.id
+									)
+									setSelectedIds(selectedIds)
+								}}
+								selectByClick={false}
+								dragContainer={window}
+								toggleContinueSelect={"shift"}
 							/>
-						)
-					})}
-				</div>
+							{packages.map((pkg) => {
+								return (
+									<Card
+										key={pkg.id}
+										pkg={pkg}
+										dispatchPackages={dispatchPackages}
+										setSelectedPackage={setSelectedPackage}
+										triggerUndoNotification={() =>
+											setUndoNotificationOpen(true)
+										}
+										inSearchResults={searchResults.has(
+											pkg.id
+										)}
+										isSelected={selectedIds.includes(
+											`${pkg.id}`
+										)}
+									/>
+								)
+							})}
+						</div>
+					</ContextMenu.Trigger>
+					<ContextMenu.Portal>
+						<ContextMenu.Content className="DropdownMenu-content text-center">
+							<ContextMenu.Item
+								className="DropdownMenu-item bg-red-500/25 text-red-400"
+								onSelect={() => {
+									dispatchPackages({
+										type: "batchDelete",
+										ids: selectedIds,
+									})
+									setSelectedIds([])
+								}}
+							>
+								<AiOutlineDelete className="absolute left-4" />
+								Delete Selected
+							</ContextMenu.Item>
+						</ContextMenu.Content>
+					</ContextMenu.Portal>
+				</ContextMenu.Root>
 			)}
 			{selectedPackage && (
 				<DetailsModal
