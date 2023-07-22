@@ -1,9 +1,9 @@
 @media (max-width: 700px) {
-	.flex-item:focus-within {
-		flex: 1 0 calc(100% - 46px);
-	}
-	.flex-container:focus-within .flex-item:not(:focus-within) {
-		flex: 1 0 0%;
-		overflow: hidden;
-	}
+  .flex-item:focus-within {
+    flex: 1 0 calc(100% - 46px);
+  }
+  .flex-container:focus-within .flex-item:not(:focus-within) {
+    flex: 1 0 0%;
+    overflow: hidden;
+  }
 }

@@ -1,6 +1,6 @@
 import { TPackage } from "./Packages"
 import { TrackingHistory, PackageInfo } from "@/app/api/package/typesAndSchemas"
-import { HistoryLine } from "@/components/card/Card"
+import HistoryLine from "@/components/tracking/HistoryLine"
 import { PackageAction } from "@/context/packageContext/packageReducer"
 import {
 	getCourierIconFromCode,
@@ -12,9 +12,11 @@ import { AnimatePresence, motion } from "framer-motion"
 // import Image from "next/image"
 import React from "react"
 import { MdClose } from "react-icons/md"
-import { BiChevronDown } from "react-icons/bi"
+import { BiChevronDown, BiCopy } from "react-icons/bi"
 // import { BsArrowLeft } from "react-icons/bs"
 import Balancer from "react-wrap-balancer"
+import * as Tabs from "@radix-ui/react-tabs"
+import "./detailsModal.css"
 
 type ToAndFromLocationProps = {
 	startLocation: string
@@ -54,6 +56,104 @@ const ToAndFromLocation = ({
 	)
 }
 
+type TrackingHistoryProps = {
+	trackingHistory: TrackingHistory[]
+}
+
+const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
+	const [trackingHistoryExpanded, setTrackingHistoryExpanded] =
+		React.useState(false)
+	return (
+		<motion.div
+			layoutScroll
+			className="relative isolate flex flex-col-reverse px-20"
+		>
+			<motion.div
+				className="absolute left-[calc(5rem+2.4rem)] h-full w-1 origin-top rounded-full bg-gradient-to-b from-indigo-900 to-indigo-700/10"
+				initial={{ scaleY: 0 }}
+				animate={{ scaleY: 1 }}
+				transition={{
+					delay: 0.3,
+					duration: 2,
+					ease: [0.075, 0.82, 0.165, 1],
+				}}
+			/>
+			{trackingHistory.length > 3 && (
+				<motion.button
+					onClick={() =>
+						setTrackingHistoryExpanded(!trackingHistoryExpanded)
+					}
+					transition={{
+						delay: (trackingHistory.length - 1) * 0.05,
+						duration: 0.5,
+						ease: [0.075, 0.82, 0.165, 1],
+					}}
+					initial={{
+						opacity: 0,
+						transform: "translateY(-50px) scaleY(0.8)",
+					}}
+					animate={{
+						opacity: 1,
+						transform: "translateY(0px) scaleY(1)",
+					}}
+					exit={{
+						opacity: 0,
+						transform: "translateY(-50px) scaleY(0.8)",
+					}}
+					className="flex items-center rounded-lg px-6 py-3 text-indigo-200/50 hover:text-indigo-200"
+				>
+					<BiChevronDown
+						className={
+							"h-[32px] w-[32px] " +
+							(trackingHistoryExpanded ? " rotate-180" : " ")
+						}
+					/>
+					<p className=" ml-4 text-left ">
+						{trackingHistoryExpanded
+							? `Collapse`
+							: `See ${trackingHistory.length - 3} more updates`}
+					</p>
+				</motion.button>
+			)}
+			{trackingHistory
+				.slice(trackingHistoryExpanded ? 0 : -3)
+				.map((historyItem: TrackingHistory, idx: number) => {
+					const length = trackingHistoryExpanded
+						? trackingHistory.length
+						: trackingHistory.slice(-3).length
+					return (
+						<motion.div
+							key={historyItem.date}
+							transition={{
+								delay: (length - idx) * 0.05,
+								duration: 0.5,
+								ease: [0.075, 0.82, 0.165, 1],
+							}}
+							initial={{
+								opacity: 0,
+								transform: "translateY(-50px) scaleY(0.8)",
+							}}
+							animate={{
+								opacity: 1,
+								transform: "translateY(0px) scaleY(1)",
+							}}
+							exit={{
+								opacity: 0,
+								transform: "translateY(-50px) scaleY(0.8)",
+							}}
+							className="z-0"
+						>
+							<HistoryLine
+								historyItem={historyItem}
+								topItem={idx === length - 1}
+							/>
+						</motion.div>
+					)
+				})}
+		</motion.div>
+	)
+}
+
 type Props = {
 	pkg: TPackage
 	pkgInfo: PackageInfo
@@ -68,8 +168,33 @@ const DetailsModal = ({
 	dispatchPackages,
 	setOpen,
 }: Props) => {
-	const [trackingHistoryExpanded, setTrackingHistoryExpanded] =
-		React.useState(false)
+	const tabsHighlightRef = React.useRef<HTMLDivElement>(null)
+	const tabsRef = React.useRef<HTMLDivElement>(null)
+
+	function onTabHover(e: React.MouseEvent<HTMLButtonElement>) {
+		if (!tabsHighlightRef.current || !tabsRef.current) return
+
+		const target = e.target as HTMLDivElement
+		const highlight = tabsHighlightRef.current
+		const targetRect = target.getBoundingClientRect()
+		const tabsRect = tabsRef.current.getBoundingClientRect()
+
+		highlight.style.opacity = `1`
+		highlight.style.width = `${targetRect.width}px`
+		highlight.style.transform = `translateX(${
+			targetRect.left - tabsRect.left
+		}px)`
+	}
+
+	function onTabExit() {
+		if (!tabsHighlightRef.current) return
+
+		const highlight = tabsHighlightRef.current
+
+		highlight.style.width = `0px`
+		highlight.style.transform = `translateX(0px)`
+		highlight.style.opacity = `0`
+	}
 	return (
 		<Dialog.Root open={true} modal={true} onOpenChange={setOpen}>
 			<Dialog.Portal>
@@ -125,14 +250,6 @@ const DetailsModal = ({
 									</div>
 								</div>
 								{/* <div>
-									<ToAndFromLocation
-										startLocation={pkgInfo.startLocation}
-										endLocation={pkgInfo.endLocation}
-									/>
-									<button className="h-min flex items-center gap-1 text-yellow-50/50 hover:text-yellow-50/75 active:text-indigo-400">
-										<BiCopy />
-										{pkg.trackingNumber}
-									</button>
 								</div> */}
 
 								{/* <button className="aspect-square w-min flex-none cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10">
@@ -147,145 +264,76 @@ const DetailsModal = ({
 									<MdClose />
 								</button>
 							</motion.div>
-							<motion.div
-								layoutScroll
-								className="relative isolate flex flex-col-reverse px-20"
-							>
-								<motion.div
-									className="absolute left-[calc(5rem+2.4rem)] h-full w-1 origin-top rounded-full bg-gradient-to-b from-indigo-900 to-indigo-700/10"
-									initial={{ scaleY: 0 }}
-									animate={{ scaleY: 1 }}
-									transition={{
-										delay: 0.3,
-										duration: 2,
-										ease: [0.075, 0.82, 0.165, 1],
-									}}
-								/>
-								{pkgInfo && (
-									<>
-										{pkgInfo.trackingHistory.length > 3 && (
-											<motion.button
-												onClick={() =>
-													setTrackingHistoryExpanded(
-														!trackingHistoryExpanded
-													)
-												}
-												transition={{
-													delay:
-														(pkgInfo.trackingHistory
-															.length -
-															1) *
-														0.05,
-													duration: 0.5,
-													ease: [
-														0.075, 0.82, 0.165, 1,
-													],
-												}}
-												initial={{
-													opacity: 0,
-													transform:
-														"translateY(-50px) scaleY(0.8)",
-												}}
-												animate={{
-													opacity: 1,
-													transform:
-														"translateY(0px) scaleY(1)",
-												}}
-												exit={{
-													opacity: 0,
-													transform:
-														"translateY(-50px) scaleY(0.8)",
-												}}
-												className="flex items-center rounded-lg px-6 py-3 text-indigo-200/50 hover:text-indigo-200"
-											>
-												<BiChevronDown
-													className={
-														"h-[32px] w-[32px] " +
-														(trackingHistoryExpanded
-															? " rotate-180"
-															: " ")
-													}
-												/>
-												<p className=" ml-4 text-left ">
-													{trackingHistoryExpanded
-														? `Collapse`
-														: `See ${
-																pkgInfo
-																	.trackingHistory
-																	.length - 3
-														  } more updates`}
-												</p>
-											</motion.button>
-										)}
-										{pkgInfo.trackingHistory
-											.slice(
-												trackingHistoryExpanded ? 0 : -3
-											)
-											.map(
-												(
-													historyItem: TrackingHistory,
-													idx: number
-												) => {
-													const length =
-														trackingHistoryExpanded
-															? pkgInfo
-																	.trackingHistory
-																	.length
-															: pkgInfo.trackingHistory.slice(
-																	-3
-															  ).length
-													return (
-														<motion.div
-															key={
-																historyItem.date
-															}
-															transition={{
-																delay:
-																	(length -
-																		idx) *
-																	0.05,
-																duration: 0.5,
-																ease: [
-																	0.075, 0.82,
-																	0.165, 1,
-																],
-															}}
-															initial={{
-																opacity: 0,
-																transform:
-																	"translateY(-50px) scaleY(0.8)",
-															}}
-															animate={{
-																opacity: 1,
-																transform:
-																	"translateY(0px) scaleY(1)",
-															}}
-															exit={{
-																opacity: 0,
-																transform:
-																	"translateY(-50px) scaleY(0.8)",
-															}}
-															className="z-0"
-														>
-															<HistoryLine
-																historyItem={
-																	historyItem
-																}
-																detailedView={
-																	true
-																}
-																topItem={
-																	idx ===
-																	length - 1
-																}
-															/>
-														</motion.div>
-													)
-												}
-											)}
-									</>
-								)}
-							</motion.div>
+							<Tabs.Root defaultValue="tracking-history">
+								<Tabs.List
+									className="relative border-b border-b-yellow-50/25"
+									ref={tabsRef}
+								>
+									<div
+										ref={tabsHighlightRef}
+										className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-yellow-50/20 opacity-0 transition-all"
+									/>
+									<Tabs.Trigger
+										onMouseEnter={onTabHover}
+										onMouseLeave={onTabExit}
+										value="tracking-history"
+										className="TabsTrigger mx-2 p-2 text-yellow-50/50 transition-all hover:text-yellow-50/80"
+									>
+										Tracking History
+									</Tabs.Trigger>
+									<Tabs.Trigger
+										onMouseEnter={onTabHover}
+										onMouseLeave={onTabExit}
+										value="package-info"
+										className="TabsTrigger mx-2 p-2 text-yellow-50/50 transition-all hover:text-yellow-50/80"
+									>
+										Package Info
+									</Tabs.Trigger>
+								</Tabs.List>
+								<Tabs.Content
+									value="tracking-history"
+									className="mt-6"
+								>
+									<TrackingHistory
+										trackingHistory={
+											pkgInfo
+												? pkgInfo.trackingHistory
+												: []
+										}
+									/>
+								</Tabs.Content>
+								<Tabs.Content
+									value="package-info"
+									className="px-20"
+								>
+									<h1 className="text-lg font-semibold tracking-tighter text-yellow-50">
+										Shipment Overview
+									</h1>
+									<h5 className="text-md text-yellow-50/90tracking-wider font-light uppercase">
+										tracking number
+									</h5>
+									<button className="flex h-min items-center gap-1 text-yellow-50/50 hover:text-yellow-50/75 active:text-indigo-400">
+										<BiCopy />
+										{pkg.trackingNumber}
+									</button>
+									<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
+										details
+									</h5>
+									<ToAndFromLocation
+										startLocation={pkgInfo.startLocation}
+										endLocation={pkgInfo.endLocation}
+									/>
+									<h1 className="text-lg font-semibold tracking-tighter text-yellow-50">
+										Services
+									</h1>
+									<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
+										courier
+									</h5>
+									<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
+										service
+									</h5>
+								</Tabs.Content>
+							</Tabs.Root>
 						</motion.div>
 					</AnimatePresence>
 				</Dialog.Content>

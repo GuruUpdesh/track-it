@@ -5,10 +5,11 @@ import "./ui/undo/undo.css"
 import { PackageInfo, courierEnum } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/card/Card"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
+import { useSearchContext } from "@/context/searchContext/useSearchContext"
 import { useUndoStackContext } from "@/context/undoStackContext/useUndoStackContext"
 import * as Toast from "@radix-ui/react-toast"
-// import Fuse from "fuse.js"
-import React from "react"
+import Fuse from "fuse.js"
+import React, { useEffect } from "react"
 import { z } from "zod"
 
 export const packageSchema = z.object({
@@ -33,6 +34,7 @@ type UndoNotificationProps = {
 const UndoNotification = ({ open, setOpen }: UndoNotificationProps) => {
 	const { dispatchPackages } = usePackageContext()
 	const { undoStack, dispatchUndoStack } = useUndoStackContext()
+
 	return (
 		<Toast.Provider swipeDirection="down" duration={3000}>
 			<Toast.Root
@@ -70,28 +72,52 @@ const UndoNotification = ({ open, setOpen }: UndoNotificationProps) => {
 
 const Grid = () => {
 	const { packages, dispatchPackages } = usePackageContext()
-	// const [searchResults, setSearchResults] =
-	// 	React.useState<TPackage[]>(packages)
+	const { undoStack, dispatchUndoStack } = useUndoStackContext()
+	const { search } = useSearchContext()
+	const [searchResults, setSearchResults] = React.useState(new Set())
 
-	// React.useEffect(() => {
-	// 	if (searchString === "") {
-	// 		setSearchResults(packages)
-	// 		return
-	// 	}
-	// 	const options = {
-	// 		keys: ["name", "description"],
-	// 		threshold: 0.3,
-	// 	}
-	// 	const fuse = new Fuse(packages, options)
-	// 	const results = fuse.search(searchString)
-	// 	setSearchResults(results.map((result) => result.item))
-	// }, [searchString, packages])
+	React.useEffect(() => {
+		if (search === "") {
+			setSearchResults(new Set(packages.map((pkg) => pkg.id)))
+			return
+		}
+		const options = {
+			keys: ["name"],
+			threshold: 0.3,
+		}
+
+		const fuse = new Fuse(packages, options)
+		const results = fuse.search(search)
+		setSearchResults(new Set(results.map((result) => result.item.id)))
+	}, [search, packages])
 
 	const [selectedPackage, setSelectedPackage] =
 		React.useState<TPackageWithInfo | null>(null)
 
 	const [undoNotificationOpen, setUndoNotificationOpen] =
 		React.useState(false)
+
+	// undo shortcut
+	useEffect(() => {
+		function handleKeyDown(e: KeyboardEvent) {
+			if ((e.ctrlKey || e.metaKey) && e.key === "z") {
+				console.log("undo")
+				e.preventDefault()
+				if (undoStack.length === 0) return
+				const pop = undoStack[undoStack.length - 1]
+				dispatchUndoStack({ type: "pop" })
+				if (pop) {
+					dispatchPackages({ type: "add", new: pop })
+				}
+			}
+		}
+
+		window.addEventListener("keydown", handleKeyDown)
+
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown)
+		}
+	}, [undoStack, dispatchPackages, dispatchUndoStack])
 
 	return (
 		<>
@@ -113,18 +139,20 @@ const Grid = () => {
 			)}
 			{packages.length > 0 && (
 				<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-					{packages.map((pkg) => (
-						<Card
-							key={pkg.id}
-							pkg={pkg}
-							dispatchPackages={dispatchPackages}
-							inSearchResults={true}
-							setSelectedPackage={setSelectedPackage}
-							triggerUndoNotification={() =>
-								setUndoNotificationOpen(true)
-							}
-						/>
-					))}
+					{packages.map((pkg) => {
+						return (
+							<Card
+								key={pkg.id}
+								pkg={pkg}
+								dispatchPackages={dispatchPackages}
+								setSelectedPackage={setSelectedPackage}
+								triggerUndoNotification={() =>
+									setUndoNotificationOpen(true)
+								}
+								inSearchResults={searchResults.has(pkg.id)}
+							/>
+						)
+					})}
 				</div>
 			)}
 			{selectedPackage && (

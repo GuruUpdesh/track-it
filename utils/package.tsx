@@ -66,12 +66,10 @@ export function getIconForStatus(
 export const estimateProgress = (
 	currentEta: string | null,
 	status: TStatus,
-	firstUpdate: string,
-	lastUpdate: string
+	firstUpdate: string
 ): number => {
 	const eta = currentEta ? new Date(currentEta) : null
 	const firstUpdateDate = new Date(firstUpdate)
-	const lastUpdateDate = new Date(lastUpdate)
 
 	// todo support more robust progress estimation
 	if (
@@ -88,17 +86,6 @@ export const estimateProgress = (
 		const expectedTransitTime = differenceInDays(eta, firstUpdateDate)
 		const progress = Math.round(
 			(totalTransitTime / expectedTransitTime) * 100
-		)
-		console.log(
-			"estimateProgress",
-			progress,
-			"totalTransitTime",
-			totalTransitTime,
-			"expectedTransitTime",
-			expectedTransitTime,
-			formatDate(currentEta || ""),
-			formatDate(firstUpdate),
-			formatDate(lastUpdate)
 		)
 		return progress
 	} else if (status === "DELIVERED") {

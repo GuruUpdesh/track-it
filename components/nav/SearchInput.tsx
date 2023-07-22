@@ -1,12 +1,14 @@
 "use client"
 
+import { useSearchContext } from "@/context/searchContext/useSearchContext"
 import "./nav.css"
-import React, { useState } from "react"
+import React from "react"
 import { AiOutlineSearch } from "react-icons/ai"
 import { MdClose } from "react-icons/md"
 
 const SearchInput = () => {
-	const [searchString, setSearchString] = useState("")
+	// const [searchString, setSearchString] = useState("")
+	const { search, setSearch } = useSearchContext()
 	return (
 		<div className="flex-item relative flex min-w-[5rem] items-center rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 outline-offset-2 focus-within:outline focus-within:outline-2 focus-within:outline-indigo-400">
 			<AiOutlineSearch className="mr-1" />
@@ -14,13 +16,13 @@ const SearchInput = () => {
 				type="text"
 				className="md:text-md min-w-0 bg-transparent py-2 text-xs outline-none sm:text-sm"
 				placeholder="Search"
-				value={searchString}
-				onChange={(e) => setSearchString(e.target.value)}
+				value={search}
+				onChange={(e) => setSearch(e.target.value)}
 			/>
-			{searchString && (
+			{search && (
 				<button
 					className="absolute right-4 rounded-full bg-[#110F1B] p-1"
-					onClick={() => setSearchString("")}
+					onClick={() => setSearch("")}
 				>
 					<MdClose />
 				</button>

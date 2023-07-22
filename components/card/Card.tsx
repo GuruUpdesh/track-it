@@ -36,7 +36,7 @@ import {
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
 // todo transition to radix-ui/react-icons
-import { BsCheckLg, BsChevronRight, BsHouseCheck, BsDot } from "react-icons/bs"
+import { BsCheckLg, BsChevronRight } from "react-icons/bs"
 import {
 	MdClose,
 	MdMoreVert,
@@ -46,6 +46,7 @@ import {
 import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
+import HistoryLine from "../tracking/HistoryLine"
 
 type CardDropdownProps = {
 	pkg: TPackage
@@ -125,10 +126,6 @@ export const CardDropdownMenu = ({
 								<BsChevronRight />
 							</div>
 						</DropdownMenu.SubTrigger>
-						<DropdownMenu.Item className="DropdownMenu-item">
-							<BsHouseCheck className="absolute left-4" />
-							Mark as Delivered
-						</DropdownMenu.Item>
 						<DropdownMenu.Portal>
 							<DropdownMenu.SubContent
 								className="DropdownMenu-content"
@@ -303,120 +300,20 @@ export const EditTrackingNumberModal = ({
 	)
 }
 
-type HistoryLineProps = {
-	historyItem: TrackingHistory | null
-	detailedView?: boolean
-	topItem?: boolean
-}
-
-export const HistoryLine = ({
-	historyItem,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	detailedView = false,
-	topItem = false,
-}: HistoryLineProps) => {
-	if (!historyItem) return null
-	const delivered = historyItem.status === "DELIVERED"
-	// return (
-	// 	<div className="z-10 flex items-center justify-between px-2 py-1">
-	// 		<div className="flex gap-6">
-	// 			{detailedView && (
-	// 				<div className="flex aspect-square h-[50px] items-center justify-center rounded-full bg-[#20233e] px-4 py-1 text-sm text-indigo-400 hover:bg-indigo-400 hover:text-indigo-900">
-	// 					{getIconForStatus(
-	// 						historyItem.status,
-	// 						historyItem.deliveryLocation
-	// 					)}
-	// 				</div>
-	// 			)}
-
-	// 			<div>
-	// 				<h1 className="flex text-left text-lg font-light tracking-tighter text-yellow-50/75 ">
-	// 					{historyItem.location}
-	// 				</h1>
-	// 				<Tooltip text={formatRelativeDate(historyItem.date)}>
-	// 					<p className="line-clamp-1 text-left text-xs tracking-tighter text-yellow-50/25">
-	// 						{formatDate(historyItem.date)} at
-	// 						{" " + getTimeFromDate(historyItem.date)}
-	// 					</p>
-	// 				</Tooltip>
-	// 			</div>
-	// 		</div>
-	// 		{detailedView ? (
-	// 			<p className="ml-2 whitespace-nowrap text-left text-sm text-yellow-50/50">
-	// 				{historyItem.detailedStatus}
-	// 			</p>
-	// 		) : (
-	// 			<Tooltip text={historyItem.detailedStatus}>
-	// 				<div className="flex items-center gap-2 rounded-full bg-indigo-400/25 px-4 py-1 text-sm capitalize text-indigo-400 hover:bg-indigo-400 hover:text-indigo-900">
-	// 					{historyItem.status.toLocaleLowerCase()}
-	// 					{getIconForStatus(
-	// 						historyItem.status,
-	// 						historyItem.deliveryLocation
-	// 					)}
-	// 				</div>
-	// 			</Tooltip>
-	// 		)}
-	// 	</div>
-	// )
-	return (
-		<div
-			className={
-				"flex items-center rounded-lg px-6 py-3" +
-				(topItem
-					? delivered
-						? " bg-gradient-to-r from-indigo-900 to-indigo-700 py-1 shadow-xl shadow-indigo-600/25"
-						: " bg-[#1a1a18] py-1"
-					: " ")
-			}
-		>
-			{topItem ? (
-				<div className="rounded-full border border-white/50 p-2 text-sm text-white/75 outline outline-white/10">
-					{getIconForStatus(
-						historyItem.status,
-						historyItem.deliveryLocation
-					)}
-				</div>
-			) : (
-				<>
-					<BsDot className="h-[32px] w-[32px] text-yellow-50/50" />
-				</>
-			)}
-			<div className="pl-4">
-				<h5 className="line-clamp-1">{historyItem.detailedStatus}</h5>
-				<div className="flex items-center text-yellow-50/50">
-					{historyItem.location === "Location not found" ? null : (
-						<>
-							<p className="whitespace-nowrap">
-								{historyItem.location}
-							</p>
-							<BsDot />
-						</>
-					)}
-					<p className="whitespace-nowrap">
-						{formatDate(historyItem.date) +
-							" " +
-							getTimeFromDate(historyItem.date)}
-					</p>
-				</div>
-			</div>
-		</div>
-	)
-}
-
 type Props = {
 	pkg: TPackage
 	dispatchPackages: React.Dispatch<PackageAction>
-	inSearchResults: boolean
 	setSelectedPackage: (pkg: TPackageWithInfo) => void
 	triggerUndoNotification: () => void
+	inSearchResults: boolean
 }
 
 const Card = ({
 	pkg,
 	dispatchPackages,
-	inSearchResults,
 	setSelectedPackage,
 	triggerUndoNotification,
+	inSearchResults,
 }: Props) => {
 	const { dispatchUndoStack } = useUndoStackContext()
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
@@ -446,8 +343,7 @@ const Card = ({
 						journeyPercentRef.current.style.width = `${estimateProgress(
 							packageInfo.eta,
 							packageInfo.status.status,
-							packageInfo.trackingHistory[0].date,
-							packageInfo.status.date
+							packageInfo.trackingHistory[0].date
 						)}%`
 						journeyPercentRef.current.style.opacity = "1"
 					}
@@ -590,7 +486,7 @@ const Card = ({
 	return (
 		<>
 			<motion.div
-				className="group border border-indigo-400/25 bg-[#110F1B] focus-within:bg-[#181527] hover:bg-[#181527] "
+				className="group border border-indigo-400/25 bg-gradient-to-b from-[#110F1B] to-transparent focus-within:bg-[#181527] hover:bg-[#181527] "
 				data-testid="card"
 				onContextMenu={(e) => {
 					e.preventDefault()
@@ -607,7 +503,7 @@ const Card = ({
 				<div className="relative min-w-[220px] max-w-[350px] select-none border-b border-b-indigo-400/25">
 					<div
 						ref={journeyPercentRef}
-						className="journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/75 opacity-50"
+						className="journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/40 opacity-50"
 					/>
 					<div className="relative flex items-center justify-between p-2">
 						<div className="flex max-w-[80%] gap-2">
@@ -624,7 +520,11 @@ const Card = ({
 										<AiOutlineWarning />
 									) : !packageInfo ? (
 										<AiOutlineLoading3Quarters className="animate-spin" />
-									) : null}
+									) : (
+										getIconForStatus(
+											packageInfo.status.status
+										)
+									)}
 								</div>
 								<Image
 									src="/package.svg"
