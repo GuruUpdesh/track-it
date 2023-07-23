@@ -2,6 +2,7 @@ import { TCourier } from "@/app/api/package/typesAndSchemas"
 import { TPackage, packageSchema } from "@/components/Packages"
 
 export type PackageAction =
+	| { type: "set"; packages: TPackage[] }
 	| { type: "add"; new: TPackage }
 	| { type: "delete"; id: number }
 	| { type: "batchDelete"; ids: string[] }
@@ -12,6 +13,8 @@ export type PackageAction =
 
 function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 	switch (action.type) {
+		case "set":
+			return action.packages
 		case "add":
 			packageSchema.parse(action.new)
 			return [...state, action.new]

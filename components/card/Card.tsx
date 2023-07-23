@@ -19,20 +19,17 @@ import {
 	getCourierUrlsFromTrackingNumber,
 } from "@/utils/courier"
 import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
-import { estimateProgress, getIconForStatus } from "@/utils/package"
+import { estimateProgress } from "@/utils/package"
 import * as Dialog from "@radix-ui/react-dialog"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import axios from "axios"
 import { motion } from "framer-motion"
-import Image from "next/image"
 import React, { useEffect, useState } from "react"
 import {
 	AiOutlineDelete,
 	AiOutlineEdit,
-	AiOutlineLoading3Quarters,
 	AiOutlineMail,
 	AiOutlineNumber,
-	AiOutlineWarning,
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
 // todo transition to radix-ui/react-icons
@@ -47,6 +44,7 @@ import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 import HistoryLine from "../tracking/HistoryLine"
+import CardImage from "./CardImage"
 
 type CardDropdownProps = {
 	pkg: TPackage
@@ -515,33 +513,14 @@ const Card = ({
 					<div className="relative flex items-center justify-between p-2">
 						<div className="flex max-w-[80%] gap-2">
 							{/* Image */}
-							<div className="relative flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/25">
-								<div
-									className={
-										"absolute z-20 flex h-full w-full items-center justify-center rounded-full" +
-										(!packageInfo &&
-											" bg-black/25 backdrop-blur-[2px]")
-									}
-								>
-									{error ? (
-										<AiOutlineWarning />
-									) : !packageInfo ? (
-										<AiOutlineLoading3Quarters className="animate-spin" />
-									) : (
-										getIconForStatus(
-											packageInfo.status.status
-										)
-									)}
-								</div>
-								<Image
-									src="/package.svg"
-									alt="Package Box"
-									width={27}
-									height={27}
-									priority
-									className="pointer-events-none z-10 h-auto"
-								/>
-							</div>
+							<CardImage
+								error={error !== null}
+								status={
+									packageInfo
+										? packageInfo.status.status
+										: undefined
+								}
+							/>
 							{/* Name */}
 							<div className="relative flex max-w-[calc(100%-50px)] flex-col items-start">
 								{editName ? (
