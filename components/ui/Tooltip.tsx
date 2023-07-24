@@ -1,5 +1,6 @@
 import * as UITooltip from "@radix-ui/react-tooltip"
 import React from "react"
+import { Balancer } from "react-wrap-balancer"
 
 type Props = {
 	children: React.ReactNode
@@ -20,7 +21,7 @@ const Tooltip = ({ children, title, disabled = false }: Props) => {
 							data-testid="Tooltip-content"
 						>
 							<UITooltip.Arrow className="arrow z-10 fill-black stroke-white" />
-							{title}
+							<Balancer>{title}</Balancer>
 						</UITooltip.Content>
 					) : null}
 				</UITooltip.Portal>

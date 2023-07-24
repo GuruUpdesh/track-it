@@ -2,7 +2,7 @@
 
 import { TPackage, TPackageWithInfo } from "../../DashboardGrid"
 import Tooltip from "../../ui/Tooltip"
-import "./styles/menu.css"
+import "./styles/card.css"
 import "./styles/modal.css"
 import {
 	PackageInfo,
@@ -17,10 +17,10 @@ import {
 	getCourierIconFromCode,
 	getCourierStringFromCode,
 	getCourierUrlsFromTrackingNumber,
+	getCouriersFromTrackingNumber,
 } from "@/utils/courier"
 import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
 import { estimateProgress } from "@/utils/package"
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import axios from "axios"
 import { motion } from "framer-motion"
 import React, { useEffect, useState } from "react"
@@ -32,8 +32,6 @@ import {
 	AiOutlineOrderedList,
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
-// todo transition to radix-ui/react-icons
-import { BsCheckLg, BsChevronRight } from "react-icons/bs"
 import { MdMoreVert, MdOutlineEditNote, MdOutlineExplore } from "react-icons/md"
 import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
@@ -53,183 +51,8 @@ import {
 import ReactDOM from "react-dom"
 import Modal from "../../ui/modal/Modal"
 import EditTrackingNumber from "../../ui/forms/EditTrackingNumber"
-
-type CardDropdownProps = {
-	pkg: TPackage
-	menuFunctions: {
-		openDetailedView: () => void
-		copyTrackingNumber: () => void
-		edit: {
-			name: () => void
-			trackingNumber: () => void
-			courier: (courier: TCourier) => void
-		}
-		reorder: () => void
-		duplicate: () => void
-		delete: () => void
-	}
-	open: boolean
-	setOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-export const CardDropdownMenu = ({
-	pkg,
-	menuFunctions,
-	open,
-	setOpen,
-}: CardDropdownProps) => {
-	return (
-		<DropdownMenu.Root open={open} onOpenChange={setOpen}>
-			<DropdownMenu.Trigger asChild>
-				<button
-					aria-label="Package Controls"
-					className={
-						"aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10" +
-						(open ? " bg-yellow-50/10" : "")
-					}
-				>
-					<MdMoreVert />
-				</button>
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Portal>
-				<DropdownMenu.Content
-					className="DropdownMenu-content text-center"
-					onCloseAutoFocus={(e) => e.preventDefault()}
-				>
-					<DropdownMenu.Item
-						onSelect={menuFunctions.openDetailedView}
-						className="DropdownMenu-item"
-					>
-						<BiExpand className="absolute left-4" />
-						Open Detailed View
-					</DropdownMenu.Item>
-					<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
-					<DropdownMenu.Item
-						onSelect={menuFunctions.copyTrackingNumber}
-						className="DropdownMenu-item"
-					>
-						<AiOutlineNumber className="absolute left-4" />
-						Copy Tracking Number
-					</DropdownMenu.Item>
-					<a
-						href={
-							getCourierUrlsFromTrackingNumber(
-								pkg.trackingNumber
-							)[0]
-						}
-						target="_blank"
-					>
-						<DropdownMenu.Item className="DropdownMenu-item">
-							<MdOutlineExplore className="absolute left-4" />
-							Open Courier Website
-						</DropdownMenu.Item>
-					</a>
-					<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
-					<DropdownMenu.Sub>
-						<DropdownMenu.SubTrigger className="DropdownMenu-item">
-							<MdOutlineEditNote className="absolute left-4" />
-							Edit
-							<div className="float-right">
-								<BsChevronRight />
-							</div>
-						</DropdownMenu.SubTrigger>
-						<DropdownMenu.Portal>
-							<DropdownMenu.SubContent
-								className="DropdownMenu-content"
-								sideOffset={5}
-								alignOffset={-5}
-							>
-								<DropdownMenu.Item
-									onSelect={menuFunctions.edit.name}
-									className="DropdownMenu-item"
-								>
-									<AiOutlineEdit className="absolute left-4" />
-									Name
-								</DropdownMenu.Item>
-								<DropdownMenu.Item
-									onSelect={menuFunctions.edit.trackingNumber}
-									className="DropdownMenu-item"
-								>
-									<TbEditCircle className="absolute left-4" />
-									Tracking Number
-								</DropdownMenu.Item>
-								<DropdownMenu.Sub>
-									<DropdownMenu.SubTrigger className="DropdownMenu-item bg-orange-500/25 text-orange-400">
-										<AiOutlineMail className="absolute left-4" />
-										Override Courier
-										<div className="float-right">
-											<BsChevronRight />
-										</div>
-									</DropdownMenu.SubTrigger>
-									<DropdownMenu.Portal>
-										<DropdownMenu.SubContent
-											className="DropdownMenu-content"
-											sideOffset={5}
-											alignOffset={-5}
-										>
-											<DropdownMenu.RadioGroup
-												value={pkg.courier}
-												onValueChange={(value) =>
-													menuFunctions.edit.courier(
-														value as TCourier
-													)
-												}
-											>
-												<DropdownMenu.Label className="p-2 text-xs text-orange-400">
-													Warning this could cause
-													errors!
-												</DropdownMenu.Label>
-												{Object.keys(couriers).map(
-													(courier) => (
-														<DropdownMenu.RadioItem
-															key={courier}
-															className="DropdownMenu-item"
-															value={courier}
-														>
-															<DropdownMenu.ItemIndicator className="absolute left-4">
-																<BsCheckLg />
-															</DropdownMenu.ItemIndicator>
-															{getCourierStringFromCode(
-																courier
-															)}
-														</DropdownMenu.RadioItem>
-													)
-												)}
-											</DropdownMenu.RadioGroup>
-										</DropdownMenu.SubContent>
-									</DropdownMenu.Portal>
-								</DropdownMenu.Sub>
-							</DropdownMenu.SubContent>
-						</DropdownMenu.Portal>
-					</DropdownMenu.Sub>
-					<DropdownMenu.Item
-						onSelect={menuFunctions.reorder}
-						className="DropdownMenu-item"
-					>
-						<AiOutlineOrderedList className="absolute left-4" />
-						Reorder
-					</DropdownMenu.Item>
-					<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
-					<DropdownMenu.Item
-						onSelect={menuFunctions.reorder}
-						className="DropdownMenu-item"
-					>
-						<BiCopy className="absolute left-4" />
-						Duplicate
-					</DropdownMenu.Item>
-					<DropdownMenu.Item
-						onSelect={menuFunctions.delete}
-						className="DropdownMenu-item bg-red-500/25 text-red-400"
-					>
-						<AiOutlineDelete className="absolute left-4" />
-						Delete
-					</DropdownMenu.Item>
-					<DropdownMenu.Arrow className="fill-indigo-400/75" />
-				</DropdownMenu.Content>
-			</DropdownMenu.Portal>
-		</DropdownMenu.Root>
-	)
-}
+import IconButton from "@/components/ui/IconButton"
+import Menu, { TMenuItem } from "@/components/ui/Menu/Menu"
 
 type EditTrackingNumberModalProps = {
 	open: boolean
@@ -515,6 +338,84 @@ const Card = ({
 		},
 	}
 
+	const menu: TMenuItem[] = [
+		{
+			label: "Open Detailed View",
+			onClick: menuFunctions.openDetailedView,
+			icon: <BiExpand className="absolute left-4" />,
+			separator: true,
+			disabled: error !== null || !packageInfo,
+		},
+		{
+			label: "Copy Tracking Number",
+			onClick: menuFunctions.copyTrackingNumber,
+			icon: <AiOutlineNumber className="absolute left-4" />,
+			disabled: pkg.trackingNumber === "",
+		},
+		{
+			label: "Open Courier Website",
+			onClick: () => {
+				window.open(
+					getCourierUrlsFromTrackingNumber(pkg.trackingNumber)[0]
+				)
+			},
+			icon: <MdOutlineExplore className="absolute left-4" />,
+			separator: true,
+			disabled:
+				pkg.courier !==
+				getCouriersFromTrackingNumber(pkg.trackingNumber)[0],
+		},
+		{
+			label: "Edit",
+			icon: <MdOutlineEditNote className="absolute left-4" />,
+			children: [
+				{
+					label: "Name",
+					onClick: menuFunctions.edit.name,
+					icon: <AiOutlineEdit className="absolute left-4" />,
+				},
+				{
+					label: "Tracking Number",
+					onClick: menuFunctions.edit.trackingNumber,
+					icon: <TbEditCircle className="absolute left-4" />,
+				},
+				{
+					label: "Override Courier",
+					icon: <AiOutlineMail className="absolute left-4" />,
+					radioGroup: {
+						enabled: true,
+						value: pkg.courier,
+						onChange: (value: string) => {
+							menuFunctions.edit.courier(value as TCourier)
+						},
+						options: Object.keys(couriers).map((courier) => ({
+							label: getCourierStringFromCode(courier),
+							value: courier,
+						})),
+					},
+					variant: "warning",
+				},
+			],
+		},
+		{
+			label: "Reorder",
+			onClick: menuFunctions.reorder,
+			icon: <AiOutlineOrderedList className="absolute left-4" />,
+			separator: true,
+		},
+		{
+			label: "Duplicate",
+			onClick: menuFunctions.duplicate,
+			icon: <BiCopy className="absolute left-4" />,
+		},
+		{
+			label: "Delete",
+			onClick: menuFunctions.delete,
+			icon: <AiOutlineDelete className="absolute left-4" />,
+			variant: "danger",
+		},
+	]
+
 	if (!inSearchResults) return null
 
 	return (
@@ -647,20 +548,25 @@ const Card = ({
 								</div>
 							</div>
 						</div>
-						<Tooltip title="Open">
+						<IconButton
+							onClick={menuFunctions.openDetailedView}
+							disabled={error !== null || !packageInfo}
+							altText="Open Detailed Package Information"
+							className="opacity-0 transition-opacity group-hover:opacity-100"
+						>
+							<BiExpand />
+						</IconButton>
+						<Menu menu={menu}>
 							<button
-								onClick={menuFunctions.openDetailedView}
-								className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 opacity-0 outline-none transition-opacity hover:bg-yellow-50/10 focus:bg-yellow-50/10 group-hover:opacity-100"
+								aria-label="Package Controls"
+								className={
+									"aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10" +
+									(menuOpen ? " bg-yellow-50/10" : "")
+								}
 							>
-								<BiExpand />
+								<MdMoreVert />
 							</button>
-						</Tooltip>
-						<CardDropdownMenu
-							pkg={pkg}
-							menuFunctions={menuFunctions}
-							open={menuOpen}
-							setOpen={setMenuOpen}
-						/>
+						</Menu>
 					</div>
 				</div>
 				<div
