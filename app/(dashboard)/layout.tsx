@@ -1,3 +1,5 @@
+"use client"
+
 import AddInput from "@/components/nav/AddInput"
 import NavBackground from "@/components/nav/NavBackground"
 import SearchInput from "@/components/nav/SearchInput"
