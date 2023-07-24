@@ -52,7 +52,7 @@ import ReactDOM from "react-dom"
 import Modal from "../../ui/modal/Modal"
 import EditTrackingNumber from "../../ui/forms/EditTrackingNumber"
 import IconButton from "@/components/ui/IconButton"
-import Menu, { TMenuItem } from "@/components/ui/Menu/Menu"
+import Menu, { TMenuItem } from "@/components/ui/menu/Menu"
 
 type EditTrackingNumberModalProps = {
 	open: boolean
