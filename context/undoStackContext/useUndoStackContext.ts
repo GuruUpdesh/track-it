@@ -1,5 +1,5 @@
 import { undoStackAction } from "./undoStackReducer"
-import { TPackage } from "@/components/Packages"
+import { TPackage } from "@/components/DashboardGrid"
 import React, { createContext, useContext } from "react"
 
 export type undoStackContextProps = {

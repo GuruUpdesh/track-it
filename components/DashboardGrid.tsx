@@ -1,9 +1,9 @@
 "use client"
 
-import DetailsModal from "./DetailsModal"
+import DetailsModal from "@/components/tracking/details/DetailsModal"
 import "./ui/undo/undo.css"
 import { PackageInfo, courierEnum } from "@/app/api/package/typesAndSchemas"
-import Card from "@/components/card/Card"
+import Card from "@/components/tracking/card/Card"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
 import { useSearchContext } from "@/context/searchContext/useSearchContext"
 import { useUndoStackContext } from "@/context/undoStackContext/useUndoStackContext"

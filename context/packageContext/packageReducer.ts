@@ -1,5 +1,5 @@
 import { TCourier } from "@/app/api/package/typesAndSchemas"
-import { TPackage, packageSchema } from "@/components/Packages"
+import { TPackage, packageSchema } from "@/components/DashboardGrid"
 
 export type PackageAction =
 	| { type: "set"; packages: TPackage[] }

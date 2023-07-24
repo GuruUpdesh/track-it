@@ -1,7 +1,7 @@
 "use client"
 
-import { TPackage, TPackageWithInfo } from "../Packages"
-import Tooltip from "../ui/Tooltip"
+import { TPackage, TPackageWithInfo } from "../../DashboardGrid"
+import Tooltip from "../../ui/Tooltip"
 import "./styles/menu.css"
 import "./styles/modal.css"
 import {
@@ -38,7 +38,7 @@ import { MdMoreVert, MdOutlineEditNote, MdOutlineExplore } from "react-icons/md"
 import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
-import HistoryLine from "../tracking/HistoryLine"
+import HistoryLine from "../HistoryLine"
 import CardImage from "./CardImage"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
 import {
@@ -51,8 +51,8 @@ import {
 	DraggableStateSnapshot,
 } from "@hello-pangea/dnd"
 import ReactDOM from "react-dom"
-import Modal from "../ui/modal/Modal"
-import EditTrackingNumber from "../ui/forms/EditTrackingNumber"
+import Modal from "../../ui/modal/Modal"
+import EditTrackingNumber from "../../ui/forms/EditTrackingNumber"
 
 type CardDropdownProps = {
 	pkg: TPackage

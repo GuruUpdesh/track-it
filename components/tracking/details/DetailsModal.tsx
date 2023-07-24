@@ -1,4 +1,4 @@
-import { TPackage } from "./Packages"
+import { TPackage } from "@/components/DashboardGrid"
 import { TrackingHistory, PackageInfo } from "@/app/api/package/typesAndSchemas"
 import HistoryLine from "@/components/tracking/HistoryLine"
 import { PackageAction } from "@/context/packageContext/packageReducer"
@@ -7,7 +7,6 @@ import {
 	getCourierStringFromCode,
 	getCourierUrlsFromTrackingNumber,
 } from "@/utils/courier"
-import * as Dialog from "@radix-ui/react-dialog"
 import { AnimatePresence, motion } from "framer-motion"
 // import Image from "next/image"
 import React from "react"
@@ -16,7 +15,8 @@ import { BiChevronDown, BiCopy } from "react-icons/bi"
 // import { BsArrowLeft } from "react-icons/bs"
 import Balancer from "react-wrap-balancer"
 import * as Tabs from "@radix-ui/react-tabs"
-import "./detailsModal.css"
+import "./styles/detailsModal.css"
+import Modal from "@/components/ui/modal/Modal"
 
 type ToAndFromLocationProps = {
 	startLocation: string
@@ -196,149 +196,132 @@ const DetailsModal = ({
 		highlight.style.opacity = `0`
 	}
 	return (
-		<Dialog.Root open={true} modal={true} onOpenChange={setOpen}>
-			<Dialog.Portal>
-				<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 z-40 h-full w-full" />
-				<Dialog.Content className="absolute left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] outline-none">
-					<AnimatePresence>
-						<motion.div
-							transition={{
-								duration: 0.3,
-								ease: [0.075, 0.82, 0.165, 1],
-							}}
-							layoutId={`card-${pkg.id}`}
-							initial={{ opacity: 0, y: 50 }}
-							animate={{ opacity: 1, y: 0 }}
-							exit={{ opacity: 0, y: 50 }}
-							className="flex max-h-[80vh] min-h-[80vh] w-[350px]  flex-col overflow-hidden rounded-xl border border-indigo-400/25 bg-[#000000] sm:w-[500px] md:w-[650px] lg:w-[700px]"
-						>
-							<motion.div
-								layout
-								className="flex justify-between bg-gradient-to-b from-[#110F1B] to-transparent p-4"
-							>
-								<div className="flex gap-2">
-									{/* <button
+		<Modal open={true} setOpen={setOpen} disabledContextStyles={true}>
+			<AnimatePresence>
+				<motion.div
+					transition={{
+						duration: 0.3,
+						ease: [0.075, 0.82, 0.165, 1],
+					}}
+					layoutId={`card-${pkg.id}`}
+					initial={{ opacity: 0, y: 50 }}
+					animate={{ opacity: 1, y: 0 }}
+					exit={{ opacity: 0, y: 50 }}
+					className="flex max-h-[80vh] min-h-[80vh] w-[350px]  flex-col overflow-hidden rounded-xl border border-indigo-400/25 bg-[#000000] sm:w-[500px] md:w-[650px] lg:w-[700px]"
+				>
+					<motion.div
+						layout
+						className="flex justify-between bg-gradient-to-b from-[#110F1B] to-transparent p-4"
+					>
+						<div className="flex gap-2">
+							{/* <button
 										className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10"
 										onClick={() => {
 											setOpen(false)
 										}}
-									>
+										>
 										<BsArrowLeft />
 									</button> */}
-									<div className="relative flex flex-col items-start">
-										<motion.h1 className="flex w-[20ch] max-w-full items-center overflow-hidden whitespace-nowrap text-left text-2xl tracking-tighter text-yellow-50">
-											{pkg.name}
-										</motion.h1>
-										<motion.a
-											className="underline-link flex items-center gap-1 text-xs text-indigo-300"
-											href={
-												getCourierUrlsFromTrackingNumber(
-													pkg.trackingNumber
-												)[0]
-											}
-											target="_blank"
-										>
-											{getCourierIconFromCode(
-												pkg.courier
-											)}
-											<motion.p>
-												{getCourierStringFromCode(
-													pkg.courier
-												)}
-											</motion.p>
-										</motion.a>
-									</div>
-								</div>
-								{/* <div>
+							<div className="relative flex flex-col items-start">
+								<motion.h1 className="flex w-[20ch] max-w-full items-center overflow-hidden whitespace-nowrap text-left text-2xl tracking-tighter text-yellow-50">
+									{pkg.name}
+								</motion.h1>
+								<motion.a
+									className="underline-link flex items-center gap-1 text-xs text-indigo-300"
+									href={
+										getCourierUrlsFromTrackingNumber(
+											pkg.trackingNumber
+										)[0]
+									}
+									target="_blank"
+								>
+									{getCourierIconFromCode(pkg.courier)}
+									<motion.p>
+										{getCourierStringFromCode(pkg.courier)}
+									</motion.p>
+								</motion.a>
+							</div>
+						</div>
+						{/* <div>
 								</div> */}
 
-								{/* <button className="aspect-square w-min flex-none cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10">
+						{/* <button className="aspect-square w-min flex-none cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10">
 									<MdMoreVert />
 								</button> */}
-								<button
-									className="absolute right-2 top-2 aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10"
-									onClick={() => {
-										setOpen(false)
-									}}
-								>
-									<MdClose />
-								</button>
-							</motion.div>
-							<Tabs.Root defaultValue="tracking-history">
-								<Tabs.List
-									className="relative border-b border-b-yellow-50/25"
-									ref={tabsRef}
-								>
-									<div
-										ref={tabsHighlightRef}
-										className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-yellow-50/20 opacity-0 transition-all"
-									/>
-									<Tabs.Trigger
-										onMouseEnter={onTabHover}
-										onMouseLeave={onTabExit}
-										value="tracking-history"
-										className="TabsTrigger mx-2 p-2 text-yellow-50/50 transition-all hover:text-yellow-50/80"
-									>
-										Tracking History
-									</Tabs.Trigger>
-									<Tabs.Trigger
-										onMouseEnter={onTabHover}
-										onMouseLeave={onTabExit}
-										value="package-info"
-										className="TabsTrigger mx-2 p-2 text-yellow-50/50 transition-all hover:text-yellow-50/80"
-									>
-										Package Info
-									</Tabs.Trigger>
-								</Tabs.List>
-								<Tabs.Content
-									value="tracking-history"
-									className="mt-6"
-								>
-									<TrackingHistory
-										trackingHistory={
-											pkgInfo
-												? pkgInfo.trackingHistory
-												: []
-										}
-									/>
-								</Tabs.Content>
-								<Tabs.Content
-									value="package-info"
-									className="px-20"
-								>
-									<h1 className="text-lg font-semibold tracking-tighter text-yellow-50">
-										Shipment Overview
-									</h1>
-									<h5 className="text-md text-yellow-50/90tracking-wider font-light uppercase">
-										tracking number
-									</h5>
-									<button className="flex h-min items-center gap-1 text-yellow-50/50 hover:text-yellow-50/75 active:text-indigo-400">
-										<BiCopy />
-										{pkg.trackingNumber}
-									</button>
-									<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
-										details
-									</h5>
-									<ToAndFromLocation
-										startLocation={pkgInfo.startLocation}
-										endLocation={pkgInfo.endLocation}
-									/>
-									<h1 className="text-lg font-semibold tracking-tighter text-yellow-50">
-										Services
-									</h1>
-									<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
-										courier
-									</h5>
-									<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
-										service
-									</h5>
-								</Tabs.Content>
-							</Tabs.Root>
-						</motion.div>
-					</AnimatePresence>
-				</Dialog.Content>
-			</Dialog.Portal>
-		</Dialog.Root>
+						<button
+							className="absolute right-2 top-2 aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10"
+							onClick={() => {
+								setOpen(false)
+							}}
+						>
+							<MdClose />
+						</button>
+					</motion.div>
+					<Tabs.Root defaultValue="tracking-history">
+						<Tabs.List
+							className="relative border-b border-b-yellow-50/25"
+							ref={tabsRef}
+						>
+							<div
+								ref={tabsHighlightRef}
+								className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-yellow-50/20 opacity-0 transition-all"
+							/>
+							<Tabs.Trigger
+								onMouseEnter={onTabHover}
+								onMouseLeave={onTabExit}
+								value="tracking-history"
+								className="TabsTrigger mx-2 p-2 text-yellow-50/50 transition-all hover:text-yellow-50/80"
+							>
+								Tracking History
+							</Tabs.Trigger>
+							<Tabs.Trigger
+								onMouseEnter={onTabHover}
+								onMouseLeave={onTabExit}
+								value="package-info"
+								className="TabsTrigger mx-2 p-2 text-yellow-50/50 transition-all hover:text-yellow-50/80"
+							>
+								Package Info
+							</Tabs.Trigger>
+						</Tabs.List>
+						<Tabs.Content value="tracking-history" className="mt-6">
+							<TrackingHistory
+								trackingHistory={
+									pkgInfo ? pkgInfo.trackingHistory : []
+								}
+							/>
+						</Tabs.Content>
+						<Tabs.Content value="package-info" className="px-20">
+							<h1 className="text-lg font-semibold tracking-tighter text-yellow-50">
+								Shipment Overview
+							</h1>
+							<h5 className="text-md text-yellow-50/90tracking-wider font-light uppercase">
+								tracking number
+							</h5>
+							<button className="flex h-min items-center gap-1 text-yellow-50/50 hover:text-yellow-50/75 active:text-indigo-400">
+								<BiCopy />
+								{pkg.trackingNumber}
+							</button>
+							<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
+								details
+							</h5>
+							<ToAndFromLocation
+								startLocation={pkgInfo.startLocation}
+								endLocation={pkgInfo.endLocation}
+							/>
+							<h1 className="text-lg font-semibold tracking-tighter text-yellow-50">
+								Services
+							</h1>
+							<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
+								courier
+							</h5>
+							<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
+								service
+							</h5>
+						</Tabs.Content>
+					</Tabs.Root>
+				</motion.div>
+			</AnimatePresence>
+		</Modal>
 	)
 }
 

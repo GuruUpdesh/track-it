@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { TPackage } from "@/components/Packages"
+import { TPackage } from "@/components/DashboardGrid"
 import CancelButton from "../modal/CancelButton"
 import SaveButton from "../modal/SaveButton"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"

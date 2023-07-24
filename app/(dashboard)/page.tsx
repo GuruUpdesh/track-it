@@ -1,4 +1,4 @@
-import Grid from "@/components/Packages"
+import Grid from "@/components/DashboardGrid"
 
 export default function Home() {
 	return (

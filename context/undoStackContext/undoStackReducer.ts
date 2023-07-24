@@ -1,4 +1,4 @@
-import { TPackage } from "@/components/Packages"
+import { TPackage } from "@/components/DashboardGrid"
 
 export type undoStackAction =
 	| { type: "push"; new: TPackage }
