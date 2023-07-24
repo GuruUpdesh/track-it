@@ -3,11 +3,11 @@ import React from "react"
 
 type Props = {
 	children: React.ReactNode
-	text: string
+	title: string
 	disabled?: boolean
 }
 
-const Tooltip = ({ children, text, disabled = false }: Props) => {
+const Tooltip = ({ children, title, disabled = false }: Props) => {
 	return (
 		<UITooltip.Provider>
 			<UITooltip.Root defaultOpen={false} delayDuration={350}>
@@ -20,7 +20,7 @@ const Tooltip = ({ children, text, disabled = false }: Props) => {
 							data-testid="Tooltip-content"
 						>
 							<UITooltip.Arrow className="arrow z-10 fill-black stroke-white" />
-							{text}
+							{title}
 						</UITooltip.Content>
 					) : null}
 				</UITooltip.Portal>

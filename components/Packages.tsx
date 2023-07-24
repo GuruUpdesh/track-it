@@ -10,7 +10,7 @@ import { useUndoStackContext } from "@/context/undoStackContext/useUndoStackCont
 import * as Toast from "@radix-ui/react-toast"
 import Fuse from "fuse.js"
 import React, { useEffect } from "react"
-import Selecto from "react-selecto"
+// import Selecto from "react-selecto"
 import { z } from "zod"
 import * as ContextMenu from "@radix-ui/react-context-menu"
 import { AiOutlineDelete } from "react-icons/ai"
@@ -79,7 +79,7 @@ const Grid = () => {
 	const { search } = useSearchContext()
 	const [searchResults, setSearchResults] = React.useState(new Set())
 	const [selectedIds, setSelectedIds] = React.useState<string[]>([])
-	const [contextOpen, setContextOpen] = React.useState(false)
+	// const [contextOpen, setContextOpen] = React.useState(false)
 
 	React.useEffect(() => {
 		if (search === "") {
@@ -143,10 +143,10 @@ const Grid = () => {
 				</div>
 			)}
 			{packages.length > 0 && (
-				<ContextMenu.Root onOpenChange={setContextOpen}>
+				<ContextMenu.Root>
 					<ContextMenu.Trigger disabled={selectedIds.length < 1}>
 						<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-							{!selectedPackage && (
+							{/* {!selectedPackage && (
 								<Selecto
 									selectableTargets={[".card"]}
 									hitRate={15}
@@ -162,7 +162,7 @@ const Grid = () => {
 									dragContainer={window}
 									toggleContinueSelect={"shift"}
 								/>
-							)}
+							)} */}
 							{packages.map((pkg) => {
 								return (
 									<Card

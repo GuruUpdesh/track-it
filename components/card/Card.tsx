@@ -20,7 +20,6 @@ import {
 } from "@/utils/courier"
 import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
 import { estimateProgress } from "@/utils/package"
-import * as Dialog from "@radix-ui/react-dialog"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import axios from "axios"
 import { motion } from "framer-motion"
@@ -30,21 +29,30 @@ import {
 	AiOutlineEdit,
 	AiOutlineMail,
 	AiOutlineNumber,
+	AiOutlineOrderedList,
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
 // todo transition to radix-ui/react-icons
 import { BsCheckLg, BsChevronRight } from "react-icons/bs"
-import {
-	MdClose,
-	MdMoreVert,
-	MdOutlineEditNote,
-	MdOutlineExplore,
-} from "react-icons/md"
+import { MdMoreVert, MdOutlineEditNote, MdOutlineExplore } from "react-icons/md"
 import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 import HistoryLine from "../tracking/HistoryLine"
 import CardImage from "./CardImage"
+import { usePackageContext } from "@/context/packageContext/usePackageContext"
+import {
+	DragDropContext,
+	Droppable,
+	Draggable,
+	DropResult,
+	DroppableProvided,
+	DraggableProvided,
+	DraggableStateSnapshot,
+} from "@hello-pangea/dnd"
+import ReactDOM from "react-dom"
+import Modal from "../ui/modal/Modal"
+import EditTrackingNumber from "../ui/forms/EditTrackingNumber"
 
 type CardDropdownProps = {
 	pkg: TPackage
@@ -56,6 +64,7 @@ type CardDropdownProps = {
 			trackingNumber: () => void
 			courier: (courier: TCourier) => void
 		}
+		reorder: () => void
 		duplicate: () => void
 		delete: () => void
 	}
@@ -193,9 +202,16 @@ export const CardDropdownMenu = ({
 							</DropdownMenu.SubContent>
 						</DropdownMenu.Portal>
 					</DropdownMenu.Sub>
+					<DropdownMenu.Item
+						onSelect={menuFunctions.reorder}
+						className="DropdownMenu-item"
+					>
+						<AiOutlineOrderedList className="absolute left-4" />
+						Reorder
+					</DropdownMenu.Item>
 					<DropdownMenu.Separator className="m-1 h-[1px] bg-indigo-400/25" />
 					<DropdownMenu.Item
-						onSelect={menuFunctions.duplicate}
+						onSelect={menuFunctions.reorder}
 						className="DropdownMenu-item"
 					>
 						<BiCopy className="absolute left-4" />
@@ -219,82 +235,96 @@ type EditTrackingNumberModalProps = {
 	open: boolean
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 	pkg: TPackage
-	dispatchPackages: React.Dispatch<PackageAction>
 }
 
 export const EditTrackingNumberModal = ({
 	open,
 	setOpen,
 	pkg,
-	dispatchPackages,
 }: EditTrackingNumberModalProps) => {
-	const [trackingNumber, setTrackingNumber] = useState(pkg.trackingNumber)
 	return (
-		<Dialog.Root open={open} onOpenChange={setOpen} modal={true}>
-			<Dialog.Portal>
-				<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 z-40 h-full w-full" />
-				<Dialog.Content className="Modal-content absolute left-[50%] top-[50%] z-50 min-h-[200px] translate-x-[-50%] translate-y-[-50%] p-6">
-					<div className="mb-4 flex items-center justify-between">
-						<h1 className="text-lg font-bold">
-							Edit Tracking Number
-						</h1>
-						<button
-							onClick={() => setOpen(false)}
-							className="text-yellow-50/50 hover:text-yellow-50/90 active:text-yellow-50"
-							aria-label="close modal"
-						>
-							<MdClose fontSize="large" />
-						</button>
-					</div>
-					<form
-						className="text-yellow-50"
-						onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-							e.preventDefault()
-							dispatchPackages({
-								type: "updateTrackingNumber",
-								id: pkg.id,
-								trackingNumber: trackingNumber,
-							})
-							setOpen(false)
-						}}
-					>
-						<input
-							className="w-full rounded-md border border-yellow-50/25 bg-transparent p-2 outline-none outline-offset-2 focus-within:outline-2 focus-within:outline-indigo-400"
-							id="tracking-number-input"
-							placeholder="Type tracking number..."
-							autoFocus={true}
-							type="text"
-							value={trackingNumber}
-							onChange={(e) => {
-								setTrackingNumber(e.target.value)
-							}}
-						/>
-						<div className="mt-6 flex items-center justify-between">
-							<button
-								className="rounded-md bg-white/10 px-4 py-2"
-								onClick={() => {
-									setOpen(false)
-								}}
+		<Modal open={open} setOpen={setOpen}>
+			<div className="mb-4 flex items-center justify-between">
+				<h1 className="text-lg font-bold">Edit Tracking Number</h1>
+			</div>
+			<EditTrackingNumber pkg={pkg} setOpen={setOpen} />
+		</Modal>
+	)
+}
+
+type ReorderModalProps = {
+	open: boolean
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+let portal: HTMLElement | null = document.querySelector(".your-portal-class") // change to the actual class if you already have a portal div
+
+// if there's no portal already, we will create one
+if (!portal) {
+	portal = document.createElement("div")
+	portal.classList.add("your-portal-class") // change to desired class name
+	document.body.appendChild(portal)
+}
+
+export const ReorderModal = ({ open, setOpen }: ReorderModalProps) => {
+	const { packages } = usePackageContext()
+	return (
+		<Modal open={open} setOpen={setOpen}>
+			<div className="absolute z-50">
+				<DragDropContext
+					onDragEnd={(result: DropResult) => {
+						console.log(result)
+					}}
+				>
+					<Droppable droppableId="droppable">
+						{(droppableProvided: DroppableProvided) => (
+							<div
+								ref={droppableProvided.innerRef}
+								className="relative z-50 border border-white"
 							>
-								Cancel
-							</button>
-							<button
-								type="submit"
-								className={
-									"rounded-md px-4 py-2" +
-									(trackingNumber === pkg.trackingNumber
-										? " bg-white/10"
-										: " bg-green-400/50")
-								}
-								disabled={trackingNumber === pkg.trackingNumber}
-							>
-								Save changes
-							</button>
-						</div>
-					</form>
-				</Dialog.Content>
-			</Dialog.Portal>
-		</Dialog.Root>
+								{packages.map(
+									(pkg: TPackage, index: number) => (
+										<Draggable
+											key={`${index}`}
+											draggableId={`${index}`}
+											index={index}
+										>
+											{(
+												draggableProvided: DraggableProvided,
+												draggableSnapshot: DraggableStateSnapshot
+											) => {
+												const usePortal: boolean =
+													draggableSnapshot.isDragging
+												const child = (
+													<div
+														className="relative z-50 my-1 bg-white/10"
+														ref={
+															draggableProvided.innerRef
+														}
+														{...draggableProvided.draggableProps}
+														{...draggableProvided.dragHandleProps}
+													>
+														{pkg.name}
+													</div>
+												)
+												if (!usePortal || !portal) {
+													return child
+												}
+												return ReactDOM.createPortal(
+													child,
+													portal
+												)
+											}}
+										</Draggable>
+									)
+								)}
+								{droppableProvided.placeholder}
+							</div>
+						)}
+					</Droppable>
+				</DragDropContext>
+			</div>
+		</Modal>
 	)
 }
 
@@ -322,7 +352,7 @@ const Card = ({
 	const [editNameValue, setEditNameValue] = useState(pkg.name)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
 		useState(false)
-
+	const [openReorderModal, setOpenReorderModal] = useState(false)
 	const [error, setError] = useState<null | string>(null)
 	// todo fix the journey percent resets after a state change
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
@@ -465,6 +495,10 @@ const Card = ({
 				dispatchPackages({ type: "updateCourier", id: pkg.id, courier })
 			},
 		},
+		reorder: () => {
+			console.log("menuFunctions > reorder")
+			setOpenReorderModal(true)
+		},
 		duplicate: () => {
 			console.log("menuFunctions > duplicate")
 			dispatchPackages({ type: "duplicate", id: pkg.id })
@@ -540,7 +574,7 @@ const Card = ({
 									/>
 								) : (
 									<Tooltip
-										text={pkg.name}
+										title={pkg.name}
 										disabled={!isTextOverflowed}
 									>
 										<h3
@@ -583,7 +617,7 @@ const Card = ({
 										</p>
 									</a>
 									<Tooltip
-										text={
+										title={
 											(packageInfo &&
 												packageInfo.eta &&
 												formatDate(packageInfo.eta) +
@@ -613,7 +647,7 @@ const Card = ({
 								</div>
 							</div>
 						</div>
-						<Tooltip text="Open">
+						<Tooltip title="Open">
 							<button
 								onClick={menuFunctions.openDetailedView}
 								className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 opacity-0 outline-none transition-opacity hover:bg-yellow-50/10 focus:bg-yellow-50/10 group-hover:opacity-100"
@@ -640,7 +674,10 @@ const Card = ({
 				open={openTrackingNumberModal}
 				setOpen={setOpenEditTrackingNumberModal}
 				pkg={pkg}
-				dispatchPackages={dispatchPackages}
+			/>
+			<ReorderModal
+				open={openReorderModal}
+				setOpen={setOpenReorderModal}
 			/>
 		</>
 	)
