@@ -136,7 +136,6 @@ export async function GET(request: NextRequest) {
 		}
 
 		const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
-		console.log(packageInfo)
 
 		const packageInfoSimple: PackageInfo = {
 			trackingNumber: packageInfo.tracking_number,
