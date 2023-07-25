@@ -80,16 +80,16 @@ type ReorderModalProps = {
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-let portal: HTMLElement | null = document.querySelector(".your-portal-class") // change to the actual class if you already have a portal div
-
-// if there's no portal already, we will create one
-if (!portal) {
-	portal = document.createElement("div")
-	portal.classList.add("your-portal-class") // change to desired class name
-	document.body.appendChild(portal)
-}
-
 export const ReorderModal = ({ open, setOpen }: ReorderModalProps) => {
+	let portal: HTMLElement | null =
+		document.querySelector(".your-portal-class") // change to the actual class if you already have a portal div
+
+	// if there's no portal already, we will create one
+	if (!portal) {
+		portal = document.createElement("div")
+		portal.classList.add("your-portal-class") // change to desired class name
+		document.body.appendChild(portal)
+	}
 	const { packages } = usePackageContext()
 	return (
 		<Modal open={open} setOpen={setOpen}>
