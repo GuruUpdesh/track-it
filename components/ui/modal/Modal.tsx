@@ -35,7 +35,7 @@ const Modal = ({
 	const { setEnabled } = useSelectContext()
 	React.useEffect(() => {
 		setEnabled(!open)
-	}, [open, setEnabled])
+	}, [open])
 	return (
 		<ModalContext.Provider value={{ open, setOpen }}>
 			<Dialog.Root open={open} onOpenChange={setOpen} modal={true}>

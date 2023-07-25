@@ -22,7 +22,7 @@ import {
 import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
 import { estimateProgress } from "@/utils/package"
 import axios from "axios"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import React, { useEffect, useState } from "react"
 import {
 	AiOutlineDelete,
@@ -556,6 +556,38 @@ const Card = ({
 			>
 				{/* Card Header */}
 				<div className="relative min-w-[220px] max-w-[350px] select-none border-b border-b-indigo-400/25">
+					<AnimatePresence>
+						{isSelected && (
+							<Tooltip
+								title="Right click for options"
+								disabled={!isSelected}
+							>
+								<motion.p
+									className="absolute left-[50%] rounded-full bg-indigo-700 px-4 py-1 text-sm text-indigo-100"
+									initial={{
+										opacity: 0,
+										scale: 0,
+										x: "-50%",
+										y: "-50%",
+									}}
+									animate={{
+										opacity: 1,
+										scale: 1,
+										x: "-50%",
+										y: "-50%",
+									}}
+									exit={{
+										opacity: 0,
+										scale: 0,
+										x: "-50%",
+										y: "-50%",
+									}}
+								>
+									Selected
+								</motion.p>
+							</Tooltip>
+						)}
+					</AnimatePresence>
 					<div
 						ref={journeyPercentRef}
 						className="journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/40 opacity-50"

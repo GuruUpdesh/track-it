@@ -9,7 +9,7 @@ export function SelectContextProvider({
 	children: React.ReactNode
 }) {
 	const [enabled, setEnabled] = useState(true)
-
+	console.log("selected context", enabled)
 	return (
 		<SelectContext.Provider value={{ enabled, setEnabled }}>
 			{children}

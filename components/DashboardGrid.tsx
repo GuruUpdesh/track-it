@@ -80,6 +80,7 @@ const DashboardGrid = () => {
 	const { search } = useSearchContext()
 	const [searchResults, setSearchResults] = React.useState(new Set())
 	const [selectedIds, setSelectedIds] = React.useState<string[]>([])
+
 	const [contextOpen, setContextOpen] = React.useState(false)
 	const { enabled } = useSelectContext()
 
@@ -100,6 +101,10 @@ const DashboardGrid = () => {
 
 	const [selectedPackage, setSelectedPackage] =
 		React.useState<TPackageWithInfo | null>(null)
+	const [detailsModalOpen, setDetailsModalOpen] = React.useState(false)
+	React.useEffect(() => {
+		setDetailsModalOpen(true)
+	}, [selectedPackage])
 
 	const [undoNotificationOpen, setUndoNotificationOpen] =
 		React.useState(false)
@@ -148,7 +153,7 @@ const DashboardGrid = () => {
 				<ContextMenu.Root onOpenChange={setContextOpen}>
 					<ContextMenu.Trigger disabled={selectedIds.length < 1}>
 						<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-							{!selectedPackage && enabled && (
+							{enabled && (
 								<Selecto
 									selectableTargets={[".card"]}
 									hitRate={15}
@@ -212,9 +217,8 @@ const DashboardGrid = () => {
 					pkg={selectedPackage.pkg}
 					pkgInfo={selectedPackage.info}
 					dispatchPackages={dispatchPackages}
-					setOpen={(open: boolean) => {
-						if (!open) setSelectedPackage(null)
-					}}
+					open={detailsModalOpen}
+					setOpen={setDetailsModalOpen}
 				/>
 			)}
 			<UndoNotification

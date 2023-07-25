@@ -158,6 +158,7 @@ type Props = {
 	pkg: TPackage
 	pkgInfo: PackageInfo
 	dispatchPackages: React.Dispatch<PackageAction>
+	open: boolean
 	setOpen: (open: boolean) => void
 }
 
@@ -166,6 +167,7 @@ const DetailsModal = ({
 	pkgInfo,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	dispatchPackages,
+	open,
 	setOpen,
 }: Props) => {
 	const tabsHighlightRef = React.useRef<HTMLDivElement>(null)
@@ -196,7 +198,7 @@ const DetailsModal = ({
 		highlight.style.opacity = `0`
 	}
 	return (
-		<Modal open={true} setOpen={setOpen} disabledContextStyles={true}>
+		<Modal open={open} setOpen={setOpen} disabledContextStyles={true}>
 			<AnimatePresence>
 				<motion.div
 					transition={{
