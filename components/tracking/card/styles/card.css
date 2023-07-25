@@ -21,7 +21,7 @@
   height: 1px;
   bottom: 0;
   left: 0;
-  background-color: rgb(165, 180, 252);
+  background-color: rgb(255, 255, 255);
   visibility: hidden;
   transform: scaleX(0);
   transform-origin: left;

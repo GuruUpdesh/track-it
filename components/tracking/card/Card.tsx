@@ -321,9 +321,9 @@ const Card = ({
 		}
 
 		return (
-			<div className="line-height-shrink">
+			<div className="line-height-shrink text-indigo-100">
 				<h5>{historyItem.detailedStatus}</h5>
-				<div className="flex items-center text-sm text-yellow-50/75">
+				<div className="flex items-center text-sm text-indigo-100/60">
 					{historyItem.location === "Location not found" ? null : (
 						<>
 							<p className="whitespace-nowrap">
@@ -617,7 +617,7 @@ const Card = ({
 								)}
 								<div className="flex items-center justify-start gap-2">
 									<a
-										className="underline-link flex items-center gap-1 text-xs text-indigo-300"
+										className="underline-link flex items-center gap-1 text-xs text-yellow-50"
 										href={
 											getCourierUrlsFromTrackingNumber(
 												pkg.trackingNumber
@@ -687,9 +687,7 @@ const Card = ({
 				<div
 					className={cn(
 						"h-[56px] bg-black p-2",
-						error === null && packageInfo
-							? "cursor-pointer hover:bg-[#121212]"
-							: ""
+						error === null && packageInfo ? "cursor-pointer" : ""
 					)}
 					onClick={menuFunctions.openDetailedView}
 				>
