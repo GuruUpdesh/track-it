@@ -17,6 +17,7 @@ import Balancer from "react-wrap-balancer"
 import * as Tabs from "@radix-ui/react-tabs"
 import "./styles/detailsModal.css"
 import Modal from "@/components/ui/modal/Modal"
+import CardImage from "../card/CardImage"
 
 type ToAndFromLocationProps = {
 	startLocation: string
@@ -216,12 +217,16 @@ const DetailsModal = ({
 						className="flex justify-between bg-gradient-to-b from-[#110F1B] to-transparent p-4"
 					>
 						<div className="flex gap-2">
+							<CardImage
+								error={undefined}
+								status={pkgInfo.status.status}
+							/>
 							<div className="relative flex flex-col items-start">
 								<motion.h1 className="flex w-[20ch] max-w-full items-center overflow-hidden whitespace-nowrap text-left text-2xl tracking-tighter text-yellow-50">
 									{pkg.name}
 								</motion.h1>
 								<motion.a
-									className="underline-link flex items-center gap-1 text-xs text-indigo-300"
+									className="underline-link flex items-center gap-1 text-xs text-yellow-50"
 									href={
 										getCourierUrlsFromTrackingNumber(
 											pkg.trackingNumber
@@ -255,7 +260,7 @@ const DetailsModal = ({
 						>
 							<div
 								ref={tabsHighlightRef}
-								className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-yellow-50/20 opacity-0 transition-all"
+								className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-indigo-50/20 opacity-0 transition-all"
 							/>
 							<Tabs.Trigger
 								onMouseEnter={onTabHover}

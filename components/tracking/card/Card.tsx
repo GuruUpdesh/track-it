@@ -33,35 +33,18 @@ import {
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
 import { BsDot, BsArrowLeft } from "react-icons/bs"
-import {
-	MdMoreVert,
-	MdOutlineEditNote,
-	MdOutlineExplore,
-	MdDragIndicator,
-} from "react-icons/md"
+import { MdMoreVert, MdOutlineEditNote, MdOutlineExplore } from "react-icons/md"
 import { PiSwapLight } from "react-icons/pi"
 import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 import CardImage from "./CardImage"
-import { usePackageContext } from "@/context/packageContext/usePackageContext"
-import {
-	DragDropContext,
-	Droppable,
-	Draggable,
-	DropResult,
-	DroppableProvided,
-	DraggableProvided,
-	DraggableStateSnapshot,
-} from "@hello-pangea/dnd"
-import ReactDOM from "react-dom"
 import Modal from "../../ui/modal/Modal"
 import EditTrackingNumber from "../../ui/forms/EditTrackingNumber"
 import IconButton from "@/components/ui/IconButton"
 import Menu, { TMenuItem } from "@/components/ui/menu/Menu"
-import CancelButton from "@/components/ui/modal/CancelButton"
-import SaveButton from "@/components/ui/modal/SaveButton"
 import { cn } from "@/lib/utils"
+import ReorderCards from "@/components/ui/forms/ReorderCards"
 
 type EditTrackingNumberModalProps = {
 	open: boolean
@@ -79,7 +62,7 @@ export const EditTrackingNumberModal = ({
 			<div className="mb-4 flex items-center justify-between">
 				<h1 className="text-lg font-bold">Edit Tracking Number</h1>
 			</div>
-			<EditTrackingNumber pkg={pkg} setOpen={setOpen} />
+			<EditTrackingNumber pkg={pkg} />
 		</Modal>
 	)
 }
@@ -90,123 +73,9 @@ type ReorderModalProps = {
 }
 
 export const ReorderModal = ({ open, setOpen }: ReorderModalProps) => {
-	let portal: HTMLElement | null =
-		document.querySelector(".your-portal-class")
-
-	if (!portal) {
-		portal = document.createElement("div")
-		portal.classList.add("your-portal-class")
-		document.body.appendChild(portal)
-	}
-	const { packages, dispatchPackages } = usePackageContext()
-	const [tempPackages, setTempPackages] = useState<TPackage[]>(packages)
-	const [hasChanged, setHasChanged] = useState(false)
-
-	useEffect(() => {
-		setTempPackages(packages)
-		setHasChanged(false)
-	}, [open, packages])
-
-	function handleDragEnd(result: DropResult) {
-		if (!result.destination) return
-		const items = Array.from(tempPackages)
-		const [reorderedItem] = items.splice(result.source.index, 1)
-		items.splice(result.destination.index, 0, reorderedItem)
-		setTempPackages(items)
-		setHasChanged(true)
-	}
-
 	return (
 		<Modal open={open} setOpen={setOpen}>
-			<form
-				onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-					e.preventDefault()
-					dispatchPackages({
-						type: "set",
-						packages: tempPackages,
-					})
-					setOpen(false)
-				}}
-			>
-				<h1 className="text-lg font-bold">Reorder your Packages</h1>
-				<p className="mb-3 border-b border-b-white/10 pb-3 text-sm text-yellow-50/75">
-					Drag and drop the cards to set their order. Then save the
-					results.
-				</p>
-				<DragDropContext onDragEnd={handleDragEnd}>
-					<Droppable droppableId="reorder-modal">
-						{(droppableProvided: DroppableProvided) => (
-							<div
-								ref={droppableProvided.innerRef}
-								className="mb-3"
-							>
-								{tempPackages.map(
-									(pkg: TPackage, index: number) => (
-										<Draggable
-											key={`${index}`}
-											draggableId={`${index}`}
-											index={index}
-										>
-											{(
-												draggableProvided: DraggableProvided,
-												draggableSnapshot: DraggableStateSnapshot
-											) => {
-												const usePortal: boolean =
-													draggableSnapshot.isDragging
-												const child = (
-													<div
-														className={cn(
-															"group relative mb-2 rounded-sm border border-indigo-400/25 bg-[#110F1B] px-4 py-2",
-															draggableSnapshot.isDragging
-																? "bg-[#181527]"
-																: ""
-														)}
-														ref={
-															draggableProvided.innerRef
-														}
-														{...draggableProvided.draggableProps}
-														{...draggableProvided.dragHandleProps}
-													>
-														<MdDragIndicator className="absolute left-[-1rem] top-[50%] translate-y-[-50%] opacity-0 transition-opacity group-hover:opacity-75" />
-														<h1 className="whitespace-nowrap text-left text-lg tracking-tighter text-yellow-50">
-															{pkg.name}
-														</h1>
-														<div className="flex items-center text-yellow-50/50">
-															<p>
-																{getCourierStringFromCode(
-																	pkg.courier
-																)}
-															</p>
-															<BsDot />
-															<p>
-																{
-																	pkg.trackingNumber
-																}
-															</p>
-														</div>
-													</div>
-												)
-												if (!usePortal || !portal) {
-													return child
-												}
-												return ReactDOM.createPortal(
-													child,
-													portal
-												)
-											}}
-										</Draggable>
-									)
-								)}
-								{droppableProvided.placeholder}
-							</div>
-						)}
-					</Droppable>
-				</DragDropContext>
-				<div className="mt-3 flex items-center justify-between border-t  border-t-white/10 pt-3">
-					<CancelButton />
-					<SaveButton disabled={!hasChanged} />
-				</div>
-			</form>
+			<ReorderCards />
 		</Modal>
 	)
 }
@@ -323,7 +192,7 @@ const Card = ({
 
 		return (
 			<div className="line-height-shrink text-indigo-100">
-				<h5>{historyItem.detailedStatus}</h5>
+				<h5 className="line-clamp-1">{historyItem.detailedStatus}</h5>
 				<div className="flex items-center text-sm text-indigo-100/60">
 					{historyItem.location === "Location not found" ? null : (
 						<>
@@ -749,7 +618,7 @@ const Card = ({
 				</div>
 				<div
 					className={cn(
-						"h-[56px] bg-black p-2",
+						"relative h-[56px] min-w-[220px] max-w-[350px]  bg-black p-2",
 						error === null && packageInfo ? "cursor-pointer" : ""
 					)}
 					onClick={menuFunctions.openDetailedView}

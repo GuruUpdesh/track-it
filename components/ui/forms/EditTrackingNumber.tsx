@@ -3,15 +3,16 @@ import { TPackage } from "@/components/DashboardGrid"
 import CancelButton from "../modal/CancelButton"
 import SaveButton from "../modal/SaveButton"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
+import { useModalContext } from "../modal/Modal"
 
 type Props = {
 	pkg: TPackage
-	setOpen: (open: boolean) => void
 }
 
-const EditTrackingNumber = ({ pkg, setOpen }: Props) => {
+const EditTrackingNumber = ({ pkg }: Props) => {
 	const [trackingNumber, setTrackingNumber] = useState(pkg.trackingNumber)
 	const { dispatchPackages } = usePackageContext()
+	const { setOpen } = useModalContext()
 	return (
 		<form
 			className="text-yellow-50"

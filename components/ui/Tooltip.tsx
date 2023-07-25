@@ -20,7 +20,7 @@ const Tooltip = ({ children, title, disabled = false }: Props) => {
 							side="bottom"
 							data-testid="Tooltip-content"
 						>
-							<UITooltip.Arrow className="arrow z-10 fill-black stroke-white" />
+							<UITooltip.Arrow className="arrow z-10 fill-black stroke-yellow-50/50" />
 							<Balancer>{title}</Balancer>
 						</UITooltip.Content>
 					) : null}

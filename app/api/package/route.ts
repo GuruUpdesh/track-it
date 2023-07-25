@@ -94,6 +94,8 @@ function simplifyDetailMessage(message: string, status: TStatus): string {
 			return "Arrived at facility"
 		} else if (lowercaseMessage.includes("in transit")) {
 			return "In transit"
+		} else if (lowercaseMessage.includes("out for delivery")) {
+			return "Out for delivery"
 		}
 	}
 
