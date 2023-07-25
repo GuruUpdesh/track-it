@@ -32,17 +32,17 @@ import {
 	AiOutlineOrderedList,
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
-import { BsDot } from "react-icons/bs"
+import { BsDot, BsArrowLeft } from "react-icons/bs"
 import {
 	MdMoreVert,
 	MdOutlineEditNote,
 	MdOutlineExplore,
 	MdDragIndicator,
 } from "react-icons/md"
+import { PiSwapLight } from "react-icons/pi"
 import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
-import HistoryLine from "../HistoryLine"
 import CardImage from "./CardImage"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
 import {
@@ -218,6 +218,8 @@ type Props = {
 	triggerUndoNotification: () => void
 	inSearchResults: boolean
 	isSelected: boolean
+	packagesLength: number
+	index: number
 }
 
 const Card = ({
@@ -227,6 +229,8 @@ const Card = ({
 	triggerUndoNotification,
 	inSearchResults,
 	isSelected,
+	packagesLength,
+	index,
 }: Props) => {
 	const { dispatchUndoStack } = useUndoStackContext()
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
@@ -317,7 +321,26 @@ const Card = ({
 			return
 		}
 
-		return <HistoryLine historyItem={historyItem} />
+		return (
+			<div className="line-height-shrink">
+				<h5>{historyItem.detailedStatus}</h5>
+				<div className="flex items-center text-sm text-yellow-50/75">
+					{historyItem.location === "Location not found" ? null : (
+						<>
+							<p className="whitespace-nowrap">
+								{historyItem.location}
+							</p>
+							<BsDot />
+						</>
+					)}
+					<p className="whitespace-nowrap">
+						{formatDate(historyItem.date) +
+							" " +
+							getTimeFromDate(historyItem.date)}
+					</p>
+				</div>
+			</div>
+		)
 	}
 
 	useEffect(() => {
@@ -456,11 +479,44 @@ const Card = ({
 					variant: "warning",
 				},
 			],
+			separator: true,
 		},
 		{
 			label: "Reorder",
 			onClick: menuFunctions.reorder,
 			icon: <AiOutlineOrderedList className="absolute left-4" />,
+		},
+		{
+			label: "Move",
+			icon: <PiSwapLight className="absolute left-4" />,
+			children: [
+				{
+					label: "Left",
+					onClick: () => {
+						dispatchPackages({
+							type: "move",
+							direction: "left",
+							index: index,
+						})
+					},
+					icon: <BsArrowLeft className="absolute left-4" />,
+					disabled: index === 0,
+				},
+				{
+					label: "Right",
+					onClick: () => {
+						dispatchPackages({
+							type: "move",
+							direction: "right",
+							index: index,
+						})
+					},
+					icon: (
+						<BsArrowLeft className="absolute left-4 rotate-180 transform" />
+					),
+					disabled: index === packagesLength - 1,
+				},
+			],
 			separator: true,
 		},
 		{
@@ -540,7 +596,7 @@ const Card = ({
 									>
 										<h3
 											ref={textRef}
-											onDoubleClick={handleEditName}
+											onClick={handleEditName}
 											className="flex w-[20ch] max-w-full cursor-pointer items-center overflow-hidden whitespace-nowrap text-left text-lg font-semibold tracking-tighter text-yellow-50"
 											style={
 												isTextOverflowed
@@ -630,7 +686,12 @@ const Card = ({
 					</div>
 				</div>
 				<div
-					className="cursor-pointer bg-black hover:bg-[#111]"
+					className={cn(
+						"h-[56px] bg-black p-2",
+						error === null && packageInfo
+							? "cursor-pointer hover:bg-[#121212]"
+							: ""
+					)}
 					onClick={menuFunctions.openDetailedView}
 				>
 					{renderHistory(-1)}

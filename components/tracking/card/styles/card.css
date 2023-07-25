@@ -6,6 +6,10 @@
   background: conic-gradient(rgba(129, 140, 248, 0.75) 0deg, rgba(129, 140, 248, 0.25) 0deg);
 }
 
+.line-height-shrink {
+  line-height: 1.25rem;
+}
+
 .underline-link {
   position: relative;
   padding-right: 0.5ch;

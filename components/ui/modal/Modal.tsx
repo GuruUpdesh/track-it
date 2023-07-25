@@ -4,6 +4,7 @@ import React, { createContext, useContext } from "react"
 import * as Dialog from "@radix-ui/react-dialog"
 import CloseButton from "./CloseButton"
 import { cn } from "@/lib/utils"
+import { useSelectContext } from "@/context/selectContext/useSelectContext"
 
 type Props = {
 	open: boolean
@@ -31,6 +32,10 @@ const Modal = ({
 	children,
 	disabledContextStyles = false,
 }: Props) => {
+	const { setEnabled } = useSelectContext()
+	React.useEffect(() => {
+		setEnabled(!open)
+	}, [open, setEnabled])
 	return (
 		<ModalContext.Provider value={{ open, setOpen }}>
 			<Dialog.Root open={open} onOpenChange={setOpen} modal={true}>

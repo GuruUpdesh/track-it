@@ -97,9 +97,9 @@ function simplifyDetailMessage(message: string, status: TStatus): string {
 		}
 	}
 
-	// if (status = "PRE_TRANSIT") {
-	// 	return "Shipment information received"
-	// }
+	if ((status = "PRE_TRANSIT")) {
+		return "Shipment information received"
+	}
 
 	return message
 }
