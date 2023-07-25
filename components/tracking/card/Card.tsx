@@ -223,7 +223,7 @@ const Card = ({
 	}
 
 	function handleSaveName() {
-		if (editNameValue === "" || editNameValue === pkg.name) {
+		if (editNameValue === "") {
 			return
 		}
 		dispatchPackages({
