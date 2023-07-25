@@ -244,6 +244,7 @@ const Card = ({
 	// todo fix the journey percent resets after a state change
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
+	const [hovering, setHovering] = useState(false)
 
 	useEffect(() => {
 		const getPackageInfo = async () => {
@@ -553,6 +554,8 @@ const Card = ({
 				animate={{ opacity: 1, y: 0 }}
 				exit={{ opacity: 0, y: 50 }}
 				key={pkg.id}
+				onMouseEnter={() => setHovering(true)}
+				onMouseLeave={() => setHovering(false)}
 			>
 				{/* Card Header */}
 				<div className="relative min-w-[220px] max-w-[350px] select-none border-b border-b-indigo-400/25">
@@ -587,6 +590,34 @@ const Card = ({
 								</motion.p>
 							</Tooltip>
 						)}
+					</AnimatePresence>
+					<AnimatePresence>
+						{!isSelected &&
+							packageInfo &&
+							packageInfo.status.status === "DELIVERED" &&
+							hovering && (
+								<motion.button
+									className="absolute left-0 z-40 rounded-full border border-indigo-400/25 bg-[#110F1B] px-1 py-1 text-sm text-indigo-100 hover:bg-indigo-700"
+									initial={{
+										opacity: 0,
+										scale: 0,
+										y: "-50%",
+									}}
+									animate={{
+										opacity: 1,
+										scale: 1,
+										y: "-50%",
+									}}
+									exit={{
+										opacity: 0,
+										scale: 0,
+										y: "-50%",
+									}}
+									onClick={menuFunctions.delete}
+								>
+									<AiOutlineDelete />
+								</motion.button>
+							)}
 					</AnimatePresence>
 					<div
 						ref={journeyPercentRef}
