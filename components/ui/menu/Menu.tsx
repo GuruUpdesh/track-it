@@ -29,6 +29,8 @@ export type TMenuItem = {
 type Props = {
 	menu: TMenuItem[]
 	children: React.ReactNode
+	open: boolean
+	setOpen: (open: boolean) => void
 }
 
 export function renderRadioOption(option: radioOption, index: number) {
@@ -85,9 +87,9 @@ export function renderMenuItem(
 	)
 }
 
-const Menu = ({ menu, children }: Props) => {
+const Menu = ({ menu, children, open, setOpen }: Props) => {
 	return (
-		<DropdownMenu.Root>
+		<DropdownMenu.Root open={open} onOpenChange={setOpen} modal={true}>
 			<DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>
 			<DropdownMenu.Portal>
 				<DropdownMenu.Content

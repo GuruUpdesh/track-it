@@ -616,7 +616,7 @@ const Card = ({
 						>
 							<BiExpand />
 						</IconButton>
-						<Menu menu={menu}>
+						<Menu menu={menu} open={menuOpen} setOpen={setMenuOpen}>
 							<button
 								aria-label="Package Controls"
 								className={
