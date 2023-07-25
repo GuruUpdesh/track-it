@@ -97,7 +97,7 @@ function simplifyDetailMessage(message: string, status: TStatus): string {
 		}
 	}
 
-	if ((status = "PRE_TRANSIT")) {
+	if (status === "PRE_TRANSIT") {
 		return "Shipment information received"
 	}
 
@@ -136,6 +136,7 @@ export async function GET(request: NextRequest) {
 		}
 
 		const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
+		console.log(packageInfo)
 
 		const packageInfoSimple: PackageInfo = {
 			trackingNumber: packageInfo.tracking_number,
@@ -148,6 +149,7 @@ export async function GET(request: NextRequest) {
 			status: simplifyTrackingHistory(
 				packageInfo.tracking_status as ShippoTrackingHistory
 			),
+			service: packageInfo.servicelevel.name,
 			trackingHistory: packageInfo.tracking_history.map((history) =>
 				simplifyTrackingHistory(history)
 			),

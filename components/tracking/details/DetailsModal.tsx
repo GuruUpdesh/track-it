@@ -214,14 +214,6 @@ const DetailsModal = ({
 						className="flex justify-between bg-gradient-to-b from-[#110F1B] to-transparent p-4"
 					>
 						<div className="flex gap-2">
-							{/* <button
-										className="aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10"
-										onClick={() => {
-											setOpen(false)
-										}}
-										>
-										<BsArrowLeft />
-									</button> */}
 							<div className="relative flex flex-col items-start">
 								<motion.h1 className="flex w-[20ch] max-w-full items-center overflow-hidden whitespace-nowrap text-left text-2xl tracking-tighter text-yellow-50">
 									{pkg.name}
@@ -242,9 +234,6 @@ const DetailsModal = ({
 								</motion.a>
 							</div>
 						</div>
-						{/* <div>
-								</div> */}
-
 						{/* <button className="aspect-square w-min flex-none cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10">
 									<MdMoreVert />
 								</button> */}
@@ -290,33 +279,70 @@ const DetailsModal = ({
 								}
 							/>
 						</Tabs.Content>
-						<Tabs.Content value="package-info" className="px-20">
-							<h1 className="text-lg font-semibold tracking-tighter text-yellow-50">
-								Shipment Overview
-							</h1>
-							<h5 className="text-md text-yellow-50/90tracking-wider font-light uppercase">
-								tracking number
-							</h5>
-							<button className="flex h-min items-center gap-1 text-yellow-50/50 hover:text-yellow-50/75 active:text-indigo-400">
-								<BiCopy />
-								{pkg.trackingNumber}
-							</button>
-							<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
-								details
-							</h5>
-							<ToAndFromLocation
-								startLocation={pkgInfo.startLocation}
-								endLocation={pkgInfo.endLocation}
-							/>
-							<h1 className="text-lg font-semibold tracking-tighter text-yellow-50">
-								Services
-							</h1>
-							<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
-								courier
-							</h5>
-							<h5 className="text-md font-light uppercase tracking-wider text-yellow-50/90">
-								service
-							</h5>
+						<Tabs.Content
+							value="package-info"
+							className="mt-6 px-20"
+						>
+							<motion.section
+								className="mb-6 origin-top rounded-lg bg-white/10 p-4"
+								initial={{ transform: "translateY(-50px)" }}
+								animate={{ transform: "translateY(0px)" }}
+								transition={{
+									delay: 0,
+									duration: 0.5,
+									ease: [0.075, 0.82, 0.165, 1],
+								}}
+							>
+								<h1 className="text-md mb-1 border-b border-b-white/10 font-semibold capitalize tracking-tight text-yellow-50">
+									Shipment Overview
+								</h1>
+								<div>
+									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+										tracking number
+									</h2>
+									<button className="text-md flex h-min items-center gap-1 font-normal text-yellow-50 hover:text-yellow-50 active:text-indigo-400">
+										<BiCopy />
+										{pkg.trackingNumber}
+									</button>
+								</div>
+								<div className="mt-3">
+									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+										details
+									</h2>
+									<ToAndFromLocation
+										startLocation={pkgInfo.startLocation}
+										endLocation={pkgInfo.endLocation}
+									/>
+								</div>
+							</motion.section>
+							<motion.section
+								className="origin-top rounded-lg bg-white/10 p-4"
+								initial={{ transform: "translateY(-50px)" }}
+								animate={{ transform: "translateY(0px)" }}
+								transition={{
+									delay: 0,
+									duration: 0.5,
+									ease: [0.075, 0.82, 0.165, 1],
+								}}
+							>
+								<h1 className="text-md mb-1 border-b border-b-white/10 font-semibold capitalize tracking-tight text-yellow-50">
+									Services
+								</h1>
+								<div>
+									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+										courier
+									</h2>
+									<p>
+										{getCourierStringFromCode(pkg.courier)}
+									</p>
+								</div>
+								<div className="mt-3">
+									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+										service
+									</h2>
+									<p>{pkgInfo.service}</p>
+								</div>
+							</motion.section>
 						</Tabs.Content>
 					</Tabs.Root>
 				</motion.div>

@@ -302,12 +302,11 @@ const Card = ({
 					highlightColor="#312e81"
 					borderRadius="2rem"
 				>
-					<div className="z-0 flex items-center justify-between px-2 py-1">
+					<div className="z-0 flex items-center justify-between">
 						<div>
-							<Skeleton width="120px" height="22px" />
-							<Skeleton width="90px" height="16px" />
+							<Skeleton width="120px" height="20px" />
+							<Skeleton width="200px" height="20px" />
 						</div>
-						<Skeleton width="130px" height="25px" />
 					</div>
 				</SkeletonTheme>
 			)
@@ -482,7 +481,7 @@ const Card = ({
 			separator: true,
 		},
 		{
-			label: "Reorder",
+			label: "Reorder All",
 			onClick: menuFunctions.reorder,
 			icon: <AiOutlineOrderedList className="absolute left-4" />,
 		},
