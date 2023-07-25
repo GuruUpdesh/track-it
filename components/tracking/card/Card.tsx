@@ -32,7 +32,13 @@ import {
 	AiOutlineOrderedList,
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
-import { MdMoreVert, MdOutlineEditNote, MdOutlineExplore } from "react-icons/md"
+import { BsDot } from "react-icons/bs"
+import {
+	MdMoreVert,
+	MdOutlineEditNote,
+	MdOutlineExplore,
+	MdDragIndicator,
+} from "react-icons/md"
 import { TbEditCircle } from "react-icons/tb"
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
@@ -53,6 +59,9 @@ import Modal from "../../ui/modal/Modal"
 import EditTrackingNumber from "../../ui/forms/EditTrackingNumber"
 import IconButton from "@/components/ui/IconButton"
 import Menu, { TMenuItem } from "@/components/ui/menu/Menu"
+import CancelButton from "@/components/ui/modal/CancelButton"
+import SaveButton from "@/components/ui/modal/SaveButton"
+import { cn } from "@/lib/utils"
 
 type EditTrackingNumberModalProps = {
 	open: boolean
@@ -82,30 +91,56 @@ type ReorderModalProps = {
 
 export const ReorderModal = ({ open, setOpen }: ReorderModalProps) => {
 	let portal: HTMLElement | null =
-		document.querySelector(".your-portal-class") // change to the actual class if you already have a portal div
+		document.querySelector(".your-portal-class")
 
-	// if there's no portal already, we will create one
 	if (!portal) {
 		portal = document.createElement("div")
-		portal.classList.add("your-portal-class") // change to desired class name
+		portal.classList.add("your-portal-class")
 		document.body.appendChild(portal)
 	}
-	const { packages } = usePackageContext()
+	const { packages, dispatchPackages } = usePackageContext()
+	const [tempPackages, setTempPackages] = useState<TPackage[]>(packages)
+	const [hasChanged, setHasChanged] = useState(false)
+
+	useEffect(() => {
+		setTempPackages(packages)
+		setHasChanged(false)
+	}, [open, packages])
+
+	function handleDragEnd(result: DropResult) {
+		if (!result.destination) return
+		const items = Array.from(tempPackages)
+		const [reorderedItem] = items.splice(result.source.index, 1)
+		items.splice(result.destination.index, 0, reorderedItem)
+		setTempPackages(items)
+		setHasChanged(true)
+	}
+
 	return (
 		<Modal open={open} setOpen={setOpen}>
-			<div className="absolute z-50">
-				<DragDropContext
-					onDragEnd={(result: DropResult) => {
-						console.log(result)
-					}}
-				>
-					<Droppable droppableId="droppable">
+			<form
+				onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+					e.preventDefault()
+					dispatchPackages({
+						type: "set",
+						packages: tempPackages,
+					})
+					setOpen(false)
+				}}
+			>
+				<h1 className="text-lg font-bold">Reorder your Packages</h1>
+				<p className="mb-3 border-b border-b-white/10 pb-3 text-sm text-yellow-50/75">
+					Drag and drop the cards to set their order. Then save the
+					results.
+				</p>
+				<DragDropContext onDragEnd={handleDragEnd}>
+					<Droppable droppableId="reorder-modal">
 						{(droppableProvided: DroppableProvided) => (
 							<div
 								ref={droppableProvided.innerRef}
-								className="relative z-50 border border-white"
+								className="mb-3"
 							>
-								{packages.map(
+								{tempPackages.map(
 									(pkg: TPackage, index: number) => (
 										<Draggable
 											key={`${index}`}
@@ -120,14 +155,35 @@ export const ReorderModal = ({ open, setOpen }: ReorderModalProps) => {
 													draggableSnapshot.isDragging
 												const child = (
 													<div
-														className="relative z-50 my-1 bg-white/10"
+														className={cn(
+															"group relative mb-2 rounded-sm border border-indigo-400/25 bg-[#110F1B] px-4 py-2",
+															draggableSnapshot.isDragging
+																? "bg-[#181527]"
+																: ""
+														)}
 														ref={
 															draggableProvided.innerRef
 														}
 														{...draggableProvided.draggableProps}
 														{...draggableProvided.dragHandleProps}
 													>
-														{pkg.name}
+														<MdDragIndicator className="absolute left-[-1rem] top-[50%] translate-y-[-50%] opacity-0 transition-opacity group-hover:opacity-75" />
+														<h1 className="whitespace-nowrap text-left text-lg tracking-tighter text-yellow-50">
+															{pkg.name}
+														</h1>
+														<div className="flex items-center text-yellow-50/50">
+															<p>
+																{getCourierStringFromCode(
+																	pkg.courier
+																)}
+															</p>
+															<BsDot />
+															<p>
+																{
+																	pkg.trackingNumber
+																}
+															</p>
+														</div>
 													</div>
 												)
 												if (!usePortal || !portal) {
@@ -146,7 +202,11 @@ export const ReorderModal = ({ open, setOpen }: ReorderModalProps) => {
 						)}
 					</Droppable>
 				</DragDropContext>
-			</div>
+				<div className="mt-3 flex items-center justify-between border-t  border-t-white/10 pt-3">
+					<CancelButton />
+					<SaveButton disabled={!hasChanged} />
+				</div>
+			</form>
 		</Modal>
 	)
 }
