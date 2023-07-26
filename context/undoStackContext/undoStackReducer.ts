@@ -1,14 +1,14 @@
-import { TPackage } from "@/components/DashboardGrid"
+import { TIndexedPackage } from "./useUndoStackContext"
 
 export type undoStackAction =
-	| { type: "push"; new: TPackage }
+	| { type: "push"; new: TIndexedPackage }
 	| { type: "pop" }
 	| { type: "clear" }
 
 function undoStackReducer(
-	state: TPackage[],
+	state: TIndexedPackage[],
 	action: undoStackAction
-): TPackage[] {
+): TIndexedPackage[] {
 	switch (action.type) {
 		case "push":
 			return [...state, action.new]

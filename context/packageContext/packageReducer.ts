@@ -1,9 +1,12 @@
 import { TCourier } from "@/app/api/package/typesAndSchemas"
 import { TPackage, packageSchema } from "@/components/DashboardGrid"
+import { TIndexedPackage } from "../undoStackContext/useUndoStackContext"
+import { getCopyString } from "@/utils/package"
 
 export type PackageAction =
 	| { type: "set"; packages: TPackage[] }
 	| { type: "add"; new: TPackage }
+	| { type: "put"; pkg: TIndexedPackage }
 	| { type: "delete"; id: number }
 	| { type: "batchDelete"; ids: string[] }
 	| { type: "updateName"; id: number; name: string }
@@ -19,6 +22,11 @@ function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 		case "add":
 			packageSchema.parse(action.new)
 			return [...state, action.new]
+		case "put":
+			const { index, ...putPkg }: TIndexedPackage = action.pkg
+			const newState = [...state]
+			newState.splice(index, 0, putPkg)
+			return newState
 		case "delete":
 			return state.filter((pkg) => pkg.id !== action.id)
 		case "batchDelete":
@@ -46,7 +54,7 @@ function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 					...state,
 					{
 						id: Date.now(),
-						name: pkg.name,
+						name: getCopyString(pkg.name),
 						trackingNumber: pkg.trackingNumber,
 						courier: pkg.courier,
 					},

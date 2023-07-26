@@ -10,7 +10,10 @@ import {
 	TrackingHistory,
 } from "@/app/api/package/typesAndSchemas"
 import { PackageAction } from "@/context/packageContext/packageReducer"
-import { useUndoStackContext } from "@/context/undoStackContext/useUndoStackContext"
+import {
+	undo,
+	useUndoStackContext,
+} from "@/context/undoStackContext/useUndoStackContext"
 import useTextOverflow from "@/hooks/useTextOverflow"
 import {
 	couriers,
@@ -45,6 +48,7 @@ import IconButton from "@/components/ui/IconButton"
 import Menu, { TMenuItem } from "@/components/ui/menu/Menu"
 import { cn } from "@/lib/utils"
 import ReorderCards from "@/components/ui/forms/ReorderCards"
+import { toast } from "react-hot-toast"
 
 type EditTrackingNumberModalProps = {
 	open: boolean
@@ -82,24 +86,22 @@ export const ReorderModal = ({ open, setOpen }: ReorderModalProps) => {
 
 type Props = {
 	pkg: TPackage
+	index: number
+	packagesLength: number
 	dispatchPackages: React.Dispatch<PackageAction>
 	setSelectedPackage: (pkg: TPackageWithInfo) => void
-	triggerUndoNotification: () => void
 	inSearchResults: boolean
 	isSelected: boolean
-	packagesLength: number
-	index: number
 }
 
 const Card = ({
 	pkg,
+	index,
+	packagesLength,
 	dispatchPackages,
 	setSelectedPackage,
-	triggerUndoNotification,
 	inSearchResults,
 	isSelected,
-	packagesLength,
-	index,
 }: Props) => {
 	const { dispatchUndoStack } = useUndoStackContext()
 	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
@@ -251,6 +253,7 @@ const Card = ({
 		copyTrackingNumber: () => {
 			console.log("menuFunctions > copyTrackingNumber")
 			navigator.clipboard.writeText(pkg.trackingNumber)
+			toast.success("Copied to clipboard")
 		},
 		edit: {
 			name: () => {
@@ -268,6 +271,7 @@ const Card = ({
 			courier: (courier: TCourier) => {
 				console.log("menuFunctions > edit > courier")
 				dispatchPackages({ type: "updateCourier", id: pkg.id, courier })
+				toast.success("Courier updated")
 			},
 		},
 		reorder: () => {
@@ -280,13 +284,28 @@ const Card = ({
 		},
 		delete: () => {
 			console.log("menuFunctions > delete")
-			const pkgCopy = { ...pkg }
+			const pkgCopy = { ...pkg, index: index }
 			dispatchPackages({ type: "delete", id: pkg.id })
 			dispatchUndoStack({
 				type: "push",
 				new: pkgCopy,
 			})
-			triggerUndoNotification()
+			toast.success((t) => (
+				<div className="flex items-center">
+					<p className="line-clamp-1 h-min max-w-[20ch] overflow-hidden">
+						Deleted {pkgCopy.name}
+					</p>
+					<button
+						className="ml-3 rounded-md bg-white/10 px-2 py-1 hover:bg-white/20"
+						onClick={() => {
+							undo(dispatchUndoStack, dispatchPackages)
+							toast.dismiss(t.id)
+						}}
+					>
+						Undo
+					</button>
+				</div>
+			))
 		},
 	}
 

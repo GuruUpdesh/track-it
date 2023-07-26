@@ -60,7 +60,7 @@
 	animation: slideUp 75ms cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
 	will-change: transform, opacity;
 
-	z-index: 1000;
+	z-index: 10000;
 }
 
 @keyframes slideUp {

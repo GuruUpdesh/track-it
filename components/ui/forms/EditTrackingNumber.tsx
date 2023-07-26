@@ -4,6 +4,7 @@ import CancelButton from "../modal/CancelButton"
 import SaveButton from "../modal/SaveButton"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
 import { useModalContext } from "../modal/Modal"
+import { toast } from "react-hot-toast"
 
 type Props = {
 	pkg: TPackage
@@ -24,6 +25,7 @@ const EditTrackingNumber = ({ pkg }: Props) => {
 					trackingNumber: trackingNumber,
 				})
 				setOpen(false)
+				toast.success("Tracking number updated")
 			}}
 		>
 			<input

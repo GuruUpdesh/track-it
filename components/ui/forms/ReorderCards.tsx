@@ -18,6 +18,7 @@ import { MdDragIndicator } from "react-icons/md"
 import { getCourierStringFromCode } from "@/utils/courier"
 import ReactDOM from "react-dom"
 import { cn } from "@/lib/utils"
+import { toast } from "react-hot-toast"
 
 const ReorderCards = () => {
 	const { setOpen } = useModalContext()
@@ -57,6 +58,7 @@ const ReorderCards = () => {
 					packages: tempPackages,
 				})
 				setOpen(false)
+				toast.success("Order updated")
 			}}
 		>
 			<h1 className="text-lg font-bold">Reorder your Packages</h1>

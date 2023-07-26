@@ -94,3 +94,18 @@ export const estimateProgress = (
 	}
 	return 0
 }
+
+export function getCopyString(str: string): string {
+	const parts = str.split(" ")
+	const lastPart = parts[parts.length - 1]
+
+	if (!isNaN(parseInt(lastPart))) {
+		parts[parts.length - 1] = (parseInt(lastPart) + 1).toString()
+	} else if (lastPart === "copy") {
+		parts.push("2")
+	} else {
+		parts.push("copy")
+	}
+
+	return parts.join(" ")
+}

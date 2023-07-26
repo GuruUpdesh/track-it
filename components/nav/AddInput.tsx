@@ -3,14 +3,36 @@
 import "./nav.css"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
 import { getCouriersFromTrackingNumber } from "@/utils/courier"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { BsPlus } from "react-icons/bs"
+import { toast } from "react-hot-toast"
 
 const AddInput = () => {
 	const { dispatchPackages } = usePackageContext()
 	const [trackingNumber, setTrackingNumber] = useState("")
 	const [error, setError] = useState("")
 	const [valid, setValid] = useState(false)
+	const inputRef = useRef<HTMLInputElement>(null)
+
+	useEffect(() => {
+		function handleKeyDown(e: KeyboardEvent) {
+			if (
+				(e.ctrlKey || e.metaKey) &&
+				e.shiftKey &&
+				e.key.toLowerCase() === "n"
+			) {
+				e.preventDefault()
+				if (inputRef.current) {
+					inputRef.current.focus()
+				}
+			}
+		}
+
+		window.addEventListener("keydown", handleKeyDown)
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown)
+		}
+	}, [])
 
 	useEffect(() => {
 		const couriers = getCouriersFromTrackingNumber(trackingNumber)
@@ -53,6 +75,7 @@ const AddInput = () => {
 				},
 			})
 			setTrackingNumber("")
+			toast.success("Package added")
 		}
 	}
 
@@ -72,6 +95,7 @@ const AddInput = () => {
 				Tracking Number
 			</label>
 			<input
+				ref={inputRef}
 				id="trackingNumber"
 				placeholder="Type tracking number..."
 				type="text"

@@ -1,13 +1,15 @@
 "use client"
 
 import DetailsModal from "@/components/tracking/details/DetailsModal"
-import "./ui/undo/undo.css"
 import { PackageInfo, courierEnum } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/tracking/card/Card"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
 import { useSearchContext } from "@/context/searchContext/useSearchContext"
-import { useUndoStackContext } from "@/context/undoStackContext/useUndoStackContext"
-import * as Toast from "@radix-ui/react-toast"
+import {
+	undo,
+	useUndoStackContext,
+} from "@/context/undoStackContext/useUndoStackContext"
+// import * as Toast from "@radix-ui/react-toast"
 import Fuse from "fuse.js"
 import React, { useEffect } from "react"
 import Selecto from "react-selecto"
@@ -30,53 +32,9 @@ export interface TPackageWithInfo {
 
 export type TPackage = z.infer<typeof packageSchema>
 
-type UndoNotificationProps = {
-	open: boolean
-	setOpen: (open: boolean) => void
-}
-
-const UndoNotification = ({ open, setOpen }: UndoNotificationProps) => {
-	const { dispatchPackages } = usePackageContext()
-	const { undoStack, dispatchUndoStack } = useUndoStackContext()
-
-	return (
-		<Toast.Provider swipeDirection="down" duration={3000}>
-			<Toast.Root
-				className="ToastRoot grid items-center rounded-sm border border-indigo-400/25 bg-[#080808] px-2 py-1 font-semibold text-yellow-50/75 hover:bg-[#181818] hover:text-yellow-50"
-				open={open}
-				onOpenChange={setOpen}
-			>
-				<Toast.Action
-					className="relative overflow-hidden"
-					asChild
-					altText="undo delete"
-				>
-					<>
-						<button
-							className="z-10"
-							onClick={() => {
-								if (undoStack.length === 0) return
-								const pop = undoStack[undoStack.length - 1]
-								dispatchUndoStack({ type: "pop" })
-								if (pop) {
-									dispatchPackages({ type: "add", new: pop })
-								}
-								setOpen(false)
-							}}
-						>
-							Undo
-						</button>
-					</>
-				</Toast.Action>
-			</Toast.Root>
-			<Toast.Viewport className="fixed bottom-3 right-[50%] z-50 flex max-w-[100vw] translate-x-[50%] flex-col gap-3" />
-		</Toast.Provider>
-	)
-}
-
 const DashboardGrid = () => {
 	const { packages, dispatchPackages } = usePackageContext()
-	const { undoStack, dispatchUndoStack } = useUndoStackContext()
+	const { dispatchUndoStack } = useUndoStackContext()
 	const { search } = useSearchContext()
 	const [searchResults, setSearchResults] = React.useState(new Set())
 	const [selectedIds, setSelectedIds] = React.useState<string[]>([])
@@ -106,30 +64,40 @@ const DashboardGrid = () => {
 		setDetailsModalOpen(true)
 	}, [selectedPackage])
 
-	const [undoNotificationOpen, setUndoNotificationOpen] =
-		React.useState(false)
-
 	// undo shortcut
 	useEffect(() => {
 		function handleKeyDown(e: KeyboardEvent) {
 			if ((e.ctrlKey || e.metaKey) && e.key === "z") {
-				console.log("undo")
 				e.preventDefault()
-				if (undoStack.length === 0) return
-				const pop = undoStack[undoStack.length - 1]
-				dispatchUndoStack({ type: "pop" })
-				if (pop) {
-					dispatchPackages({ type: "add", new: pop })
-				}
+				undo(dispatchUndoStack, dispatchPackages)
 			}
 		}
 
 		window.addEventListener("keydown", handleKeyDown)
-
 		return () => {
 			window.removeEventListener("keydown", handleKeyDown)
 		}
-	}, [undoStack, dispatchPackages, dispatchUndoStack])
+	}, [dispatchPackages, dispatchUndoStack])
+
+	// select all shortcut
+	useEffect(() => {
+		function handleKeyDown(e: KeyboardEvent) {
+			if (!enabled) return
+			if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+				e.preventDefault()
+				if (selectedIds.length === packages.length) {
+					setSelectedIds([])
+					return
+				}
+				setSelectedIds(packages.map((pkg) => `${pkg.id}`))
+			}
+		}
+
+		window.addEventListener("keydown", handleKeyDown)
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown)
+		}
+	}, [packages, selectedIds, enabled])
 
 	return (
 		<>
@@ -177,9 +145,6 @@ const DashboardGrid = () => {
 										pkg={pkg}
 										dispatchPackages={dispatchPackages}
 										setSelectedPackage={setSelectedPackage}
-										triggerUndoNotification={() =>
-											setUndoNotificationOpen(true)
-										}
 										inSearchResults={searchResults.has(
 											pkg.id
 										)}
@@ -221,10 +186,6 @@ const DashboardGrid = () => {
 					setOpen={setDetailsModalOpen}
 				/>
 			)}
-			<UndoNotification
-				open={undoNotificationOpen}
-				setOpen={setUndoNotificationOpen}
-			/>
 		</>
 	)
 }

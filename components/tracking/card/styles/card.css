@@ -37,17 +37,18 @@
   word-wrap: break-word;
   border-radius: 2rem;
   font-size: 10px;
-  border: 1px solid rgb(254 252 232 / 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   background-color: rgb(0, 0, 0);
+  padding: 0.5rem;
   text-align: center;
   color: #fefce8;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  padding: 0.2rem 1rem;
+  padding: 0.5rem 1rem;
   animation: slideUp 75ms cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
   will-change: transform, opacity;
-  z-index: 1000;
+  z-index: 10000;
 }
 @media (max-width: 768px) {
   .Tooltip-content {

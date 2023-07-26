@@ -5,6 +5,7 @@ import { PackageContextProvider } from "@/context/packageContext/PackageContextP
 import { SearchContextProvider } from "@/context/searchContext/SearchContextProvider"
 import { SelectContextProvider } from "@/context/selectContext/selectContextProvider"
 import { UndoStackContextProvider } from "@/context/undoStackContext/undoStackProvider"
+import Alert from "@/lib/alert/Alert"
 import Image from "next/image"
 
 type Props = {
@@ -17,6 +18,7 @@ function DashboardLayout({ children }: Props) {
 			<UndoStackContextProvider>
 				<SearchContextProvider>
 					<SelectContextProvider>
+						<Alert />
 						<div className="mt-1 w-[350px] min-w-[50vw] px-4 sm:mt-6 sm:w-auto md:px-12">
 							<nav className="sticky top-0 z-40 flex w-full items-center justify-between gap-2 overflow-hidden py-1 sm:overflow-visible">
 								<a href="/" className="min-w-[30px]">
