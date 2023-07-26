@@ -11,7 +11,11 @@ function undoStackReducer(
 ): TIndexedPackage[] {
 	switch (action.type) {
 		case "push":
-			return [...state, action.new]
+			if (state.length >= 10) {
+				return [...state.slice(1), action.new]
+			} else {
+				return [...state, action.new]
+			}
 		case "pop":
 			return state.slice(0, state.length - 1)
 		case "clear":

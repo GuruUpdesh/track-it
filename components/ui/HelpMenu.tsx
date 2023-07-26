@@ -5,32 +5,36 @@ import { BiQuestionMark, BiCommand } from "react-icons/bi"
 import Menu, { TMenuItem } from "./menu/Menu"
 import { CgShortcut } from "react-icons/cg"
 
-function getShortcut(shortcut: string) {
-	let isMac
-
-	if (navigator.userAgent) {
-		isMac = navigator.userAgent.includes("Mac")
-	} else {
-		isMac = navigator.platform.toUpperCase().includes("MAC")
-	}
-
-	if (isMac) {
-		const [key, action] = shortcut.split(" + ")
-
-		return (
-			<p className="absolute right-4 text-xs text-white/50">
-				{key.toLowerCase() === "ctrl" ? <BiCommand /> : key} + {action}
-			</p>
-		)
-	} else {
-		return (
-			<p className="absolute right-4 text-xs text-white/50">{shortcut}</p>
-		)
-	}
-}
-
 const HelpMenu = () => {
 	const [open, setOpen] = React.useState(false)
+
+	function getShortcut(shortcut: string) {
+		let isMac
+
+		if (navigator.userAgent) {
+			isMac = navigator.userAgent.includes("Mac")
+		} else {
+			isMac = navigator.platform.toUpperCase().includes("MAC")
+		}
+
+		if (isMac) {
+			const [key, action] = shortcut.split(" + ")
+
+			return (
+				<p className="absolute right-4 text-xs text-white/50">
+					{key.toLowerCase() === "ctrl" ? <BiCommand /> : key} +{" "}
+					{action}
+				</p>
+			)
+		} else {
+			return (
+				<p className="absolute right-4 text-xs text-white/50">
+					{shortcut}
+				</p>
+			)
+		}
+	}
+
 	const menu: TMenuItem[] = [
 		{
 			label: "Shortcuts",
