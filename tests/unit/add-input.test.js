@@ -4,7 +4,7 @@ import { getCouriersFromTrackingNumber } from "@/utils/courier"
 import "@testing-library/jest-dom"
 import { fireEvent, render, screen } from "@testing-library/react"
 
-jest.mock("../utils/courier", () => ({
+jest.mock("../../utils/courier", () => ({
 	getCouriersFromTrackingNumber: jest.fn(),
 }))
 
