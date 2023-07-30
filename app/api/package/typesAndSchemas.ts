@@ -90,6 +90,9 @@ export const PackageInfoSchema = z.object({
 	courier: courierEnum,
 	status: trackingHistorySchema,
 	eta: z.string().nullable(),
+	service: z.string().nullable(),
+	startLocation: z.string(),
+	endLocation: z.string(),
 	trackingHistory: z.array(trackingHistorySchema),
 })
 

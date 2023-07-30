@@ -88,6 +88,7 @@ export function getCourierIconFromCode(code: string) {
 export function getCouriersFromTrackingNumber(
 	trackingNumber: string
 ): TCourier[] {
+	// ! This function might return the same courier multiple times
 	const matchingCouriers: TCourier[] = []
 	for (const courier in couriers) {
 		const patterns = couriers[courier].patterns

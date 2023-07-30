@@ -1,31 +1,31 @@
-import { render } from "@testing-library/react"
-
 import {
-	getCourierIconFromCode,
 	getCourierStringFromCode,
-	getCourierUrlsFromTrackingNumber,
 	getCouriersFromTrackingNumber,
 } from "../utils/courier"
+import { formatDate, getTimeFromDate } from "../utils/date"
 import {
 	convertLocationObjectToString,
 	extractDeliveryLocation,
-	formatDate,
-	getTimeFromDate,
 } from "../utils/package"
 
-describe("package utils", () => {
-	describe("Testing date formatting functions", () => {
-		test("formatDate returns formatted date", () => {
-			const date = new Date(2023, 0, 1).toISOString() // January 1, 2023
-			expect(formatDate(date)).toBe("January 1, 2023")
-		})
-
-		test("getTimeFromDate returns formatted time", () => {
-			const date = new Date(2023, 0, 1, 14, 30).toISOString() // January 1, 2023, 14:30
-			expect(getTimeFromDate(date)).toBe("2:30 PM")
-		})
+describe("date utils", () => {
+	test("formatDate returns formatted date (same year)", () => {
+		const date = new Date(2023, 0, 1).toISOString() // January 1, 2023
+		expect(formatDate(date)).toBe("Jan 1")
 	})
 
+	test("formatDate returns formatted date (different year)", () => {
+		const date = new Date(2022, 0, 1).toISOString() // January 1, 2023
+		expect(formatDate(date)).toBe("Jan 1, 2022")
+	})
+
+	test("getTimeFromDate returns formatted time", () => {
+		const date = new Date(2023, 0, 1, 14, 30).toISOString() // January 1, 2023, 14:30
+		expect(getTimeFromDate(date)).toBe("2:30pm")
+	})
+})
+
+describe("package utils", () => {
 	describe("Testing location conversion function", () => {
 		test("convertLocationObjectToString returns formatted location", () => {
 			const locations = [

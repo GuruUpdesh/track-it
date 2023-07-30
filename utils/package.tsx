@@ -1,25 +1,9 @@
+import { formatDate } from "./date"
 import { TLocation, TStatus } from "@/app/api/package/typesAndSchemas"
-import { format, formatDistance } from "date-fns"
 import { differenceInDays } from "date-fns"
 import { AiOutlineWarning } from "react-icons/ai"
 import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
 import { TbTruckLoading } from "react-icons/tb"
-
-export function formatRelativeDate(date: string): string {
-	const dateObject = new Date(date)
-	const relative = formatDistance(dateObject, new Date(), { addSuffix: true })
-	return relative
-}
-
-export function formatDate(date: string): string {
-	const dateObject = new Date(date)
-	return format(dateObject, "MMMM d, yyyy") // e.g., January 1, 2023
-}
-
-export function getTimeFromDate(date: string): string {
-	const dateObject = new Date(date)
-	return format(dateObject, "h:mm aa") // e.g., 2:30 PM
-}
 
 export function convertLocationObjectToString(
 	location: TLocation | null
@@ -82,12 +66,10 @@ export function getIconForStatus(
 export const estimateProgress = (
 	currentEta: string | null,
 	status: TStatus,
-	firstUpdate: string,
-	lastUpdate: string
+	firstUpdate: string
 ): number => {
 	const eta = currentEta ? new Date(currentEta) : null
 	const firstUpdateDate = new Date(firstUpdate)
-	const lastUpdateDate = new Date(lastUpdate)
 
 	// todo support more robust progress estimation
 	if (
@@ -105,21 +87,25 @@ export const estimateProgress = (
 		const progress = Math.round(
 			(totalTransitTime / expectedTransitTime) * 100
 		)
-		console.log(
-			"estimateProgress",
-			progress,
-			"totalTransitTime",
-			totalTransitTime,
-			"expectedTransitTime",
-			expectedTransitTime,
-			formatDate(currentEta || ""),
-			formatDate(firstUpdate),
-			formatDate(lastUpdate)
-		)
 		return progress
 	} else if (status === "DELIVERED") {
 		console.log("estimateProgress", 100)
 		return 100
 	}
 	return 0
+}
+
+export function getCopyString(str: string): string {
+	const parts = str.split(" ")
+	const lastPart = parts[parts.length - 1]
+
+	if (!isNaN(parseInt(lastPart))) {
+		parts[parts.length - 1] = (parseInt(lastPart) + 1).toString()
+	} else if (lastPart === "copy") {
+		parts.push("2")
+	} else {
+		parts.push("copy")
+	}
+
+	return parts.join(" ")
 }

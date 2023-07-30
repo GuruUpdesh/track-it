@@ -1,21 +1,22 @@
 import {
-	convertLocationObjectToString,
-	extractDeliveryLocation,
-} from "@/utils/package"
-import axios from "axios"
-import { NextRequest } from "next/server"
-import { z } from "zod"
-
-import {
 	PackageInfo,
 	PackageInfoSchema,
 	ShippoResponse,
 	ShippoTrackingHistory,
 	TCourier,
+	TStatus,
 	TrackingHistory,
 	shippoResponseSchema,
 } from "./typesAndSchemas"
 import { createErrorResponse, createSuccessResponse } from "./utils"
+import {
+	convertLocationObjectToString,
+	extractDeliveryLocation,
+} from "@/utils/package"
+import axios from "axios"
+import { startOfDay, endOfDay, isEqual, format } from "date-fns"
+import { NextRequest } from "next/server"
+import { z } from "zod"
 
 const SHIPPO_API_KEY = "ShippoToken " + process.env.SHIPPO_KEY
 const SHIPPO_TEST_API_KEY = "ShippoToken " + process.env.SHIPPO_TEST
@@ -62,12 +63,58 @@ function isTCourier(courier: string): courier is TCourier {
 	return couriers.includes(courier as TCourier)
 }
 
+function getEta(eta: string | null): string | null {
+	if (!eta) {
+		return null
+	}
+	console.log(eta)
+
+	const etaDate = new Date(eta)
+
+	if (isEqual(etaDate, startOfDay(etaDate))) {
+		console.log("start of day")
+		const endOfEtaDay = endOfDay(etaDate)
+		return format(endOfEtaDay, "yyyy-MM-dd HH:mm:ss")
+	} else {
+		return eta
+	}
+}
+
+function simplifyDetailMessage(message: string, status: TStatus): string {
+	const lowercaseMessage = message.toLowerCase()
+
+	if (status === "DELIVERED") {
+		return "Delivered"
+	}
+
+	if (status === "TRANSIT") {
+		if (lowercaseMessage.includes("departed")) {
+			return "Departed"
+		} else if (lowercaseMessage.includes("arrived")) {
+			return "Arrived at facility"
+		} else if (lowercaseMessage.includes("in transit")) {
+			return "In transit"
+		} else if (lowercaseMessage.includes("out for delivery")) {
+			return "Out for delivery"
+		}
+	}
+
+	if (status === "PRE_TRANSIT") {
+		return "Shipment information received"
+	}
+
+	return message
+}
+
 function simplifyTrackingHistory(
 	trackingHistory: ShippoTrackingHistory
 ): TrackingHistory {
 	return {
 		status: trackingHistory.status,
-		detailedStatus: trackingHistory.status_details,
+		detailedStatus: simplifyDetailMessage(
+			trackingHistory.status_details,
+			trackingHistory.status
+		),
 		location: convertLocationObjectToString(trackingHistory.location),
 		date: trackingHistory.status_date,
 		deliveryLocation: extractDeliveryLocation(
@@ -95,10 +142,15 @@ export async function GET(request: NextRequest) {
 		const packageInfoSimple: PackageInfo = {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
-			eta: packageInfo.eta,
+			eta: getEta(packageInfo.eta),
+			startLocation: convertLocationObjectToString(
+				packageInfo.address_from
+			),
+			endLocation: convertLocationObjectToString(packageInfo.address_to),
 			status: simplifyTrackingHistory(
 				packageInfo.tracking_status as ShippoTrackingHistory
 			),
+			service: packageInfo.servicelevel.name,
 			trackingHistory: packageInfo.tracking_history.map((history) =>
 				simplifyTrackingHistory(history)
 			),
