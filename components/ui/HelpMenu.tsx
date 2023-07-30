@@ -13,8 +13,10 @@ const HelpMenu = () => {
 
 		if (navigator.userAgent) {
 			isMac = navigator.userAgent.includes("Mac")
-		} else {
+		} else if (navigator.platform) {
 			isMac = navigator.platform.toUpperCase().includes("MAC")
+		} else {
+			isMac = false
 		}
 
 		if (isMac) {
