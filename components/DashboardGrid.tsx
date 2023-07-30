@@ -101,7 +101,7 @@ const DashboardGrid = () => {
 
 	return (
 		<>
-			{packages.length === 0 && (
+			{packages.length === 0 ? (
 				<div className="mt-2 flex min-w-full flex-grow flex-col items-center gap-2 text-center text-yellow-50/50 sm:mt-6">
 					<p>You are not tracking any shipments yet.</p>
 					<button
@@ -116,8 +116,11 @@ const DashboardGrid = () => {
 						Add
 					</button>
 				</div>
-			)}
-			{packages.length > 0 && (
+			) : searchResults.size === 0 ? (
+				<div className="mt-2 flex min-w-full flex-grow flex-col items-center gap-2 text-center text-yellow-50/50 sm:mt-6">
+					<p>Can not find anything that matches {search}.</p>
+				</div>
+			) : (
 				<ContextMenu.Root onOpenChange={setContextOpen}>
 					<ContextMenu.Trigger disabled={selectedIds.length < 1}>
 						<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
