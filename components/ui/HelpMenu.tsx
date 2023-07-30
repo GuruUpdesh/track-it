@@ -9,15 +9,7 @@ const HelpMenu = () => {
 	const [open, setOpen] = React.useState(false)
 
 	function getShortcut(shortcut: string) {
-		let isMac
-
-		if (navigator.userAgent) {
-			isMac = navigator.userAgent.includes("Mac")
-		} else if (navigator.platform) {
-			isMac = navigator.platform.toUpperCase().includes("MAC")
-		} else {
-			isMac = false
-		}
+		const isMac = false // TODO: detect
 
 		if (isMac) {
 			const [key, action] = shortcut.split(" + ")
