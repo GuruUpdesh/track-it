@@ -71,36 +71,36 @@ const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
 		>
 			<motion.div
 				className="absolute left-[calc(5rem+2.4rem)] h-full w-1 origin-top rounded-full bg-gradient-to-b from-indigo-900 to-indigo-700/10"
-				initial={{ scaleY: 0 }}
-				animate={{ scaleY: 1 }}
-				transition={{
-					delay: 0.3,
-					duration: 2,
-					ease: [0.075, 0.82, 0.165, 1],
-				}}
+				// initial={{ scaleY: 0 }}
+				// animate={{ scaleY: 1 }}
+				// transition={{
+				// 	delay: 0.3,
+				// 	duration: 2,
+				// 	ease: [0.075, 0.82, 0.165, 1],
+				// }}
 			/>
 			{trackingHistory.length > 3 && (
 				<motion.button
 					onClick={() =>
 						setTrackingHistoryExpanded(!trackingHistoryExpanded)
 					}
-					transition={{
-						delay: (trackingHistory.length - 1) * 0.05,
-						duration: 0.5,
-						ease: [0.075, 0.82, 0.165, 1],
-					}}
-					initial={{
-						opacity: 0,
-						transform: "translateY(-50px) scaleY(0.8)",
-					}}
-					animate={{
-						opacity: 1,
-						transform: "translateY(0px) scaleY(1)",
-					}}
-					exit={{
-						opacity: 0,
-						transform: "translateY(-50px) scaleY(0.8)",
-					}}
+					// transition={{
+					// 	delay: (trackingHistory.length - 1) * 0.05,
+					// 	duration: 0.5,
+					// 	ease: [0.075, 0.82, 0.165, 1],
+					// }}
+					// initial={{
+					// 	opacity: 0,
+					// 	transform: "translateY(-50px) scaleY(0.8)",
+					// }}
+					// animate={{
+					// 	opacity: 1,
+					// 	transform: "translateY(0px) scaleY(1)",
+					// }}
+					// exit={{
+					// 	opacity: 0,
+					// 	transform: "translateY(-50px) scaleY(0.8)",
+					// }}
 					className="flex items-center rounded-lg px-6 py-3 text-indigo-200/50 hover:text-indigo-200"
 				>
 					<BiChevronDown
@@ -125,23 +125,23 @@ const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
 					return (
 						<motion.div
 							key={historyItem.date}
-							transition={{
-								delay: (length - idx) * 0.05,
-								duration: 0.5,
-								ease: [0.075, 0.82, 0.165, 1],
-							}}
-							initial={{
-								opacity: 0,
-								transform: "translateY(-50px) scaleY(0.8)",
-							}}
-							animate={{
-								opacity: 1,
-								transform: "translateY(0px) scaleY(1)",
-							}}
-							exit={{
-								opacity: 0,
-								transform: "translateY(-50px) scaleY(0.8)",
-							}}
+							// transition={{
+							// 	delay: (length - idx) * 0.05,
+							// 	duration: 0.5,
+							// 	ease: [0.075, 0.82, 0.165, 1],
+							// }}
+							// initial={{
+							// 	opacity: 0,
+							// 	transform: "translateY(-50px) scaleY(0.8)",
+							// }}
+							// animate={{
+							// 	opacity: 1,
+							// 	transform: "translateY(0px) scaleY(1)",
+							// }}
+							// exit={{
+							// 	opacity: 0,
+							// 	transform: "translateY(-50px) scaleY(0.8)",
+							// }}
 							className="z-0"
 						>
 							<HistoryLine
@@ -295,13 +295,13 @@ const DetailsModal = ({
 						>
 							<motion.section
 								className="mb-6 origin-top rounded-lg bg-white/10 p-4"
-								initial={{ transform: "translateY(-50px)" }}
-								animate={{ transform: "translateY(0px)" }}
-								transition={{
-									delay: 0,
-									duration: 0.5,
-									ease: [0.075, 0.82, 0.165, 1],
-								}}
+								// initial={{ transform: "translateY(-50px)" }}
+								// animate={{ transform: "translateY(0px)" }}
+								// transition={{
+								// 	delay: 0,
+								// 	duration: 0.5,
+								// 	ease: [0.075, 0.82, 0.165, 1],
+								// }}
 							>
 								<h1 className="text-md mb-1 border-b border-b-white/10 font-semibold capitalize tracking-tight text-yellow-50">
 									Shipment Overview
@@ -327,13 +327,13 @@ const DetailsModal = ({
 							</motion.section>
 							<motion.section
 								className="origin-top rounded-lg bg-white/10 p-4"
-								initial={{ transform: "translateY(-50px)" }}
-								animate={{ transform: "translateY(0px)" }}
-								transition={{
-									delay: 0,
-									duration: 0.5,
-									ease: [0.075, 0.82, 0.165, 1],
-								}}
+								// initial={{ transform: "translateY(-50px)" }}
+								// animate={{ transform: "translateY(0px)" }}
+								// transition={{
+								// 	delay: 0,
+								// 	duration: 0.5,
+								// 	ease: [0.075, 0.82, 0.165, 1],
+								// }}
 							>
 								<h1 className="text-md mb-1 border-b border-b-white/10 font-semibold capitalize tracking-tight text-yellow-50">
 									Services
