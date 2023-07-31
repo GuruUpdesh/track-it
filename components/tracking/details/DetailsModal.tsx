@@ -19,6 +19,8 @@ import "./styles/detailsModal.css"
 import Modal from "@/components/ui/modal/Modal"
 import CardImage from "../card/CardImage"
 import useFadedScroll from "@/hooks/useFadedScroll"
+import { formatDate, getTimeFromDate } from "@/utils/date"
+import { toast } from "react-hot-toast"
 
 type TrackingHistoryProps = {
 	trackingHistory: TrackingHistory[]
@@ -245,26 +247,49 @@ const DetailsModal = ({
 								// }}
 							>
 								<h1 className="text-md mb-1 border-b border-b-white/10 font-semibold capitalize tracking-tight text-yellow-50">
-									Shipment Overview
+									Shipment overview
 								</h1>
+								{pkgInfo.eta &&
+									pkgInfo.status.status !== "DELIVERED" && (
+										<div>
+											<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+												Delivery estimate
+											</h2>
+											<p>
+												{formatDate(pkgInfo.eta) +
+													" by " +
+													getTimeFromDate(
+														pkgInfo.eta
+													)}
+											</p>
+										</div>
+									)}
 								<div>
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										transit time
+										Transit time
 									</h2>
 									<p>{pkgInfo.transitTime}</p>
 								</div>
 								<div className="mt-3">
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										tracking number
+										Tracking number
 									</h2>
-									<button className="text-md flex h-min items-center gap-1 font-normal text-yellow-50 hover:text-yellow-50 active:text-indigo-400">
+									<button
+										onClick={() => {
+											navigator.clipboard.writeText(
+												pkg.trackingNumber
+											)
+											toast.success("Copied to clipboard")
+										}}
+										className="text-md flex h-min items-center gap-1 font-normal active:text-indigo-400"
+									>
 										<BiCopy />
 										{pkg.trackingNumber}
 									</button>
 								</div>
 								<div className="mt-3">
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										details
+										Details
 									</h2>
 									<Balancer>
 										<p>
@@ -288,7 +313,7 @@ const DetailsModal = ({
 								</h1>
 								<div>
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										courier
+										Courier
 									</h2>
 									<p>
 										{getCourierStringFromCode(pkg.courier)}
@@ -296,7 +321,7 @@ const DetailsModal = ({
 								</div>
 								<div className="mt-3">
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										service
+										Service
 									</h2>
 									<p>{pkgInfo.service}</p>
 								</div>
