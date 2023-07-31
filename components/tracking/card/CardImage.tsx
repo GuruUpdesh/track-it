@@ -1,9 +1,10 @@
 "use client"
 
 import { TStatus } from "@/app/api/package/typesAndSchemas"
-import React, { useMemo } from "react"
-import { getIconForStatus } from "@/utils/package"
+import React from "react"
+import { getColorFromStatus, getIconForStatus } from "@/utils/package"
 import { AiOutlineLoading3Quarters, AiOutlineWarning } from "react-icons/ai"
+import { cn } from "@/lib/utils"
 
 type Props = {
 	error?: boolean
@@ -11,40 +12,7 @@ type Props = {
 }
 
 const CardImage = ({ error, status }: Props) => {
-	const color = useMemo(() => {
-		let bgClass, textClass
-
-		if (error) {
-			bgClass = "to-red-400/25"
-			textClass = "text-red-200"
-		} else {
-			switch (status) {
-				case "DELIVERED":
-				case "RETURNED":
-					bgClass = "to-emerald-400/25"
-					textClass = "text-emerald-200"
-					break
-				case "PRE_TRANSIT":
-					bgClass = "to-yellow-400/25"
-					textClass = "text-yellow-200"
-					break
-				case "FAILURE":
-					bgClass = "to-red-400/25"
-					textClass = "text-red-200"
-					break
-				case "TRANSIT":
-					bgClass = "to-lime-400/25"
-					textClass = "text-lime-200"
-					break
-				default:
-					bgClass = "to-indigo-400/25"
-					textClass = "text-indigo-200"
-					break
-			}
-		}
-
-		return [bgClass, textClass]
-	}, [status, error])
+	// warning: the to-... and text-... only work because tailwind.config.js includes the classnames in the safelist array
 	const icon = error ? (
 		<AiOutlineWarning />
 	) : !status ? (
@@ -54,7 +22,10 @@ const CardImage = ({ error, status }: Props) => {
 	)
 	return (
 		<div
-			className={`relative flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/25 ${color[1]}`}
+			className={cn(
+				"relative flex aspect-square min-w-[50px] items-center justify-center rounded-full border border-indigo-400/25",
+				`text-${getColorFromStatus(status, error)}-200`
+			)}
 		>
 			<div
 				className={
@@ -64,7 +35,10 @@ const CardImage = ({ error, status }: Props) => {
 				{icon}
 			</div>
 			<div
-				className={`absolute z-10 h-full w-full rounded-full bg-gradient-to-b from-transparent ${color[0]}`}
+				className={cn(
+					"absolute z-10 h-full w-full rounded-full bg-gradient-to-b from-transparent",
+					`to-${getColorFromStatus(status, error)}-400/25`
+				)}
 			/>
 		</div>
 	)

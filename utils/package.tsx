@@ -109,3 +109,44 @@ export function getCopyString(str: string): string {
 
 	return parts.join(" ")
 }
+
+export function getColorFromStatus(status?: TStatus, error = false): string {
+	if (error) {
+		return "red"
+	}
+
+	switch (status) {
+		case "PRE_TRANSIT":
+			return "yellow"
+		case "TRANSIT":
+			return "lime"
+		case "DELIVERED":
+			return "emerald"
+		case "RETURNED":
+			return "emerald"
+		case "FAILURE":
+			return "red"
+		case "UNKNOWN":
+			return "indigo"
+		default:
+			return "indigo"
+	}
+}
+
+export const cardStatusColorConfig = {
+	red: {
+		bg: "bg-red-400/25",
+	},
+	yellow: {
+		bg: "bg-yellow-400/25",
+	},
+	lime: {
+		bg: "bg-lime-400/25",
+	},
+	emerald: {
+		bg: "bg-emerald-400/25",
+	},
+	indigo: {
+		bg: "bg-indigo-400/25",
+	},
+}

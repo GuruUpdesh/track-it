@@ -202,14 +202,17 @@ const DetailsModal = ({
 		<Modal open={open} setOpen={setOpen} disabledContextStyles={true}>
 			<AnimatePresence>
 				<motion.div
-					transition={{
-						duration: 0.3,
-						ease: [0.075, 0.82, 0.165, 1],
-					}}
-					layoutId={`card-${pkg.id}`}
-					initial={{ opacity: 0, y: 50 }}
-					animate={{ opacity: 1, y: 0 }}
-					exit={{ opacity: 0, y: 50 }}
+					// transition={{
+					// 	duration: 0.3,
+					// 	ease: [0.075, 0.82, 0.165, 1],
+					// }}
+					// layoutId={`card-${pkg.id}`}
+					// initial={{ opacity: 0, y: 50 }}
+					// animate={{ opacity: 1, y: 0 }}
+					// exit={{ opacity: 0, y: 50, transition: {
+					// 	duration: 0.8,
+					// 	ease: [0.075, 0.82, 0.165, 1],
+					// } }}
 					className="flex max-h-[80vh] min-h-[80vh] w-full flex-col overflow-hidden rounded-xl border border-indigo-400/25 bg-[#000000] sm:w-[500px] md:w-[650px] lg:w-[700px]"
 				>
 					<motion.div
