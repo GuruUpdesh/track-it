@@ -23,7 +23,7 @@ import {
 	getCouriersFromTrackingNumber,
 } from "@/utils/courier"
 import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
-import { estimateProgress } from "@/utils/package"
+import { estimateProgress, getColorFromStatus } from "@/utils/package"
 import axios from "axios"
 import { AnimatePresence, motion } from "framer-motion"
 import React, { useEffect, useState } from "react"
@@ -478,7 +478,12 @@ const Card = ({
 					</AnimatePresence>
 					<div
 						ref={journeyPercentRef}
-						className="journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/40 opacity-50"
+						className={cn(
+							"journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/75 opacity-50",
+							`group-hover:bg-${getColorFromStatus(
+								packageInfo?.status.status || "UNKNOWN"
+							)}-600`
+						)}
 					/>
 					<div className="relative flex items-center justify-between p-2">
 						<div className="flex max-w-[80%] gap-2">

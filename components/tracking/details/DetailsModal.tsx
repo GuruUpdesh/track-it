@@ -11,13 +11,14 @@ import { AnimatePresence, motion } from "framer-motion"
 // import Image from "next/image"
 import React from "react"
 import { MdClose } from "react-icons/md"
-import { BiChevronDown, BiCopy } from "react-icons/bi"
+import { BiCopy } from "react-icons/bi"
 // import { BsArrowLeft } from "react-icons/bs"
 import Balancer from "react-wrap-balancer"
 import * as Tabs from "@radix-ui/react-tabs"
 import "./styles/detailsModal.css"
 import Modal from "@/components/ui/modal/Modal"
 import CardImage from "../card/CardImage"
+import useFadedScroll from "@/hooks/useFadedScroll"
 
 type ToAndFromLocationProps = {
 	startLocation: string
@@ -62,15 +63,13 @@ type TrackingHistoryProps = {
 }
 
 const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
-	const [trackingHistoryExpanded, setTrackingHistoryExpanded] =
-		React.useState(false)
 	return (
 		<motion.div
 			layoutScroll
 			className="relative isolate flex flex-col-reverse px-6 sm:px-10 md:px-20"
 		>
 			<motion.div
-				className="absolute left-[calc(5rem+2.4rem)] h-full w-1 origin-top rounded-full bg-gradient-to-b from-indigo-900 to-indigo-700/10"
+				className="absolute left-[calc(5rem+39px)] h-full w-[1px] origin-top rounded-full bg-gradient-to-b from-white to-white/5"
 				// initial={{ scaleY: 0 }}
 				// animate={{ scaleY: 1 }}
 				// transition={{
@@ -79,49 +78,9 @@ const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
 				// 	ease: [0.075, 0.82, 0.165, 1],
 				// }}
 			/>
-			{trackingHistory.length > 3 && (
-				<motion.button
-					onClick={() =>
-						setTrackingHistoryExpanded(!trackingHistoryExpanded)
-					}
-					// transition={{
-					// 	delay: (trackingHistory.length - 1) * 0.05,
-					// 	duration: 0.5,
-					// 	ease: [0.075, 0.82, 0.165, 1],
-					// }}
-					// initial={{
-					// 	opacity: 0,
-					// 	transform: "translateY(-50px) scaleY(0.8)",
-					// }}
-					// animate={{
-					// 	opacity: 1,
-					// 	transform: "translateY(0px) scaleY(1)",
-					// }}
-					// exit={{
-					// 	opacity: 0,
-					// 	transform: "translateY(-50px) scaleY(0.8)",
-					// }}
-					className="flex items-center rounded-lg px-6 py-3 text-indigo-200/50 hover:text-indigo-200"
-				>
-					<BiChevronDown
-						className={
-							"h-[32px] w-[32px] " +
-							(trackingHistoryExpanded ? " rotate-180" : " ")
-						}
-					/>
-					<p className=" ml-4 text-left ">
-						{trackingHistoryExpanded
-							? `Collapse`
-							: `See ${trackingHistory.length - 3} more updates`}
-					</p>
-				</motion.button>
-			)}
-			{trackingHistory
-				.slice(trackingHistoryExpanded ? 0 : -3)
-				.map((historyItem: TrackingHistory, idx: number) => {
-					const length = trackingHistoryExpanded
-						? trackingHistory.length
-						: trackingHistory.slice(-3).length
+			{trackingHistory.map(
+				(historyItem: TrackingHistory, idx: number) => {
+					const length = trackingHistory.length
 					return (
 						<motion.div
 							key={historyItem.date}
@@ -150,7 +109,8 @@ const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
 							/>
 						</motion.div>
 					)
-				})}
+				}
+			)}
 		</motion.div>
 	)
 }
@@ -207,6 +167,7 @@ const DetailsModal = ({
 
 		highlight.style.display = `none`
 	}
+	const { ref, onScroll, fadeStyles } = useFadedScroll(80)
 	return (
 		<Modal open={open} setOpen={setOpen} disabledContextStyles={true}>
 			<AnimatePresence>
@@ -292,7 +253,13 @@ const DetailsModal = ({
 								Package Info
 							</Tabs.Trigger>
 						</Tabs.List>
-						<Tabs.Content value="tracking-history" className="mt-6">
+						<Tabs.Content
+							ref={ref}
+							onScroll={onScroll}
+							style={fadeStyles}
+							value="tracking-history"
+							className="mt-6 max-h-[calc(80vh-150px)] overflow-scroll overflow-x-hidden"
+						>
 							<TrackingHistory
 								trackingHistory={
 									pkgInfo ? pkgInfo.trackingHistory : []
