@@ -20,44 +20,6 @@ import Modal from "@/components/ui/modal/Modal"
 import CardImage from "../card/CardImage"
 import useFadedScroll from "@/hooks/useFadedScroll"
 
-type ToAndFromLocationProps = {
-	startLocation: string
-	endLocation: string
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ToAndFromLocation = ({
-	startLocation,
-	endLocation,
-}: ToAndFromLocationProps) => {
-	const foundStartLocation = !startLocation.includes("not found")
-	const foundEndLocation = !endLocation.includes("not found")
-
-	if (!foundStartLocation && !foundEndLocation) return null
-
-	function getRouteDescription(
-		startLocation: string | null,
-		endLocation: string | null
-	): string {
-		let routeDescription = "Coming"
-		if (startLocation) {
-			routeDescription += ` from ${startLocation}`
-		}
-		if (endLocation) {
-			routeDescription += ` to ${endLocation}`
-		}
-		return routeDescription
-	}
-
-	return (
-		<p className="">
-			<Balancer>
-				{getRouteDescription(startLocation, endLocation)}
-			</Balancer>
-		</p>
-	)
-}
-
 type TrackingHistoryProps = {
 	trackingHistory: TrackingHistory[]
 }
@@ -227,32 +189,34 @@ const DetailsModal = ({
 						</button>
 					</motion.div>
 					<Tabs.Root defaultValue="tracking-history">
-						<Tabs.List
-							className="relative mx-2 border-b border-indigo-400/25"
-							ref={tabsRef}
-							onMouseLeave={onTabsExit}
-						>
-							<div
-								ref={tabsHighlightRef}
-								className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-indigo-400/20 opacity-0 transition-all"
-							/>
-							<Tabs.Trigger
-								onMouseEnter={onTabHover}
-								onMouseLeave={onTabExit}
-								value="tracking-history"
-								className="TabsTrigger mx-2 p-2 text-indigo-50/50 transition-all hover:text-indigo-400/80"
+						<div className="border-b border-indigo-400/25">
+							<Tabs.List
+								className="relative mx-2  max-w-fit"
+								ref={tabsRef}
+								onMouseLeave={onTabsExit}
 							>
-								Tracking History
-							</Tabs.Trigger>
-							<Tabs.Trigger
-								onMouseEnter={onTabHover}
-								onMouseLeave={onTabExit}
-								value="package-info"
-								className="TabsTrigger mx-2 p-2 text-indigo-50/50 transition-all hover:text-indigo-400/80"
-							>
-								Package Info
-							</Tabs.Trigger>
-						</Tabs.List>
+								<div
+									ref={tabsHighlightRef}
+									className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-indigo-400/20 opacity-0 transition-all"
+								/>
+								<Tabs.Trigger
+									onMouseEnter={onTabHover}
+									onMouseLeave={onTabExit}
+									value="tracking-history"
+									className="TabsTrigger mx-2 p-2 text-indigo-50/50 transition-all hover:text-indigo-400/80"
+								>
+									Tracking History
+								</Tabs.Trigger>
+								<Tabs.Trigger
+									onMouseEnter={onTabHover}
+									onMouseLeave={onTabExit}
+									value="package-info"
+									className="TabsTrigger mx-2 p-2 text-indigo-50/50 transition-all hover:text-indigo-400/80"
+								>
+									Package Info
+								</Tabs.Trigger>
+							</Tabs.List>
+						</div>
 						<Tabs.Content
 							ref={ref}
 							onScroll={onScroll}
@@ -285,6 +249,12 @@ const DetailsModal = ({
 								</h1>
 								<div>
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+										transit time
+									</h2>
+									<p>{pkgInfo.transitTime}</p>
+								</div>
+								<div className="mt-3">
+									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
 										tracking number
 									</h2>
 									<button className="text-md flex h-min items-center gap-1 font-normal text-yellow-50 hover:text-yellow-50 active:text-indigo-400">
@@ -296,10 +266,11 @@ const DetailsModal = ({
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
 										details
 									</h2>
-									<ToAndFromLocation
-										startLocation={pkgInfo.startLocation}
-										endLocation={pkgInfo.endLocation}
-									/>
+									<Balancer>
+										<p>
+											{pkgInfo.sourceAndDestinationString}
+										</p>
+									</Balancer>
 								</div>
 							</motion.section>
 							<motion.section

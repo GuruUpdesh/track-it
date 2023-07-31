@@ -1,10 +1,15 @@
 import {
+	getEta,
+	getSourceAndDestinationLocations,
+	getTransitTime,
+	simplifyDetailMessage,
+} from "@/utils/dataTransform"
+import {
 	PackageInfo,
 	PackageInfoSchema,
 	ShippoResponse,
 	ShippoTrackingHistory,
 	TCourier,
-	TStatus,
 	TrackingHistory,
 	shippoResponseSchema,
 } from "./typesAndSchemas"
@@ -14,7 +19,6 @@ import {
 	extractDeliveryLocation,
 } from "@/utils/package"
 import axios from "axios"
-import { startOfDay, endOfDay, isEqual, format } from "date-fns"
 import { NextRequest } from "next/server"
 import { z } from "zod"
 
@@ -63,49 +67,6 @@ function isTCourier(courier: string): courier is TCourier {
 	return couriers.includes(courier as TCourier)
 }
 
-function getEta(eta: string | null): string | null {
-	if (!eta) {
-		return null
-	}
-	console.log(eta)
-
-	const etaDate = new Date(eta)
-
-	if (isEqual(etaDate, startOfDay(etaDate))) {
-		console.log("start of day")
-		const endOfEtaDay = endOfDay(etaDate)
-		return format(endOfEtaDay, "yyyy-MM-dd HH:mm:ss")
-	} else {
-		return eta
-	}
-}
-
-function simplifyDetailMessage(message: string, status: TStatus): string {
-	const lowercaseMessage = message.toLowerCase()
-
-	if (status === "DELIVERED") {
-		return "Delivered"
-	}
-
-	if (status === "TRANSIT") {
-		if (lowercaseMessage.includes("departed")) {
-			return "Departed"
-		} else if (lowercaseMessage.includes("arrived")) {
-			return "Arrived at facility"
-		} else if (lowercaseMessage.includes("in transit")) {
-			return "In transit"
-		} else if (lowercaseMessage.includes("out for delivery")) {
-			return "Out for delivery"
-		}
-	}
-
-	if (status === "PRE_TRANSIT") {
-		return "Shipment information received"
-	}
-
-	return message
-}
-
 function simplifyTrackingHistory(
 	trackingHistory: ShippoTrackingHistory
 ): TrackingHistory {
@@ -143,10 +104,9 @@ export async function GET(request: NextRequest) {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
 			eta: getEta(packageInfo.eta),
-			startLocation: convertLocationObjectToString(
-				packageInfo.address_from
-			),
-			endLocation: convertLocationObjectToString(packageInfo.address_to),
+			sourceAndDestinationString:
+				getSourceAndDestinationLocations(packageInfo),
+			transitTime: getTransitTime(packageInfo),
 			status: simplifyTrackingHistory(
 				packageInfo.tracking_status as ShippoTrackingHistory
 			),
