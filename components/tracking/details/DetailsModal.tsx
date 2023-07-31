@@ -182,6 +182,7 @@ const DetailsModal = ({
 		const targetRect = target.getBoundingClientRect()
 		const tabsRect = tabsRef.current.getBoundingClientRect()
 
+		highlight.style.display = `block`
 		highlight.style.opacity = `1`
 		highlight.style.width = `${targetRect.width}px`
 		highlight.style.transform = `translateX(${
@@ -197,6 +198,14 @@ const DetailsModal = ({
 		highlight.style.width = `0px`
 		highlight.style.transform = `translateX(0px)`
 		highlight.style.opacity = `0`
+	}
+
+	function onTabsExit() {
+		if (!tabsHighlightRef.current) return
+
+		const highlight = tabsHighlightRef.current
+
+		highlight.style.display = `none`
 	}
 	return (
 		<Modal open={open} setOpen={setOpen} disabledContextStyles={true}>
@@ -258,18 +267,19 @@ const DetailsModal = ({
 					</motion.div>
 					<Tabs.Root defaultValue="tracking-history">
 						<Tabs.List
-							className="relative border-b border-b-yellow-50/25"
+							className="relative mx-2 border-b border-indigo-400/25"
 							ref={tabsRef}
+							onMouseLeave={onTabsExit}
 						>
 							<div
 								ref={tabsHighlightRef}
-								className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-indigo-50/20 opacity-0 transition-all"
+								className="pointer-events-none absolute top-[10%] h-[80%] w-2 rounded-sm bg-indigo-400/20 opacity-0 transition-all"
 							/>
 							<Tabs.Trigger
 								onMouseEnter={onTabHover}
 								onMouseLeave={onTabExit}
 								value="tracking-history"
-								className="TabsTrigger mx-2 p-2 text-yellow-50/50 transition-all hover:text-yellow-50/80"
+								className="TabsTrigger mx-2 p-2 text-indigo-50/50 transition-all hover:text-indigo-400/80"
 							>
 								Tracking History
 							</Tabs.Trigger>
@@ -277,7 +287,7 @@ const DetailsModal = ({
 								onMouseEnter={onTabHover}
 								onMouseLeave={onTabExit}
 								value="package-info"
-								className="TabsTrigger mx-2 p-2 text-yellow-50/50 transition-all hover:text-yellow-50/80"
+								className="TabsTrigger mx-2 p-2 text-indigo-50/50 transition-all hover:text-indigo-400/80"
 							>
 								Package Info
 							</Tabs.Trigger>
