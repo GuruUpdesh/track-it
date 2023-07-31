@@ -67,7 +67,7 @@ const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
 	return (
 		<motion.div
 			layoutScroll
-			className="relative isolate flex flex-col-reverse px-20"
+			className="relative isolate flex flex-col-reverse px-6 sm:px-10 md:px-20"
 		>
 			<motion.div
 				className="absolute left-[calc(5rem+2.4rem)] h-full w-1 origin-top rounded-full bg-gradient-to-b from-indigo-900 to-indigo-700/10"
@@ -210,7 +210,7 @@ const DetailsModal = ({
 					initial={{ opacity: 0, y: 50 }}
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: 50 }}
-					className="flex max-h-[80vh] min-h-[80vh] w-[350px]  flex-col overflow-hidden rounded-xl border border-indigo-400/25 bg-[#000000] sm:w-[500px] md:w-[650px] lg:w-[700px]"
+					className="flex max-h-[80vh] min-h-[80vh] w-full flex-col overflow-hidden rounded-xl border border-indigo-400/25 bg-[#000000] sm:w-[500px] md:w-[650px] lg:w-[700px]"
 				>
 					<motion.div
 						layout
@@ -288,7 +288,7 @@ const DetailsModal = ({
 						</Tabs.Content>
 						<Tabs.Content
 							value="package-info"
-							className="mt-6 px-20"
+							className="mt-6 px-6 sm:px-10 md:px-20"
 						>
 							<motion.section
 								className="mb-6 origin-top rounded-lg bg-white/10 p-4"

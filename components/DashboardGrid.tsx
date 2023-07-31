@@ -126,7 +126,7 @@ const DashboardGrid = () => {
 								</p>
 							</div>
 						)}
-						<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+						<div className="mb-5 mt-2 grid grid-cols-1 gap-4 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 							{enabled && (
 								<Selecto
 									selectableTargets={[".card"]}
