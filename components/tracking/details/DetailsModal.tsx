@@ -2,14 +2,10 @@ import { TPackage } from "@/components/DashboardGrid"
 import { TrackingHistory, PackageInfo } from "@/app/api/package/typesAndSchemas"
 import HistoryLine from "@/components/tracking/HistoryLine"
 import { PackageAction } from "@/context/packageContext/packageReducer"
-import {
-	getCourierIconFromCode,
-	getCourierStringFromCode,
-	getCourierUrlsFromTrackingNumber,
-} from "@/utils/courier"
+import { getCourier } from "@/utils/courier"
 import { AnimatePresence, motion } from "framer-motion"
 // import Image from "next/image"
-import React from "react"
+import React, { useMemo } from "react"
 import { MdClose } from "react-icons/md"
 import { BiCopy } from "react-icons/bi"
 // import { BsArrowLeft } from "react-icons/bs"
@@ -98,6 +94,10 @@ const DetailsModal = ({
 	const tabsHighlightRef = React.useRef<HTMLDivElement>(null)
 	const tabsRef = React.useRef<HTMLDivElement>(null)
 
+	const courier = useMemo(() => {
+		return getCourier(pkg.courier)
+	}, [pkg.courier])
+
 	function onTabHover(e: React.MouseEvent<HTMLButtonElement>) {
 		if (!tabsHighlightRef.current || !tabsRef.current) return
 
@@ -132,6 +132,7 @@ const DetailsModal = ({
 		highlight.style.display = `none`
 	}
 	const { ref, onScroll, fadeStyles } = useFadedScroll(80)
+
 	return (
 		<Modal open={open} setOpen={setOpen} disabledContextStyles={true}>
 			<AnimatePresence>
@@ -168,22 +169,16 @@ const DetailsModal = ({
 								<motion.a
 									className="underline-link flex items-center gap-1 text-xs text-yellow-50"
 									href={
-										getCourierUrlsFromTrackingNumber(
-											pkg.trackingNumber
-										)[0]
+										courier.tracking_url +
+										pkg.trackingNumber
 									}
 									target="_blank"
 								>
-									{getCourierIconFromCode(pkg.courier)}
-									<motion.p>
-										{getCourierStringFromCode(pkg.courier)}
-									</motion.p>
+									{courier.icon}
+									<motion.p>{courier.name}</motion.p>
 								</motion.a>
 							</div>
 						</div>
-						{/* <button className="aspect-square w-min flex-none cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10">
-									<MdMoreVert />
-								</button> */}
 						<button
 							className="absolute right-2 top-2 aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10"
 							onClick={() => {
@@ -318,9 +313,7 @@ const DetailsModal = ({
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
 										Courier
 									</h2>
-									<p>
-										{getCourierStringFromCode(pkg.courier)}
-									</p>
+									<p>{courier.name}</p>
 								</div>
 								<div className="mt-3">
 									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">

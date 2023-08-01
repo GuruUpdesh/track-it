@@ -15,18 +15,12 @@ import {
 	useUndoStackContext,
 } from "@/context/undoStackContext/useUndoStackContext"
 import useTextOverflow from "@/hooks/useTextOverflow"
-import {
-	couriers,
-	getCourierIconFromCode,
-	getCourierStringFromCode,
-	getCourierUrlsFromTrackingNumber,
-	getCouriersFromTrackingNumber,
-} from "@/utils/courier"
+import { couriers, getCourier } from "@/utils/courier"
 import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
 import { estimateProgress, getColorFromStatus } from "@/utils/package"
 import axios from "axios"
 import { AnimatePresence, motion } from "framer-motion"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import {
 	AiOutlineDelete,
 	AiOutlineEdit,
@@ -116,6 +110,10 @@ const Card = ({
 	// todo fix the journey percent resets after a state change
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
+
+	const courier = useMemo(() => {
+		return getCourier(pkg.courier)
+	}, [pkg.courier])
 
 	useEffect(() => {
 		const getPackageInfo = async () => {
@@ -343,15 +341,10 @@ const Card = ({
 		{
 			label: "Open Courier Website",
 			onClick: () => {
-				window.open(
-					getCourierUrlsFromTrackingNumber(pkg.trackingNumber)[0]
-				)
+				window.open(courier.tracking_url + pkg.trackingNumber)
 			},
 			icon: <MdOutlineExplore className="absolute left-4" />,
 			separator: true,
-			disabled:
-				pkg.courier !==
-				getCouriersFromTrackingNumber(pkg.trackingNumber)[0],
 		},
 		{
 			label: "Edit",
@@ -376,9 +369,9 @@ const Card = ({
 						onChange: (value: string) => {
 							menuFunctions.edit.courier(value as TCourier)
 						},
-						options: Object.keys(couriers).map((courier) => ({
-							label: getCourierStringFromCode(courier),
-							value: courier,
+						options: couriers.map((courier) => ({
+							label: courier.name,
+							value: courier.code,
 						})),
 					},
 					variant: "warning",
@@ -567,18 +560,13 @@ const Card = ({
 									<a
 										className="underline-link flex items-center gap-1 text-xs text-yellow-50"
 										href={
-											getCourierUrlsFromTrackingNumber(
-												pkg.trackingNumber
-											)[0]
+											courier.tracking_url +
+											pkg.trackingNumber
 										}
 										target="_blank"
 									>
-										{getCourierIconFromCode(pkg.courier)}
-										<p>
-											{getCourierStringFromCode(
-												pkg.courier
-											)}
-										</p>
+										{courier.icon}
+										<p>{courier.name}</p>
 									</a>
 									{packageInfo &&
 									packageInfo.status.status !== "DELIVERED" &&

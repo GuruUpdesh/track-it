@@ -15,7 +15,7 @@ import CancelButton from "../modal/CancelButton"
 import SaveButton from "../modal/SaveButton"
 import { BsDot } from "react-icons/bs"
 import { MdDragIndicator } from "react-icons/md"
-import { getCourierStringFromCode } from "@/utils/courier"
+import { getCourier } from "@/utils/courier"
 import ReactDOM from "react-dom"
 import { cn } from "@/lib/utils"
 import { toast } from "react-hot-toast"
@@ -112,9 +112,11 @@ const ReorderCards = () => {
 													</h1>
 													<div className="flex items-center text-yellow-50/50">
 														<p>
-															{getCourierStringFromCode(
-																pkg.courier
-															)}
+															{
+																getCourier(
+																	pkg.courier
+																).name
+															}
 														</p>
 														<BsDot />
 														<p>
