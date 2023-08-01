@@ -28,41 +28,12 @@ const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
 			layoutScroll
 			className="relative isolate flex flex-col-reverse px-6 sm:px-10 md:px-20"
 		>
-			<motion.div
-				className="absolute left-[calc(5rem+39px)] h-full w-[1px] origin-top rounded-full bg-gradient-to-b from-white to-white/5"
-				// initial={{ scaleY: 0 }}
-				// animate={{ scaleY: 1 }}
-				// transition={{
-				// 	delay: 0.3,
-				// 	duration: 2,
-				// 	ease: [0.075, 0.82, 0.165, 1],
-				// }}
-			/>
+			<motion.div className="absolute left-[calc(5rem+39px)] h-full w-[1px] origin-top rounded-full bg-gradient-to-b from-white to-white/5" />
 			{trackingHistory.map(
 				(historyItem: TrackingHistory, idx: number) => {
 					const length = trackingHistory.length
 					return (
-						<motion.div
-							key={historyItem.date}
-							// transition={{
-							// 	delay: (length - idx) * 0.05,
-							// 	duration: 0.5,
-							// 	ease: [0.075, 0.82, 0.165, 1],
-							// }}
-							// initial={{
-							// 	opacity: 0,
-							// 	transform: "translateY(-50px) scaleY(0.8)",
-							// }}
-							// animate={{
-							// 	opacity: 1,
-							// 	transform: "translateY(0px) scaleY(1)",
-							// }}
-							// exit={{
-							// 	opacity: 0,
-							// 	transform: "translateY(-50px) scaleY(0.8)",
-							// }}
-							className="z-0"
-						>
+						<motion.div key={historyItem.date} className="z-0">
 							<HistoryLine
 								historyItem={historyItem}
 								topItem={idx === length - 1}
@@ -136,20 +107,7 @@ const DetailsModal = ({
 	return (
 		<Modal open={open} setOpen={setOpen} disabledContextStyles={true}>
 			<AnimatePresence>
-				<motion.div
-					// transition={{
-					// 	duration: 0.3,
-					// 	ease: [0.075, 0.82, 0.165, 1],
-					// }}
-					// layoutId={`card-${pkg.id}`}
-					// initial={{ opacity: 0, y: 50 }}
-					// animate={{ opacity: 1, y: 0 }}
-					// exit={{ opacity: 0, y: 50, transition: {
-					// 	duration: 0.8,
-					// 	ease: [0.075, 0.82, 0.165, 1],
-					// } }}
-					className="flex max-h-[80vh] min-h-[80vh] w-full flex-col overflow-hidden rounded-xl border border-indigo-400/25 bg-[#000000] sm:w-[500px] md:w-[650px] lg:w-[700px]"
-				>
+				<motion.div className="flex max-h-[80vh] min-h-[80vh] w-full flex-col overflow-hidden rounded-xl border border-indigo-400/25 bg-[#000000] sm:w-[500px] md:w-[650px] lg:w-[700px]">
 					<motion.div
 						layout
 						className="flex justify-between bg-gradient-to-b from-[#110F1B] to-transparent p-4"
@@ -234,92 +192,89 @@ const DetailsModal = ({
 							value="package-info"
 							className="mt-6 px-6 sm:px-10 md:px-20"
 						>
-							<motion.section
-								className="mb-6 origin-top rounded-lg bg-white/10 p-4"
-								// initial={{ transform: "translateY(-50px)" }}
-								// animate={{ transform: "translateY(0px)" }}
-								// transition={{
-								// 	delay: 0,
-								// 	duration: 0.5,
-								// 	ease: [0.075, 0.82, 0.165, 1],
-								// }}
-							>
-								<h1 className="text-md mb-1 border-b border-b-white/10 font-semibold capitalize tracking-tight text-yellow-50">
+							<motion.section className="mb-6 origin-top rounded-lg border border-indigo-200/25 bg-indigo-200/10 p-4">
+								<h1 className="text-md mb-1 border-b border-b-indigo-200/25 font-semibold capitalize tracking-tight">
 									Shipment overview
 								</h1>
-								{pkgInfo.eta &&
-									pkgInfo.status.status !== "DELIVERED" && (
+								<div className="flex flex-col gap-3">
+									{pkgInfo.eta &&
+										pkgInfo.status.status !==
+											"DELIVERED" && (
+											<div>
+												<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+													Delivery estimate
+												</h2>
+												<p>
+													{formatDate(pkgInfo.eta) +
+														" by " +
+														getTimeFromDate(
+															pkgInfo.eta
+														)}
+												</p>
+											</div>
+										)}
+									{pkgInfo.transitTime && (
 										<div>
 											<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-												Delivery estimate
+												Transit time
 											</h2>
-											<p>
-												{formatDate(pkgInfo.eta) +
-													" by " +
-													getTimeFromDate(
-														pkgInfo.eta
-													)}
-											</p>
+											<p>{pkgInfo.transitTime}</p>
 										</div>
 									)}
-								<div>
-									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										Transit time
-									</h2>
-									<p>{pkgInfo.transitTime}</p>
-								</div>
-								<div className="mt-3">
-									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										Tracking number
-									</h2>
-									<button
-										onClick={() => {
-											navigator.clipboard.writeText(
-												pkg.trackingNumber
-											)
-											toast.success("Copied to clipboard")
-										}}
-										className="text-md flex h-min items-center gap-1 font-normal active:text-indigo-400"
-									>
-										<BiCopy />
-										{pkg.trackingNumber}
-									</button>
-								</div>
-								<div className="mt-3">
-									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										Details
-									</h2>
-									<Balancer>
-										<p>
-											{pkgInfo.sourceAndDestinationString}
-										</p>
-									</Balancer>
+									<div>
+										<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+											Tracking number
+										</h2>
+										<button
+											onClick={() => {
+												navigator.clipboard.writeText(
+													pkg.trackingNumber
+												)
+												toast.success(
+													"Copied to clipboard"
+												)
+											}}
+											className="text-md flex h-min items-center gap-1 font-normal active:text-indigo-400"
+										>
+											<BiCopy />
+											{pkg.trackingNumber}
+										</button>
+									</div>
+									{pkgInfo.sourceAndDestinationString && (
+										<div>
+											<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+												Details
+											</h2>
+											<Balancer>
+												<p>
+													{
+														pkgInfo.sourceAndDestinationString
+													}
+												</p>
+											</Balancer>
+										</div>
+									)}
 								</div>
 							</motion.section>
-							<motion.section
-								className="origin-top rounded-lg bg-white/10 p-4"
-								// initial={{ transform: "translateY(-50px)" }}
-								// animate={{ transform: "translateY(0px)" }}
-								// transition={{
-								// 	delay: 0,
-								// 	duration: 0.5,
-								// 	ease: [0.075, 0.82, 0.165, 1],
-								// }}
-							>
-								<h1 className="text-md mb-1 border-b border-b-white/10 font-semibold capitalize tracking-tight text-yellow-50">
-									Services
+							<motion.section className="origin-top rounded-lg border border-indigo-200/25 bg-indigo-200/10 p-4">
+								<h1 className="text-md mb-1 border-b border-b-indigo-200/25 font-semibold capitalize tracking-tight ">
+									Service
 								</h1>
-								<div>
-									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										Courier
-									</h2>
-									<p>{courier.name}</p>
-								</div>
-								<div className="mt-3">
-									<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
-										Service
-									</h2>
-									<p>{pkgInfo.service}</p>
+								<div className="flex flex-col gap-3">
+									<div>
+										<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+											Courier
+										</h2>
+										<p>{courier.name}</p>
+									</div>
+									{pkgInfo.service && (
+										<div>
+											<h2 className="text-sm font-light uppercase tracking-wider text-yellow-50/50">
+												Service
+											</h2>
+											<p>{pkgInfo.service}</p>
+										</div>
+									)}
 								</div>
 							</motion.section>
 						</Tabs.Content>
