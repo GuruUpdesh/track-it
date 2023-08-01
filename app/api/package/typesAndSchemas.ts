@@ -90,6 +90,7 @@ export const PackageInfoSchema = z.object({
 	courier: courierEnum,
 	status: trackingHistorySchema,
 	eta: z.string().nullable(),
+	progressPercentage: z.number().min(0).max(100),
 	service: z.string().nullable(),
 	sourceAndDestinationString: z.string().nullable(),
 	transitTime: z.string().nullable(),

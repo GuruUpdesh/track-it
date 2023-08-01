@@ -17,7 +17,7 @@ import {
 import useTextOverflow from "@/hooks/useTextOverflow"
 import { couriers, getCourier } from "@/utils/courier"
 import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
-import { estimateProgress, getColorFromStatus } from "@/utils/package"
+import { getColorFromStatus } from "@/utils/package"
 import axios from "axios"
 import { AnimatePresence, motion } from "framer-motion"
 import React, { useEffect, useState, useMemo } from "react"
@@ -44,6 +44,7 @@ import { cn } from "@/lib/utils"
 import ReorderCards from "@/components/ui/forms/ReorderCards"
 import { toast } from "react-hot-toast"
 import { simplifyDetailMessage } from "@/utils/dataTransform"
+import { isAfter } from "date-fns"
 
 type EditTrackingNumberModalProps = {
 	open: boolean
@@ -127,11 +128,7 @@ const Card = ({
 				.then((res) => {
 					const packageInfo = res.data.packageInfo as PackageInfo
 					if (journeyPercentRef.current) {
-						journeyPercentRef.current.style.width = `${estimateProgress(
-							packageInfo.eta,
-							packageInfo.status.status,
-							packageInfo.trackingHistory[0].date
-						)}%`
+						journeyPercentRef.current.style.width = `${packageInfo.progressPercentage}%`
 						journeyPercentRef.current.style.opacity = "1"
 					}
 					setPackageInfo(packageInfo)
@@ -570,7 +567,11 @@ const Card = ({
 									</a>
 									{packageInfo &&
 									packageInfo.status.status !== "DELIVERED" &&
-									packageInfo.eta ? (
+									packageInfo.eta &&
+									isAfter(
+										new Date(packageInfo.eta),
+										new Date()
+									) ? (
 										<Tooltip
 											title={
 												packageInfo &&

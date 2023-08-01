@@ -15,6 +15,7 @@ import {
 import { createErrorResponse, createSuccessResponse } from "./utils"
 import {
 	convertLocationObjectToString,
+	estimateProgress,
 	extractDeliveryLocation,
 } from "@/utils/package"
 import axios from "axios"
@@ -99,6 +100,7 @@ export async function GET(request: NextRequest) {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
 			eta: getEta(packageInfo.eta),
+			progressPercentage: 0,
 			sourceAndDestinationString:
 				getSourceAndDestinationLocations(packageInfo),
 			transitTime: getTransitTime(packageInfo),
@@ -110,6 +112,12 @@ export async function GET(request: NextRequest) {
 				simplifyTrackingHistory(history)
 			),
 		}
+
+		packageInfoSimple.progressPercentage = estimateProgress(
+			packageInfoSimple.eta,
+			packageInfoSimple.status.status,
+			packageInfoSimple.trackingHistory[0].date
+		)
 
 		// Validate the simplified package info
 		PackageInfoSchema.parse(packageInfoSimple)
