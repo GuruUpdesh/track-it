@@ -9,14 +9,14 @@ import {
 	undo,
 	useUndoStackContext,
 } from "@/context/undoStackContext/useUndoStackContext"
-// import * as Toast from "@radix-ui/react-toast"
 import Fuse from "fuse.js"
-import React, { useEffect } from "react"
+import React, { useEffect, useReducer } from "react"
 import Selecto from "react-selecto"
 import { z } from "zod"
 import * as ContextMenu from "@radix-ui/react-context-menu"
 import { AiOutlineDelete } from "react-icons/ai"
 import { useSelectContext } from "@/context/selectContext/useSelectContext"
+import packageReducer from "@/context/packageContext/packageReducer"
 
 export const packageSchema = z.object({
 	id: z.number(),
@@ -32,8 +32,22 @@ export interface TPackageWithInfo {
 
 export type TPackage = z.infer<typeof packageSchema>
 
-const DashboardGrid = () => {
-	const { packages, dispatchPackages } = usePackageContext()
+type Props = {
+	packagesOverride?: TPackage[]
+}
+
+const DashboardGrid = ({ packagesOverride }: Props) => {
+	let { packages, dispatchPackages } = usePackageContext()
+
+	// this is an issue because the hook is called conditionally
+	if (packagesOverride) {
+		//eslint-disable-next-line
+		;[packages, dispatchPackages] = useReducer(
+			packageReducer,
+			packagesOverride
+		)
+	}
+
 	const { dispatchUndoStack } = useUndoStackContext()
 	const { search } = useSearchContext()
 	const [searchResults, setSearchResults] = React.useState(new Set())

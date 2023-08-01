@@ -1,5 +1,4 @@
 import {
-	PackageInfo,
 	ShippoResponse,
 	ShippoTrackingHistory,
 	TStatus,

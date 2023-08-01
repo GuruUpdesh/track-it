@@ -49,6 +49,7 @@ import Menu, { TMenuItem } from "@/components/ui/menu/Menu"
 import { cn } from "@/lib/utils"
 import ReorderCards from "@/components/ui/forms/ReorderCards"
 import { toast } from "react-hot-toast"
+import { simplifyDetailMessage } from "@/utils/dataTransform"
 
 type EditTrackingNumberModalProps = {
 	open: boolean
@@ -150,6 +151,9 @@ const Card = ({
 		getPackageInfo()
 	}, [pkg.trackingNumber, pkg.courier])
 
+	const [detailsHistoryTextRef, isDetailsHistoryTextOverflowed] =
+		useTextOverflow<HTMLHeadingElement>([packageInfo])
+
 	function renderHistory(index: number) {
 		let historyItem: TrackingHistory | null = null
 
@@ -169,11 +173,11 @@ const Card = ({
 		if (!packageInfo) {
 			return (
 				<SkeletonTheme
-					baseColor="#1e1b4b"
-					highlightColor="#312e81"
+					baseColor="#11101c"
+					highlightColor="#1e1b4b"
 					borderRadius="2rem"
 				>
-					<div className="z-0 flex items-center justify-between">
+					<div className="z-0 flex w-full items-center justify-between">
 						<div>
 							<Skeleton width="120px" height="20px" />
 							<Skeleton width="200px" height="20px" />
@@ -192,8 +196,29 @@ const Card = ({
 		}
 
 		return (
-			<div className="line-height-shrink text-indigo-100">
-				<h5 className="line-clamp-1">{historyItem.detailedStatus}</h5>
+			<div className="line-height-shrink w-full text-indigo-100">
+				<Tooltip
+					disabled={!isDetailsHistoryTextOverflowed}
+					title={historyItem.detailedStatus}
+				>
+					<h5
+						ref={detailsHistoryTextRef}
+						className="w-fit max-w-full overflow-hidden whitespace-nowrap"
+						style={
+							isDetailsHistoryTextOverflowed
+								? {
+										WebkitMaskImage:
+											"linear-gradient(to right, black 90%, transparent)",
+								  }
+								: {}
+						}
+					>
+						{simplifyDetailMessage(
+							historyItem.detailedStatus,
+							historyItem.status
+						)}
+					</h5>
+				</Tooltip>
 				<div className="flex items-center text-sm text-indigo-100/60">
 					{historyItem.location === "Location not found" ? null : (
 						<>
@@ -495,6 +520,11 @@ const Card = ({
 										? packageInfo.status.status
 										: undefined
 								}
+								deliveryLocation={
+									packageInfo
+										? packageInfo.status.deliveryLocation
+										: undefined
+								}
 							/>
 							{/* Name */}
 							<div className="relative flex max-w-[calc(100%-50px)] flex-col items-start">
@@ -557,34 +587,28 @@ const Card = ({
 											)}
 										</p>
 									</a>
-									<Tooltip
-										title={
-											(packageInfo &&
+									{packageInfo &&
+									packageInfo.status.status !== "DELIVERED" &&
+									packageInfo.eta ? (
+										<Tooltip
+											title={
+												packageInfo &&
 												packageInfo.eta &&
 												formatDate(packageInfo.eta) +
-													(packageInfo.status
-														.status === "DELIVERED"
-														? " at "
-														: " by ") +
+													" by " +
 													getTimeFromDate(
 														packageInfo.eta
-													)) ||
-											""
-										}
-									>
-										<p className="cursor-pointer text-left text-xs tracking-tighter text-yellow-50/50">
-											{packageInfo
-												? packageInfo.eta &&
-												  (packageInfo.status.status ===
-												  "DELIVERED"
-														? "Arrived "
-														: "Arrives ") +
-														formatRelativeDate(
-															packageInfo.eta
-														)
-												: null}
-										</p>
-									</Tooltip>
+													)
+											}
+										>
+											<p className="cursor-pointer text-left text-xs tracking-tighter text-yellow-50/50">
+												{"Arrives " +
+													formatRelativeDate(
+														packageInfo.eta
+													)}
+											</p>
+										</Tooltip>
+									) : null}
 								</div>
 							</div>
 						</div>
@@ -611,7 +635,7 @@ const Card = ({
 				</div>
 				<div
 					className={cn(
-						"relative h-[56px] min-w-[220px] max-w-[350px]  bg-black p-2",
+						"relative flex h-[56px] min-w-[220px]  max-w-[350px] items-center justify-center bg-black p-2",
 						error === null && packageInfo ? "cursor-pointer" : ""
 					)}
 					onClick={menuFunctions.openDetailedView}

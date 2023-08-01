@@ -2,7 +2,6 @@ import {
 	getEta,
 	getSourceAndDestinationLocations,
 	getTransitTime,
-	simplifyDetailMessage,
 } from "@/utils/dataTransform"
 import {
 	PackageInfo,
@@ -72,10 +71,7 @@ function simplifyTrackingHistory(
 ): TrackingHistory {
 	return {
 		status: trackingHistory.status,
-		detailedStatus: simplifyDetailMessage(
-			trackingHistory.status_details,
-			trackingHistory.status
-		),
+		detailedStatus: trackingHistory.status_details,
 		location: convertLocationObjectToString(trackingHistory.location),
 		date: trackingHistory.status_date,
 		deliveryLocation: extractDeliveryLocation(

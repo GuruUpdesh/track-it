@@ -32,7 +32,7 @@ const HistoryLine = ({ historyItem, topItem = false }: Props) => {
 				</div>
 			)}
 			<div className="pl-4">
-				<h5 className={cn("line-clamp-1", topItem && "font-semibold")}>
+				<h5 className={cn("line-clamp-2", topItem && "font-semibold")}>
 					{historyItem.detailedStatus}
 				</h5>
 				<div

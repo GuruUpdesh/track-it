@@ -157,6 +157,9 @@ const DetailsModal = ({
 							<CardImage
 								error={undefined}
 								status={pkgInfo.status.status}
+								deliveryLocation={
+									pkgInfo.status.deliveryLocation
+								}
 							/>
 							<div className="relative flex flex-col items-start">
 								<motion.h1 className="flex w-[20ch] max-w-full items-center overflow-hidden whitespace-nowrap text-left text-2xl tracking-tighter text-yellow-50">
