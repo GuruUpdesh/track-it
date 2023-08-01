@@ -64,7 +64,6 @@ const AddInput = () => {
 					`Multiple couriers found for tracking number (${trackingNumber}) returning first one`
 				)
 			}
-			console.log("couriers", couriers)
 			dispatchPackages({
 				type: "add",
 				new: {

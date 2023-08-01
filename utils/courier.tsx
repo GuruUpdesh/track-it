@@ -68,7 +68,6 @@ export function getCourierStringFromCode(code: string) {
 	const courier = couriers[code]
 	if (!courier) {
 		if (code === "shippo") return "test"
-		console.error("Invalid Courier Code", code)
 		return "Invalid Courier"
 	}
 	return courier.name
@@ -79,7 +78,6 @@ export function getCourierIconFromCode(code: string) {
 	if (!courier) return <MdOutlineExplore />
 	const icon = courier.icon
 	if (!icon) {
-		if (code !== "shippo") console.error("Invalid Courier Code", code)
 		return <MdOutlineExplore />
 	}
 	return icon

@@ -78,7 +78,6 @@ export const estimateProgress = (
 		status === "RETURNED" ||
 		status === "FAILURE"
 	) {
-		console.log("estimateProgress", 0)
 		return 0
 	} else if (status === "TRANSIT") {
 		if (!eta) return 0
@@ -89,7 +88,6 @@ export const estimateProgress = (
 		)
 		return progress
 	} else if (status === "DELIVERED") {
-		console.log("estimateProgress", 100)
 		return 100
 	}
 	return 0

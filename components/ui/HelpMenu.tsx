@@ -11,7 +11,6 @@ const HelpMenu = () => {
 	function getShortcut(shortcut: string) {
 		let isMac = false
 		if (typeof window !== "undefined") {
-			console.log("client")
 			isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0
 		}
 

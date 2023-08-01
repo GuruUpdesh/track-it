@@ -40,7 +40,6 @@ const SubMenu = ({ menuItem }: Props) => {
 	}
 
 	if (!menuItem.children && !menuItem.radioGroup?.enabled) {
-		console.error("No children found for menu item")
 		return null
 	}
 

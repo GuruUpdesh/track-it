@@ -275,13 +275,11 @@ const Card = ({
 			}
 		},
 		copyTrackingNumber: () => {
-			console.log("menuFunctions > copyTrackingNumber")
 			navigator.clipboard.writeText(pkg.trackingNumber)
 			toast.success("Copied to clipboard")
 		},
 		edit: {
 			name: () => {
-				console.log("menuFunctions > edit > name")
 				if (editName) {
 					nameInputRef.current?.focus()
 					return
@@ -289,25 +287,20 @@ const Card = ({
 				setEditName(true)
 			},
 			trackingNumber: () => {
-				console.log("menuFunctions > edit > trackingNumber")
 				setOpenEditTrackingNumberModal(true)
 			},
 			courier: (courier: TCourier) => {
-				console.log("menuFunctions > edit > courier")
 				dispatchPackages({ type: "updateCourier", id: pkg.id, courier })
 				toast.success("Courier updated")
 			},
 		},
 		reorder: () => {
-			console.log("menuFunctions > reorder")
 			setOpenReorderModal(true)
 		},
 		duplicate: () => {
-			console.log("menuFunctions > duplicate")
 			dispatchPackages({ type: "duplicate", id: pkg.id })
 		},
 		delete: () => {
-			console.log("menuFunctions > delete")
 			const pkgCopy = { ...pkg, index: index }
 			dispatchPackages({ type: "delete", id: pkg.id })
 			dispatchUndoStack({

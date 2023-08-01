@@ -14,7 +14,6 @@ function useLocalStorage<T, A extends { type: string }>(
 	const init = (key: string) => {
 		try {
 			const item = localStorage.getItem(key)
-			console.log("useLocalStorage > get item", item)
 			if (item && item !== "undefined") {
 				return JSON.parse(item) as T
 			}
@@ -22,7 +21,6 @@ function useLocalStorage<T, A extends { type: string }>(
 			localStorage.setItem(key, JSON.stringify(initialValue))
 			return initialValue
 		} catch (error) {
-			console.error(error)
 			return initialValue
 		}
 	}
@@ -43,7 +41,6 @@ function useLocalStorage<T, A extends { type: string }>(
 	const isFirstRender = useRef(true)
 
 	useEffect(() => {
-		console.log("useLocalStorage > useEffect > init", key)
 		dispatch({ type: INIT_ACTION_TYPE, payload: init(key) })
 	}, [key])
 
@@ -51,7 +48,6 @@ function useLocalStorage<T, A extends { type: string }>(
 		if (isFirstRender.current) {
 			isFirstRender.current = false
 		} else {
-			console.log("useLocalStorage > useEffect > state", state)
 			localStorage.setItem(key, JSON.stringify(state))
 		}
 	}, [key, state])

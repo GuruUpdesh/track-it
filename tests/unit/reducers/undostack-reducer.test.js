@@ -58,7 +58,6 @@ describe("undoStackReducer", () => {
 		}
 		const action = { type: "push", new: newPackage }
 		const state = undoStackReducer(stateWithTenPackages, action)
-		console.log(state)
 
 		expect(state.length).toEqual(10)
 		expect(state[0].id).toEqual(2)

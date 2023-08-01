@@ -14,7 +14,7 @@ describe("courier utils", () => {
 		})
 
 		test("Invalid courier code returns 'Invalid Courier'", () => {
-			console.error = jest.fn() // Mocking console.error to prevent error logging
+			console.error = jest.fn()
 			expect(getCourierStringFromCode("invalid")).toBe("Invalid Courier")
 			expect(console.error).toHaveBeenCalledWith(
 				"Invalid Courier Code",
