@@ -9,15 +9,35 @@ const HelpMenu = () => {
 	const [open, setOpen] = React.useState(false)
 
 	function getShortcut(shortcut: string) {
-		const isMac = false // TODO: detect
+		let isMac = false
+		if (typeof window !== "undefined") {
+			isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0
+		}
 
 		if (isMac) {
-			const [key, action] = shortcut.split(" + ")
+			const keys = shortcut.split(" + ")
+			const keyElements = keys.map((key, index) => {
+				const isLast = index === keys.length - 1
+				if (key.toLowerCase() === "ctrl") {
+					return (
+						<>
+							<BiCommand key={index} />
+							{isLast ? "" : " + "}
+						</>
+					)
+				} else {
+					return (
+						<>
+							<p key={index}>{key}</p>
+							{isLast ? "" : " + "}
+						</>
+					)
+				}
+			})
 
 			return (
-				<p className="absolute right-4 text-xs text-white/50">
-					{key.toLowerCase() === "ctrl" ? <BiCommand /> : key} +{" "}
-					{action}
+				<p className="absolute right-4 flex items-center gap-1 text-xs text-white/50">
+					{keyElements}
 				</p>
 			)
 		} else {
@@ -58,7 +78,7 @@ const HelpMenu = () => {
 	]
 	return (
 		<Menu open={open} setOpen={setOpen} menu={menu}>
-			<button className="fixed bottom-10 right-10 rounded-full border border-indigo-400/50 bg-black p-2 text-xl text-indigo-100 hover:border-indigo-400/75 hover:text-white hover:shadow-sm hover:shadow-indigo-700">
+			<button className="fixed bottom-2 right-2 z-40 rounded-full border border-indigo-400/50 bg-black p-2 text-xl text-indigo-100 hover:border-indigo-400/75 hover:text-white hover:shadow-sm hover:shadow-indigo-700 sm:bottom-10 sm:right-10">
 				<BiQuestionMark />
 			</button>
 		</Menu>

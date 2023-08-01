@@ -9,14 +9,14 @@ import {
 	undo,
 	useUndoStackContext,
 } from "@/context/undoStackContext/useUndoStackContext"
-// import * as Toast from "@radix-ui/react-toast"
 import Fuse from "fuse.js"
-import React, { useEffect } from "react"
+import React, { useEffect, useReducer } from "react"
 import Selecto from "react-selecto"
 import { z } from "zod"
 import * as ContextMenu from "@radix-ui/react-context-menu"
 import { AiOutlineDelete } from "react-icons/ai"
 import { useSelectContext } from "@/context/selectContext/useSelectContext"
+import packageReducer from "@/context/packageContext/packageReducer"
 
 export const packageSchema = z.object({
 	id: z.number(),
@@ -32,8 +32,22 @@ export interface TPackageWithInfo {
 
 export type TPackage = z.infer<typeof packageSchema>
 
-const DashboardGrid = () => {
-	const { packages, dispatchPackages } = usePackageContext()
+type Props = {
+	packagesOverride?: TPackage[]
+}
+
+const DashboardGrid = ({ packagesOverride }: Props) => {
+	let { packages, dispatchPackages } = usePackageContext()
+
+	// this is an issue because the hook is called conditionally
+	if (packagesOverride) {
+		//eslint-disable-next-line
+		;[packages, dispatchPackages] = useReducer(
+			packageReducer,
+			packagesOverride
+		)
+	}
+
 	const { dispatchUndoStack } = useUndoStackContext()
 	const { search } = useSearchContext()
 	const [searchResults, setSearchResults] = React.useState(new Set())
@@ -101,7 +115,7 @@ const DashboardGrid = () => {
 
 	return (
 		<>
-			{packages.length === 0 && (
+			{packages.length === 0 ? (
 				<div className="mt-2 flex min-w-full flex-grow flex-col items-center gap-2 text-center text-yellow-50/50 sm:mt-6">
 					<p>You are not tracking any shipments yet.</p>
 					<button
@@ -116,11 +130,17 @@ const DashboardGrid = () => {
 						Add
 					</button>
 				</div>
-			)}
-			{packages.length > 0 && (
+			) : (
 				<ContextMenu.Root onOpenChange={setContextOpen}>
 					<ContextMenu.Trigger disabled={selectedIds.length < 1}>
-						<div className="mt-2 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+						{searchResults.size === 0 && (
+							<div className="mt-2 flex min-w-full flex-grow flex-col items-center gap-2 text-center text-yellow-50/50 sm:mt-6">
+								<p>
+									Can not find anything that matches {search}.
+								</p>
+							</div>
+						)}
+						<div className="mb-5 mt-2 grid grid-cols-1 gap-4 sm:mt-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 							{enabled && (
 								<Selecto
 									selectableTargets={[".card"]}

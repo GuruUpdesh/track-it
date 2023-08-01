@@ -43,7 +43,7 @@ const Modal = ({
 					<Dialog.Overlay className="Modal-overlay absolute left-0 top-0 z-40 h-full w-full" />
 					<Dialog.Content
 						className={cn(
-							"absolute left-[50%] top-[50%] z-50 min-h-[200px] translate-x-[-50%] translate-y-[-50%]",
+							"fixed left-[50%] top-[50%] z-50 min-h-[200px] translate-x-[-50%] translate-y-[-50%]",
 							disabledContextStyles ? "" : "Modal-content p-6"
 						)}
 					>

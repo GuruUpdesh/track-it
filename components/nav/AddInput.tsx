@@ -2,7 +2,7 @@
 
 import "./nav.css"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
-import { getCouriersFromTrackingNumber } from "@/utils/courier"
+import { getCourierFromTrackingNumber } from "@/utils/courier"
 import React, { useEffect, useState, useRef } from "react"
 import { BsPlus } from "react-icons/bs"
 import { toast } from "react-hot-toast"
@@ -35,8 +35,8 @@ const AddInput = () => {
 	}, [])
 
 	useEffect(() => {
-		const couriers = getCouriersFromTrackingNumber(trackingNumber)
-		if (couriers.length === 0 && trackingNumber.length > 0) {
+		const courier = getCourierFromTrackingNumber(trackingNumber)
+		if (courier === null && trackingNumber.length > 0) {
 			setError("Tracking number is invalid")
 			setValid(false)
 		} else {
@@ -44,7 +44,7 @@ const AddInput = () => {
 			setValid(false)
 		}
 
-		if (couriers.length > 0) {
+		if (courier) {
 			setValid(true)
 		}
 	}, [trackingNumber])
@@ -57,21 +57,15 @@ const AddInput = () => {
 		e.preventDefault()
 
 		if (valid) {
-			const couriers = getCouriersFromTrackingNumber(trackingNumber)
-			if (couriers.length === 0) return
-			else if (couriers.length > 1) {
-				console.warn(
-					`Multiple couriers found for tracking number (${trackingNumber}) returning first one`
-				)
-			}
-			console.log("couriers", couriers)
+			const courier = getCourierFromTrackingNumber(trackingNumber)
+			if (courier === null) return
 			dispatchPackages({
 				type: "add",
 				new: {
 					id: Date.now(),
 					name: "",
 					trackingNumber,
-					courier: couriers[0],
+					courier: courier.code,
 				},
 			})
 			setTrackingNumber("")
@@ -87,7 +81,7 @@ const AddInput = () => {
 				(error
 					? " border-red-700/75"
 					: valid
-					? " border-green-400/75"
+					? " border-emerald-400/75"
 					: " border-indigo-400/25")
 			}
 		>

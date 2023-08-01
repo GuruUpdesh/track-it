@@ -1,4 +1,4 @@
-import Card from "../components/Card/Card"
+import Card from "@/components/tracking/card/Card"
 import "@testing-library/jest-dom"
 import { fireEvent, render, screen } from "@testing-library/react"
 import axios from "axios"
@@ -19,8 +19,12 @@ describe("Card Component", () => {
 					courier: "ups",
 					trackingNumber: "",
 				}}
+				index={0}
+				packagesLength={1}
 				dispatchPackages={mockDispatch}
+				setSelectedPackage={mockDispatch}
 				inSearchResults={true}
+				isSelected={false}
 			/>
 		)
 
@@ -86,7 +90,7 @@ describe("Card Component", () => {
 		render(card)
 
 		const name = screen.getByText("Test Name")
-		fireEvent.doubleClick(name)
+		fireEvent.click(name)
 		const input = screen.getByPlaceholderText("Type name...")
 		fireEvent.change(input, { target: { value: "Test Name Edited" } })
 		fireEvent.blur(input)

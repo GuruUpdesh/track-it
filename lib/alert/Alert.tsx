@@ -11,7 +11,7 @@ const Alert = () => {
 		<Toaster
 			position="bottom-center"
 			toastOptions={{
-				duration: 13000,
+				duration: 3000,
 				style: {
 					backgroundColor: "#080808",
 					border: "1px solid rgb(129 140 248 / 0.75)",

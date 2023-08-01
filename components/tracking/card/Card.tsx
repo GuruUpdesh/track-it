@@ -15,18 +15,12 @@ import {
 	useUndoStackContext,
 } from "@/context/undoStackContext/useUndoStackContext"
 import useTextOverflow from "@/hooks/useTextOverflow"
-import {
-	couriers,
-	getCourierIconFromCode,
-	getCourierStringFromCode,
-	getCourierUrlsFromTrackingNumber,
-	getCouriersFromTrackingNumber,
-} from "@/utils/courier"
+import { couriers, getCourier } from "@/utils/courier"
 import { formatDate, formatRelativeDate, getTimeFromDate } from "@/utils/date"
-import { estimateProgress } from "@/utils/package"
+import { getColorFromStatus } from "@/utils/package"
 import axios from "axios"
 import { AnimatePresence, motion } from "framer-motion"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import {
 	AiOutlineDelete,
 	AiOutlineEdit,
@@ -49,6 +43,8 @@ import Menu, { TMenuItem } from "@/components/ui/menu/Menu"
 import { cn } from "@/lib/utils"
 import ReorderCards from "@/components/ui/forms/ReorderCards"
 import { toast } from "react-hot-toast"
+import { simplifyDetailMessage } from "@/utils/dataTransform"
+import { isAfter } from "date-fns"
 
 type EditTrackingNumberModalProps = {
 	open: boolean
@@ -115,7 +111,10 @@ const Card = ({
 	// todo fix the journey percent resets after a state change
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
 	const nameInputRef = React.useRef<HTMLInputElement>(null)
-	const [hovering, setHovering] = useState(false)
+
+	const courier = useMemo(() => {
+		return getCourier(pkg.courier)
+	}, [pkg.courier])
 
 	useEffect(() => {
 		const getPackageInfo = async () => {
@@ -129,11 +128,7 @@ const Card = ({
 				.then((res) => {
 					const packageInfo = res.data.packageInfo as PackageInfo
 					if (journeyPercentRef.current) {
-						journeyPercentRef.current.style.width = `${estimateProgress(
-							packageInfo.eta,
-							packageInfo.status.status,
-							packageInfo.trackingHistory[0].date
-						)}%`
+						journeyPercentRef.current.style.width = `${packageInfo.progressPercentage}%`
 						journeyPercentRef.current.style.opacity = "1"
 					}
 					setPackageInfo(packageInfo)
@@ -150,6 +145,9 @@ const Card = ({
 		}
 		getPackageInfo()
 	}, [pkg.trackingNumber, pkg.courier])
+
+	const [detailsHistoryTextRef, isDetailsHistoryTextOverflowed] =
+		useTextOverflow<HTMLHeadingElement>([packageInfo])
 
 	function renderHistory(index: number) {
 		let historyItem: TrackingHistory | null = null
@@ -170,11 +168,11 @@ const Card = ({
 		if (!packageInfo) {
 			return (
 				<SkeletonTheme
-					baseColor="#1e1b4b"
-					highlightColor="#312e81"
+					baseColor="#11101c"
+					highlightColor="#1e1b4b"
 					borderRadius="2rem"
 				>
-					<div className="z-0 flex items-center justify-between">
+					<div className="z-0 flex w-full items-center justify-between">
 						<div>
 							<Skeleton width="120px" height="20px" />
 							<Skeleton width="200px" height="20px" />
@@ -193,8 +191,29 @@ const Card = ({
 		}
 
 		return (
-			<div className="line-height-shrink text-indigo-100">
-				<h5 className="line-clamp-1">{historyItem.detailedStatus}</h5>
+			<div className="line-height-shrink w-full text-indigo-100">
+				<Tooltip
+					disabled={!isDetailsHistoryTextOverflowed}
+					title={historyItem.detailedStatus}
+				>
+					<h5
+						ref={detailsHistoryTextRef}
+						className="w-fit max-w-full overflow-hidden whitespace-nowrap"
+						style={
+							isDetailsHistoryTextOverflowed
+								? {
+										WebkitMaskImage:
+											"linear-gradient(to right, black 90%, transparent)",
+								  }
+								: {}
+						}
+					>
+						{simplifyDetailMessage(
+							historyItem.detailedStatus,
+							historyItem.status
+						)}
+					</h5>
+				</Tooltip>
 				<div className="flex items-center text-sm text-indigo-100/60">
 					{historyItem.location === "Location not found" ? null : (
 						<>
@@ -251,13 +270,11 @@ const Card = ({
 			}
 		},
 		copyTrackingNumber: () => {
-			console.log("menuFunctions > copyTrackingNumber")
 			navigator.clipboard.writeText(pkg.trackingNumber)
 			toast.success("Copied to clipboard")
 		},
 		edit: {
 			name: () => {
-				console.log("menuFunctions > edit > name")
 				if (editName) {
 					nameInputRef.current?.focus()
 					return
@@ -265,25 +282,20 @@ const Card = ({
 				setEditName(true)
 			},
 			trackingNumber: () => {
-				console.log("menuFunctions > edit > trackingNumber")
 				setOpenEditTrackingNumberModal(true)
 			},
 			courier: (courier: TCourier) => {
-				console.log("menuFunctions > edit > courier")
 				dispatchPackages({ type: "updateCourier", id: pkg.id, courier })
 				toast.success("Courier updated")
 			},
 		},
 		reorder: () => {
-			console.log("menuFunctions > reorder")
 			setOpenReorderModal(true)
 		},
 		duplicate: () => {
-			console.log("menuFunctions > duplicate")
 			dispatchPackages({ type: "duplicate", id: pkg.id })
 		},
 		delete: () => {
-			console.log("menuFunctions > delete")
 			const pkgCopy = { ...pkg, index: index }
 			dispatchPackages({ type: "delete", id: pkg.id })
 			dispatchUndoStack({
@@ -326,15 +338,10 @@ const Card = ({
 		{
 			label: "Open Courier Website",
 			onClick: () => {
-				window.open(
-					getCourierUrlsFromTrackingNumber(pkg.trackingNumber)[0]
-				)
+				window.open(courier.tracking_url + pkg.trackingNumber)
 			},
 			icon: <MdOutlineExplore className="absolute left-4" />,
 			separator: true,
-			disabled:
-				pkg.courier !==
-				getCouriersFromTrackingNumber(pkg.trackingNumber)[0],
 		},
 		{
 			label: "Edit",
@@ -359,9 +366,9 @@ const Card = ({
 						onChange: (value: string) => {
 							menuFunctions.edit.courier(value as TCourier)
 						},
-						options: Object.keys(couriers).map((courier) => ({
-							label: getCourierStringFromCode(courier),
-							value: courier,
+						options: couriers.map((courier) => ({
+							label: courier.name,
+							value: courier.code,
 						})),
 					},
 					variant: "warning",
@@ -442,8 +449,6 @@ const Card = ({
 				animate={{ opacity: 1, y: 0 }}
 				exit={{ opacity: 0, y: 50 }}
 				key={pkg.id}
-				onMouseEnter={() => setHovering(true)}
-				onMouseLeave={() => setHovering(false)}
 			>
 				{/* Card Header */}
 				<div className="relative min-w-[220px] max-w-[350px] select-none border-b border-b-indigo-400/25">
@@ -479,37 +484,14 @@ const Card = ({
 							</Tooltip>
 						)}
 					</AnimatePresence>
-					<AnimatePresence>
-						{!isSelected &&
-							packageInfo &&
-							packageInfo.status.status === "DELIVERED" &&
-							hovering && (
-								<motion.button
-									className="absolute left-0 z-40 rounded-full border border-indigo-400/25 bg-[#110F1B] px-1 py-1 text-sm text-indigo-100 hover:bg-indigo-700"
-									initial={{
-										opacity: 0,
-										scale: 0,
-										y: "-50%",
-									}}
-									animate={{
-										opacity: 1,
-										scale: 1,
-										y: "-50%",
-									}}
-									exit={{
-										opacity: 0,
-										scale: 0,
-										y: "-50%",
-									}}
-									onClick={menuFunctions.delete}
-								>
-									<AiOutlineDelete />
-								</motion.button>
-							)}
-					</AnimatePresence>
 					<div
 						ref={journeyPercentRef}
-						className="journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/40 opacity-50"
+						className={cn(
+							"journeyPercent absolute bottom-0 block h-[1px] w-0 bg-indigo-400/75 opacity-50",
+							`group-hover:bg-${getColorFromStatus(
+								packageInfo?.status.status || "UNKNOWN"
+							)}-600`
+						)}
 					/>
 					<div className="relative flex items-center justify-between p-2">
 						<div className="flex max-w-[80%] gap-2">
@@ -519,6 +501,11 @@ const Card = ({
 								status={
 									packageInfo
 										? packageInfo.status.status
+										: undefined
+								}
+								deliveryLocation={
+									packageInfo
+										? packageInfo.status.deliveryLocation
 										: undefined
 								}
 							/>
@@ -570,47 +557,40 @@ const Card = ({
 									<a
 										className="underline-link flex items-center gap-1 text-xs text-yellow-50"
 										href={
-											getCourierUrlsFromTrackingNumber(
-												pkg.trackingNumber
-											)[0]
+											courier.tracking_url +
+											pkg.trackingNumber
 										}
 										target="_blank"
 									>
-										{getCourierIconFromCode(pkg.courier)}
-										<p>
-											{getCourierStringFromCode(
-												pkg.courier
-											)}
-										</p>
+										{courier.icon}
+										<p>{courier.name}</p>
 									</a>
-									<Tooltip
-										title={
-											(packageInfo &&
+									{packageInfo &&
+									packageInfo.status.status !== "DELIVERED" &&
+									packageInfo.eta &&
+									isAfter(
+										new Date(packageInfo.eta),
+										new Date()
+									) ? (
+										<Tooltip
+											title={
+												packageInfo &&
 												packageInfo.eta &&
 												formatDate(packageInfo.eta) +
-													(packageInfo.status
-														.status === "DELIVERED"
-														? " at "
-														: " by ") +
+													" by " +
 													getTimeFromDate(
 														packageInfo.eta
-													)) ||
-											""
-										}
-									>
-										<p className="cursor-pointer text-left text-xs tracking-tighter text-yellow-50/50">
-											{packageInfo
-												? packageInfo.eta &&
-												  (packageInfo.status.status ===
-												  "DELIVERED"
-														? "Arrived "
-														: "Arrives ") +
-														formatRelativeDate(
-															packageInfo.eta
-														)
-												: null}
-										</p>
-									</Tooltip>
+													)
+											}
+										>
+											<p className="cursor-pointer text-left text-xs tracking-tighter text-yellow-50/50">
+												{"Arrives " +
+													formatRelativeDate(
+														packageInfo.eta
+													)}
+											</p>
+										</Tooltip>
+									) : null}
 								</div>
 							</div>
 						</div>
@@ -637,7 +617,7 @@ const Card = ({
 				</div>
 				<div
 					className={cn(
-						"relative h-[56px] min-w-[220px] max-w-[350px]  bg-black p-2",
+						"relative flex h-[56px] min-w-[220px]  max-w-[350px] items-center justify-center bg-black p-2",
 						error === null && packageInfo ? "cursor-pointer" : ""
 					)}
 					onClick={menuFunctions.openDetailedView}

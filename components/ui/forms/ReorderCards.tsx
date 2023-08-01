@@ -15,7 +15,7 @@ import CancelButton from "../modal/CancelButton"
 import SaveButton from "../modal/SaveButton"
 import { BsDot } from "react-icons/bs"
 import { MdDragIndicator } from "react-icons/md"
-import { getCourierStringFromCode } from "@/utils/courier"
+import { getCourier } from "@/utils/courier"
 import ReactDOM from "react-dom"
 import { cn } from "@/lib/utils"
 import { toast } from "react-hot-toast"
@@ -69,7 +69,10 @@ const ReorderCards = () => {
 			<DragDropContext onDragEnd={handleDragEnd}>
 				<Droppable droppableId="reorder-modal">
 					{(droppableProvided: DroppableProvided) => (
-						<div ref={droppableProvided.innerRef} className="mb-3">
+						<div
+							ref={droppableProvided.innerRef}
+							className="mb-3 max-h-96 overflow-auto"
+						>
 							{tempPackages.map(
 								(pkg: TPackage, index: number) => (
 									<Draggable
@@ -86,7 +89,7 @@ const ReorderCards = () => {
 											const child = (
 												<div
 													className={cn(
-														"group relative mb-2 max-w-[350px] rounded-sm border border-indigo-400/25 bg-[#110F1B] px-4 py-2",
+														"group relative mb-2  ml-3 max-w-[350px] rounded-sm border border-indigo-400/25 bg-[#110F1B] px-4 py-2",
 														draggableSnapshot.isDragging
 															? "bg-[#181527]"
 															: ""
@@ -109,9 +112,11 @@ const ReorderCards = () => {
 													</h1>
 													<div className="flex items-center text-yellow-50/50">
 														<p>
-															{getCourierStringFromCode(
-																pkg.courier
-															)}
+															{
+																getCourier(
+																	pkg.courier
+																).name
+															}
 														</p>
 														<BsDot />
 														<p>

@@ -1,3 +1,7 @@
+import DashboardGrid, { TPackage } from "@/components/DashboardGrid"
+import HelpMenu from "@/components/ui/HelpMenu"
+import { redirect } from "next/navigation"
+
 const testPackages = [
 	{
 		id: 1,
@@ -42,3 +46,18 @@ const testPackages = [
 		courier: "ups",
 	},
 ]
+
+export default function Home() {
+	const dev = process.env.NODE_ENV !== "production"
+
+	if (!dev) {
+		redirect("/")
+	}
+
+	return (
+		<>
+			<HelpMenu />
+			<DashboardGrid packagesOverride={testPackages as TPackage[]} />
+		</>
+	)
+}

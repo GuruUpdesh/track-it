@@ -1,11 +1,11 @@
 import AddInput from "@/components/nav/AddInput"
 import { PackageContext } from "@/context/packageContext/usePackageContext"
-import { getCouriersFromTrackingNumber } from "@/utils/courier"
+import { getCourierFromTrackingNumber } from "@/utils/courier"
 import "@testing-library/jest-dom"
 import { fireEvent, render, screen } from "@testing-library/react"
 
-jest.mock("../utils/courier", () => ({
-	getCouriersFromTrackingNumber: jest.fn(),
+jest.mock("../../utils/courier", () => ({
+	getCourierFromTrackingNumber: jest.fn(),
 }))
 
 describe("AddInput Component", () => {
@@ -13,7 +13,7 @@ describe("AddInput Component", () => {
 
 	beforeEach(() => {
 		mockDispatch = jest.fn()
-		getCouriersFromTrackingNumber.mockReturnValue([])
+		getCourierFromTrackingNumber.mockReturnValue(null)
 	})
 
 	it("renders without crashing", () => {
@@ -38,7 +38,12 @@ describe("AddInput Component", () => {
 	})
 
 	it("allows form submission with valid tracking number", async () => {
-		getCouriersFromTrackingNumber.mockReturnValue(["Courier1"])
+		getCourierFromTrackingNumber.mockReturnValue({
+			code: "courier1",
+			name: "Courier 1",
+			tracking_url: "https://courier1.com/track/",
+			patterns: [],
+		})
 		render(
 			<PackageContext.Provider value={{ dispatchPackages: mockDispatch }}>
 				<AddInput />
@@ -54,13 +59,13 @@ describe("AddInput Component", () => {
 				id: expect.any(Number),
 				name: "",
 				trackingNumber: "VALID_NUMBER",
-				courier: "Courier1",
+				courier: "courier1",
 			},
 		})
 	})
 
 	it("handles error state with invalid tracking number", async () => {
-		getCouriersFromTrackingNumber.mockReturnValue([])
+		getCourierFromTrackingNumber.mockReturnValue(null)
 		render(
 			<PackageContext.Provider value={{ dispatchPackages: mockDispatch }}>
 				<AddInput />
@@ -72,7 +77,7 @@ describe("AddInput Component", () => {
 	})
 
 	it("handles valid state with valid tracking number", async () => {
-		getCouriersFromTrackingNumber.mockReturnValue(["Courier1"])
+		getCourierFromTrackingNumber.mockReturnValue(["Courier1"])
 		render(
 			<PackageContext.Provider value={{ dispatchPackages: mockDispatch }}>
 				<AddInput />

@@ -31,7 +31,6 @@ function packageReducer(state: TPackage[], action: PackageAction): TPackage[] {
 			return state.filter((pkg) => pkg.id !== action.id)
 		case "batchDelete":
 			const ids = action.ids
-			console.log("batch delete", ids)
 			return state.filter((pkg) => !ids.includes(`${pkg.id}`))
 		case "updateName":
 			return state.map((pkg) =>

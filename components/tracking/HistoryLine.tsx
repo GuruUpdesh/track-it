@@ -1,6 +1,7 @@
 import { TrackingHistory } from "@/app/api/package/typesAndSchemas"
+import { cn } from "@/lib/utils"
 import { formatDate, getTimeFromDate } from "@/utils/date"
-import { getIconForStatus } from "@/utils/package"
+import { getColorFromStatus } from "@/utils/package"
 import { BsDot } from "react-icons/bs"
 
 type Props = {
@@ -10,33 +11,36 @@ type Props = {
 
 const HistoryLine = ({ historyItem, topItem = false }: Props) => {
 	if (!historyItem) return null
-	const delivered = historyItem.status === "DELIVERED"
+	const color = getColorFromStatus(historyItem.status)
 	return (
 		<div
-			className={
-				"flex items-center rounded-lg px-6 py-3" +
-				(topItem
-					? delivered
-						? " bg-gradient-to-r from-indigo-900 to-indigo-700 py-1 shadow-xl shadow-indigo-600/25"
-						: " bg-[#1a1a18] py-1"
-					: " ")
-			}
+			className={cn(
+				"flex items-center rounded-lg py-3",
+				topItem
+					? `bg-black bg-gradient-to-b from-transparent px-2 to-${color}-400/25 border border-[#292a4b] shadow-${color}-600/25 mb-3`
+					: "px-6"
+			)}
 		>
 			{topItem ? (
-				<div className="rounded-full border border-white/50 p-2 text-sm text-white/75 outline outline-white/10">
-					{getIconForStatus(
-						historyItem.status,
-						historyItem.deliveryLocation
-					)}
-				</div>
+				<></>
 			) : (
-				<>
-					<BsDot className="min-h-[32px] min-w-[32px] text-yellow-50/50" />
-				</>
+				<div className="relative min-h-[32px] min-w-[32px]">
+					<div
+						className={`absolute left-[50%] min-h-[10px] min-w-[10px] translate-x-[-50%] rounded-full border border-${color}-200 bg-${color}-600`}
+					></div>
+					{/* <BsDot className={cn("min-h-[32px] min-w-[32px] scale-150", `text-${color}-200`)} /> */}
+				</div>
 			)}
 			<div className="pl-4">
-				<h5 className="line-clamp-1">{historyItem.detailedStatus}</h5>
-				<div className="flex items-center text-yellow-50/50">
+				<h5 className={cn("line-clamp-2", topItem && "font-semibold")}>
+					{historyItem.detailedStatus}
+				</h5>
+				<div
+					className={cn(
+						"flex items-center",
+						topItem ? "text-yellow-50/80" : "text-yellow-50/50"
+					)}
+				>
 					{historyItem.location === "Location not found" ? null : (
 						<>
 							<p className="whitespace-nowrap">
