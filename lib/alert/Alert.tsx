@@ -36,7 +36,7 @@ const Alert = () => {
 							{message}
 							{t.type !== "loading" && (
 								<IconButton
-									altText="dismiss"
+									ariaLabel="dismiss"
 									onClick={() => toast.dismiss(t.id)}
 								>
 									<MdClose />

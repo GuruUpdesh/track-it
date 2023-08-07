@@ -597,7 +597,7 @@ const Card = ({
 						<IconButton
 							onClick={menuFunctions.openDetailedView}
 							disabled={error !== null || !packageInfo}
-							altText="Open Detailed Package Information"
+							ariaLabel="Open Detailed Package Information"
 							className="opacity-0 transition-opacity group-hover:opacity-100"
 						>
 							<BiExpand />

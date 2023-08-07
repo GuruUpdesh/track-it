@@ -4,7 +4,7 @@ import Tooltip from "./Tooltip"
 
 type Props = {
 	children: React.ReactNode
-	altText: string
+	ariaLabel: string
 	onClick?: () => void
 	disabled?: boolean
 	className?: string
@@ -12,13 +12,13 @@ type Props = {
 
 const IconButton = ({
 	children,
-	altText,
+	ariaLabel,
 	onClick = undefined,
 	disabled = false,
 	className = "",
 }: Props) => {
 	return (
-		<Tooltip title={altText} disabled={disabled}>
+		<Tooltip title={ariaLabel} disabled={disabled}>
 			<button
 				onClick={onClick}
 				disabled={disabled}
@@ -26,7 +26,7 @@ const IconButton = ({
 					"aspect-square cursor-pointer rounded-full p-2 text-yellow-50 outline-none hover:bg-yellow-50/10 focus:bg-yellow-50/10 disabled:pointer-events-none disabled:cursor-default disabled:text-yellow-50/50 disabled:hover:bg-transparent disabled:group-hover:opacity-50",
 					className
 				)}
-				aria-label={altText}
+				aria-label={ariaLabel}
 			>
 				{children}
 			</button>
