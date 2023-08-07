@@ -216,6 +216,26 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 									/>
 								)
 							})}
+							<div className="invisible">
+								<Card
+									key={-1}
+									pkg={{
+										id: -1,
+										name: "",
+										trackingNumber: "",
+										courier: "ups",
+									}}
+									dispatchPackages={dispatchPackages}
+									setSelectedPackage={setSelectedPackage}
+									inSearchResults={true}
+									disableReorder={false}
+									statusFilter={filters.status}
+									isSelected={false}
+									packagesLength={packages.length}
+									index={0}
+									invisible={true}
+								/>
+							</div>
 						</div>
 					</ContextMenu.Trigger>
 					<ContextMenu.Portal>

@@ -358,6 +358,7 @@ describe("shippo mock cards", () => {
 						setSelectedPackage={mockDispatch}
 						inSearchResults={true}
 						isSelected={false}
+						statusFilter={[]}
 					/>
 				)
 			})

@@ -25,6 +25,7 @@ describe("Card Component", () => {
 				setSelectedPackage={mockDispatch}
 				inSearchResults={true}
 				isSelected={false}
+				statusFilter={[]}
 			/>
 		)
 
@@ -83,8 +84,13 @@ describe("Card Component", () => {
 					courier: "ups",
 					trackingNumber: "",
 				}}
+				index={0}
+				packagesLength={1}
 				dispatchPackages={mockDispatch}
+				setSelectedPackage={mockDispatch}
 				inSearchResults={true}
+				isSelected={false}
+				statusFilter={[]}
 			/>
 		)
 		render(card)

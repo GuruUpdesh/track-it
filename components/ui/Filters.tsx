@@ -111,6 +111,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 	return (
 		<div className="ml-3 flex w-full items-center justify-between gap-3 border-l border-indigo-400/25 pl-3">
 			<DropdownMenu.Root
+				defaultOpen={false}
 				open={sortedMenuOpen}
 				onOpenChange={setSortedMenuOpen}
 				modal={true}
@@ -170,6 +171,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				<BiFilterAlt /> Filters:
 			</p>
 			<DropdownMenu.Root
+				defaultOpen={false}
 				open={couriersMenuOpen}
 				onOpenChange={setCouriersMenuOpen}
 				modal={true}
@@ -244,6 +246,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 			<DropdownMenu.Root
+				defaultOpen={false}
 				open={statusMenuOpen}
 				onOpenChange={setStatusMenuOpen}
 				modal={true}

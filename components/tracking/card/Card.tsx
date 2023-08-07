@@ -90,6 +90,7 @@ type Props = {
 	isSelected: boolean
 	disableReorder: boolean
 	statusFilter: string[]
+	invisible?: boolean
 }
 
 const Card = ({
@@ -102,6 +103,7 @@ const Card = ({
 	isSelected,
 	disableReorder,
 	statusFilter,
+	invisible = false,
 }: Props) => {
 	const { dispatchUndoStack } = useUndoStackContext()
 	const [packageInfo, setPackageInfo] = useState<TPackageInfo | null>(null)
@@ -435,9 +437,13 @@ const Card = ({
 	]
 
 	if (
-		!inSearchResults ||
-		(statusFilter.length > 0 &&
-			!(packageInfo && statusFilter.includes(packageInfo.status.status)))
+		!invisible &&
+		(!inSearchResults ||
+			(statusFilter.length > 0 &&
+				!(
+					packageInfo &&
+					statusFilter.includes(packageInfo.status.status)
+				)))
 	)
 		return null
 
