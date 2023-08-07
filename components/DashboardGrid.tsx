@@ -127,8 +127,8 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 	}, [sortOption, packages])
 
 	return (
-		<div>
-			<div className="mt-3 flex items-center justify-between border-b border-indigo-400/25 pb-3">
+		<>
+			<div className="mt-3 flex w-full items-center justify-between border-b border-indigo-400/25 pb-3">
 				<h1 className="text-2xl font-semibold tracking-tight text-[#ff6b00]">
 					Dashboard
 				</h1>
@@ -190,6 +190,7 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 										inSearchResults={searchResults.has(
 											pkg.id
 										)}
+										disableReorder={sortOption !== "manual"}
 										isSelected={selectedIds.includes(
 											`${pkg.id}`
 										)}
@@ -228,7 +229,7 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 					setOpen={setDetailsModalOpen}
 				/>
 			)}
-		</div>
+		</>
 	)
 }
 

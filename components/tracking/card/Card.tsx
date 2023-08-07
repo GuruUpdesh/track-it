@@ -88,6 +88,7 @@ type Props = {
 	setSelectedPackage: (pkg: TPackageWithInfo) => void
 	inSearchResults: boolean
 	isSelected: boolean
+	disableReorder: boolean
 }
 
 const Card = ({
@@ -98,6 +99,7 @@ const Card = ({
 	setSelectedPackage,
 	inSearchResults,
 	isSelected,
+	disableReorder,
 }: Props) => {
 	const { dispatchUndoStack } = useUndoStackContext()
 	const [packageInfo, setPackageInfo] = useState<TPackageInfo | null>(null)
@@ -380,6 +382,7 @@ const Card = ({
 			label: "Reorder All",
 			onClick: menuFunctions.reorder,
 			icon: <AiOutlineOrderedList className="absolute left-4" />,
+			disabled: disableReorder,
 		},
 		{
 			label: "Move",
@@ -395,7 +398,7 @@ const Card = ({
 						})
 					},
 					icon: <BsArrowLeft className="absolute left-4" />,
-					disabled: index === 0,
+					disabled: index === 0 || disableReorder,
 				},
 				{
 					label: "Right",
@@ -409,7 +412,7 @@ const Card = ({
 					icon: (
 						<BsArrowLeft className="absolute left-4 rotate-180 transform" />
 					),
-					disabled: index === packagesLength - 1,
+					disabled: index === packagesLength - 1 || disableReorder,
 				},
 			],
 			separator: true,
