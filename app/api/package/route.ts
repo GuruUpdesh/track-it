@@ -4,12 +4,12 @@ import {
 	getTransitTime,
 } from "@/utils/dataTransform"
 import {
-	PackageInfo,
+	TPackageInfo,
 	PackageInfoSchema,
-	ShippoResponse,
-	ShippoTrackingHistory,
+	TShippoResponse,
+	TShippoTrackingHistory,
 	TCourier,
-	TrackingHistory,
+	TTrackingHistory,
 	shippoResponseSchema,
 } from "./typesAndSchemas"
 import { createErrorResponse, createSuccessResponse } from "./utils"
@@ -28,7 +28,7 @@ const SHIPPO_TEST_API_KEY = "ShippoToken " + process.env.SHIPPO_TEST
 async function fetchTrackingInfo(
 	trackingNumber: string,
 	courier: TCourier
-): Promise<ShippoResponse> {
+): Promise<TShippoResponse> {
 	const { data, status } = await axios.get(
 		`https://api.goshippo.com/tracks/${courier}/${trackingNumber}`,
 		{
@@ -59,7 +59,7 @@ async function fetchTrackingInfo(
 
 	shippoResponseSchema.parse(data)
 
-	return data as ShippoResponse
+	return data as TShippoResponse
 }
 
 function isTCourier(courier: string): courier is TCourier {
@@ -68,8 +68,8 @@ function isTCourier(courier: string): courier is TCourier {
 }
 
 function simplifyTrackingHistory(
-	trackingHistory: ShippoTrackingHistory
-): TrackingHistory {
+	trackingHistory: TShippoTrackingHistory
+): TTrackingHistory {
 	return {
 		status: trackingHistory.status,
 		detailedStatus: trackingHistory.status_details,
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
 
 		const packageInfo = await fetchTrackingInfo(trackingNumber, courier)
 
-		const packageInfoSimple: PackageInfo = {
+		const packageInfoSimple: TPackageInfo = {
 			trackingNumber: packageInfo.tracking_number,
 			courier: packageInfo.carrier,
 			eta: getEta(packageInfo.eta),
@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
 				getSourceAndDestinationLocations(packageInfo),
 			transitTime: getTransitTime(packageInfo),
 			status: simplifyTrackingHistory(
-				packageInfo.tracking_status as ShippoTrackingHistory
+				packageInfo.tracking_status as TShippoTrackingHistory
 			),
 			service: packageInfo.servicelevel.name,
 			trackingHistory: packageInfo.tracking_history.map((history) =>

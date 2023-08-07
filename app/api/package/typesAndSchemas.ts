@@ -74,8 +74,8 @@ export const shippoResponseSchema = z.object({
 	tracking_history: z.array(shippoTrackingHistorySchema),
 })
 
-export type ShippoResponse = z.infer<typeof shippoResponseSchema>
-export type ShippoTrackingHistory = z.infer<typeof shippoTrackingHistorySchema>
+export type TShippoResponse = z.infer<typeof shippoResponseSchema>
+export type TShippoTrackingHistory = z.infer<typeof shippoTrackingHistorySchema>
 
 export const trackingHistorySchema = z.object({
 	status: statusEnum,
@@ -97,5 +97,5 @@ export const PackageInfoSchema = z.object({
 	trackingHistory: z.array(trackingHistorySchema),
 })
 
-export type PackageInfo = z.infer<typeof PackageInfoSchema>
-export type TrackingHistory = z.infer<typeof trackingHistorySchema>
+export type TPackageInfo = z.infer<typeof PackageInfoSchema>
+export type TTrackingHistory = z.infer<typeof trackingHistorySchema>

@@ -1,8 +1,8 @@
 import {
-	ShippoResponse,
-	ShippoTrackingHistory,
+	TShippoResponse,
+	TShippoTrackingHistory,
 	TStatus,
-	TrackingHistory,
+	TTrackingHistory,
 } from "@/app/api/package/typesAndSchemas"
 import {
 	endOfDay,
@@ -61,7 +61,7 @@ export function getEta(eta: string | null): string | null {
 	}
 }
 
-export function getSourceAndDestinationLocations(packageInfo: ShippoResponse) {
+export function getSourceAndDestinationLocations(packageInfo: TShippoResponse) {
 	let source = packageInfo.address_from
 	let destination = packageInfo.address_to
 
@@ -97,7 +97,7 @@ export function getSourceAndDestinationLocations(packageInfo: ShippoResponse) {
 	}
 }
 
-export function getTransitTime(packageInfo: ShippoResponse) {
+export function getTransitTime(packageInfo: TShippoResponse) {
 	const trackingHistory = packageInfo.tracking_history
 	if (trackingHistory.length < 1) {
 		return null
@@ -124,8 +124,8 @@ export function getTransitTime(packageInfo: ShippoResponse) {
 }
 
 export function simplifyTrackingHistory(
-	trackingHistory: ShippoTrackingHistory
-): TrackingHistory {
+	trackingHistory: TShippoTrackingHistory
+): TTrackingHistory {
 	return {
 		status: trackingHistory.status,
 		detailedStatus: simplifyDetailMessage(

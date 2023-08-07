@@ -5,9 +5,9 @@ import Tooltip from "../../ui/Tooltip"
 import "./styles/card.css"
 import "./styles/modal.css"
 import {
-	PackageInfo,
+	TPackageInfo,
 	TCourier,
-	TrackingHistory,
+	TTrackingHistory,
 } from "@/app/api/package/typesAndSchemas"
 import { PackageAction } from "@/context/packageContext/packageReducer"
 import {
@@ -100,7 +100,7 @@ const Card = ({
 	isSelected,
 }: Props) => {
 	const { dispatchUndoStack } = useUndoStackContext()
-	const [packageInfo, setPackageInfo] = useState<PackageInfo | null>(null)
+	const [packageInfo, setPackageInfo] = useState<TPackageInfo | null>(null)
 	const [menuOpen, setMenuOpen] = useState(false)
 	const [editName, setEditName] = useState(false)
 	const [editNameValue, setEditNameValue] = useState(pkg.name)
@@ -126,7 +126,7 @@ const Card = ({
 					},
 				})
 				.then((res) => {
-					const packageInfo = res.data.packageInfo as PackageInfo
+					const packageInfo = res.data.packageInfo as TPackageInfo
 					if (journeyPercentRef.current) {
 						journeyPercentRef.current.style.width = `${packageInfo.progressPercentage}%`
 						journeyPercentRef.current.style.opacity = "1"
@@ -150,7 +150,7 @@ const Card = ({
 		useTextOverflow<HTMLHeadingElement>([packageInfo])
 
 	function renderHistory(index: number) {
-		let historyItem: TrackingHistory | null = null
+		let historyItem: TTrackingHistory | null = null
 
 		if (error) {
 			return (

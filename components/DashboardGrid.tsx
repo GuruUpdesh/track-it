@@ -1,7 +1,7 @@
 "use client"
 
 import DetailsModal from "@/components/tracking/details/DetailsModal"
-import { PackageInfo, courierEnum } from "@/app/api/package/typesAndSchemas"
+import { TPackageInfo, courierEnum } from "@/app/api/package/typesAndSchemas"
 import Card from "@/components/tracking/card/Card"
 import { usePackageContext } from "@/context/packageContext/usePackageContext"
 import { useSearchContext } from "@/context/searchContext/useSearchContext"
@@ -27,7 +27,7 @@ export const packageSchema = z.object({
 
 export interface TPackageWithInfo {
 	pkg: TPackage
-	info: PackageInfo
+	info: TPackageInfo
 }
 
 export type TPackage = z.infer<typeof packageSchema>

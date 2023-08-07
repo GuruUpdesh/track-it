@@ -17,7 +17,7 @@ const ONTRAC_REGEX_PATTERN = /\b(C\d{14})\b/i
 const FEDEX_REGEX_PATTERN =
 	/\b(((96\d\d|6\d)\d{3} ?\d{4}|96\d{2}|\d{4}) ?\d{4} ?\d{4}( ?\d{3}|\d{15})?)\b/i
 
-interface Courier {
+interface CourierConfig {
 	name: string
 	code: TCourier
 	icon: JSX.Element
@@ -25,8 +25,8 @@ interface Courier {
 	patterns: RegExp[]
 }
 
-interface Couriers {
-	[key: string]: Courier
+interface CourierConfigs {
+	[key: string]: CourierConfig
 }
 
 export const courierCodes: TCourier[] = [
@@ -37,7 +37,7 @@ export const courierCodes: TCourier[] = [
 	"shippo",
 ]
 
-const courierConfig: Couriers = {
+const courierConfig: CourierConfigs = {
 	ups: {
 		name: "UPS",
 		code: "ups",
@@ -109,48 +109,3 @@ export function getCourierFromTrackingNumber(trackingNumber: string) {
 
 	return null
 }
-
-// export function getCourierStringFromCode(code: string) {
-// 	const courier = couriers[code]
-// 	if (!courier) {
-// 		if (code === "shippo") return "test"
-// 		return "Invalid Courier"
-// 	}
-// 	return courier.name
-// }
-
-// export function getCourierIconFromCode(code: string) {
-// 	const courier = couriers[code]
-// 	if (!courier) return <MdOutlineExplore />
-// 	const icon = courier.icon
-// 	if (!icon) {
-// 		return <MdOutlineExplore />
-// 	}
-// 	return icon
-// }
-
-// export function getCouriersFromTrackingNumber(
-// 	trackingNumber: string
-// ): TCourier[] {
-// 	// ! This function might return the same courier multiple times
-// 	const matchingCouriers: TCourier[] = []
-// 	for (const courier in couriers) {
-// 		const patterns = couriers[courier].patterns
-// 		for (const pattern of patterns) {
-// 			if (pattern.test(trackingNumber)) {
-// 				matchingCouriers.push(courier as TCourier)
-// 			}
-// 		}
-// 	}
-// 	return matchingCouriers
-// }
-
-// export function getCourierUrlsFromTrackingNumber(trackingNumber: string) {
-// 	const couriersSubset = getCouriersFromTrackingNumber(trackingNumber)
-// 	const urls: string[] = []
-// 	for (const courier of couriersSubset) {
-// 		urls.push(couriers[courier].tracking_url + trackingNumber)
-// 	}
-
-// 	return urls
-// }

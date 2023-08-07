@@ -1,11 +1,11 @@
-import { TrackingHistory } from "@/app/api/package/typesAndSchemas"
+import { TTrackingHistory } from "@/app/api/package/typesAndSchemas"
 import { cn } from "@/lib/utils"
 import { formatDate, getTimeFromDate } from "@/utils/date"
 import { getColorFromStatus } from "@/utils/package"
 import { BsDot } from "react-icons/bs"
 
 type Props = {
-	historyItem: TrackingHistory | null
+	historyItem: TTrackingHistory | null
 	topItem?: boolean
 }
 
