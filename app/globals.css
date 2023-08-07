@@ -26,14 +26,6 @@ body {
 		rgb(var(--background-start-rgb));
 }
 
-.leading-both {
-	leading-trim: both;
-}
-
-.text-cap {
-	text-edge: cap;
-}
-
 @keyframes rotate-spin {
 	0% {
 		transform: rotate(0deg) scale(0.5);

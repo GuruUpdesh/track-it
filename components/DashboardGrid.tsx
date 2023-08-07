@@ -17,6 +17,7 @@ import * as ContextMenu from "@radix-ui/react-context-menu"
 import { AiOutlineDelete } from "react-icons/ai"
 import { useSelectContext } from "@/context/selectContext/useSelectContext"
 import packageReducer from "@/context/packageContext/packageReducer"
+import Filters from "./ui/Filters"
 
 export const packageSchema = z.object({
 	id: z.number(),
@@ -113,8 +114,29 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 		}
 	}, [packages, selectedIds, enabled])
 
+	const [sortOption, setSortOption] = React.useState("manual")
+
+	const sortedPackages = React.useMemo(() => {
+		if (sortOption === "newest") {
+			return [...packages].sort((a, b) => b.id - a.id)
+		}
+		if (sortOption === "oldest") {
+			return [...packages].sort((a, b) => a.id - b.id)
+		}
+		return packages
+	}, [sortOption, packages])
+
 	return (
-		<>
+		<div>
+			<div className="mt-3 flex items-center justify-between border-b border-indigo-400/25 pb-3">
+				<h1 className="text-2xl font-semibold tracking-tight text-[#ff6b00]">
+					Dashboard
+				</h1>
+				<Filters
+					sortOption={sortOption}
+					setSortOption={setSortOption}
+				/>
+			</div>
 			{packages.length === 0 ? (
 				<div className="mt-2 flex min-w-full flex-grow flex-col items-center gap-2 text-center text-yellow-50/50 sm:mt-6">
 					<p>You are not tracking any shipments yet.</p>
@@ -158,7 +180,7 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 									toggleContinueSelect={"shift"}
 								/>
 							)}
-							{packages.map((pkg, index) => {
+							{sortedPackages.map((pkg, index) => {
 								return (
 									<Card
 										key={pkg.id}
@@ -206,7 +228,7 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 					setOpen={setDetailsModalOpen}
 				/>
 			)}
-		</>
+		</div>
 	)
 }
 

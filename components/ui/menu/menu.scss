@@ -17,6 +17,37 @@
 	z-index: 1000;
 }
 
+.select-content {
+	min-width: 220px;
+	border-radius: 0.25rem;
+	border: 1px solid rgb(129 140 248 / 0.75);
+	background-color: rgba(64, 63, 73, 0.25);
+	padding: 0.5rem;
+	color: #fefce8;
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+	backdrop-filter: blur(40px);
+	z-index: 1000;
+}
+
+.select-item {
+	&[data-highlighted] {
+		outline: none;
+		&.text-red-200 {
+			background-color: rgba(255, 0, 0, 0.5);
+		}
+		&.text-yellow-200 {
+			background-color: rgba(255, 165, 0, 0.5);
+		}
+		&.text-lime-200 {
+			background-color: rgba(50, 205, 50, 0.5);
+		}
+		&.text-emerald-200 {
+			background-color: rgba(46, 204, 113, 0.5);
+		}
+		background-color: rgb(99 102 241);
+	}
+}
+
 .DropdownMenu-item {
 	cursor: pointer;
 	border-radius: 0.25rem;

@@ -12,7 +12,7 @@ export type TStatus =
 	| "FAILURE"
 	| "UNKNOWN"
 
-const statusEnum = z.enum([
+export const statusEnum = z.enum([
 	"PRE_TRANSIT",
 	"TRANSIT",
 	"DELIVERED",
