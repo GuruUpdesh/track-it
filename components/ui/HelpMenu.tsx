@@ -4,6 +4,9 @@ import React from "react"
 import { BiQuestionMark, BiCommand } from "react-icons/bi"
 import Menu, { TMenuItem } from "./menu/Menu"
 import { CgShortcut } from "react-icons/cg"
+import { BsGithub } from "react-icons/bs"
+import { MdEmail } from "react-icons/md"
+import { toast } from "react-hot-toast"
 
 const HelpMenu = () => {
 	const [open, setOpen] = React.useState(false)
@@ -50,6 +53,24 @@ const HelpMenu = () => {
 	}
 
 	const menu: TMenuItem[] = [
+		{
+			label: "GitHub",
+			icon: <BsGithub className="absolute left-4" />,
+			onClick: () => {
+				window.open("https://github.com/GuruUpdesh/track-it")
+			},
+		},
+		{
+			label: "Email",
+			icon: <MdEmail className="absolute left-4" />,
+			onClick: () => {
+				navigator.clipboard.writeText(
+					"guruupdeshsingh+trackit@gmail.com"
+				)
+				toast.success("Email copied to clipboard")
+			},
+			separator: true,
+		},
 		{
 			label: "Shortcuts",
 			icon: <CgShortcut className="absolute left-4" />,
