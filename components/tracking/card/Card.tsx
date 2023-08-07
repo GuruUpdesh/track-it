@@ -89,6 +89,7 @@ type Props = {
 	inSearchResults: boolean
 	isSelected: boolean
 	disableReorder: boolean
+	statusFilter: string[]
 }
 
 const Card = ({
@@ -100,6 +101,7 @@ const Card = ({
 	inSearchResults,
 	isSelected,
 	disableReorder,
+	statusFilter,
 }: Props) => {
 	const { dispatchUndoStack } = useUndoStackContext()
 	const [packageInfo, setPackageInfo] = useState<TPackageInfo | null>(null)
@@ -368,10 +370,12 @@ const Card = ({
 						onChange: (value: string) => {
 							menuFunctions.edit.courier(value as TCourier)
 						},
-						options: couriers.map((courier) => ({
-							label: courier.name,
-							value: courier.code,
-						})),
+						options: couriers
+							.filter((courier) => courier.code !== "shippo")
+							.map((courier) => ({
+								label: courier.name,
+								value: courier.code,
+							})),
 					},
 					variant: "warning",
 				},
@@ -430,7 +434,12 @@ const Card = ({
 		},
 	]
 
-	if (!inSearchResults) return null
+	if (
+		!inSearchResults ||
+		(statusFilter.length > 0 &&
+			!(packageInfo && statusFilter.includes(packageInfo.status.status)))
+	)
+		return null
 
 	return (
 		<>

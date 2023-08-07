@@ -33,6 +33,11 @@ export interface TPackageWithInfo {
 
 export type TPackage = z.infer<typeof packageSchema>
 
+export type TFilters = {
+	couriers: string[]
+	status: string[]
+}
+
 type Props = {
 	packagesOverride?: TPackage[]
 }
@@ -126,15 +131,22 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 		return packages
 	}, [sortOption, packages])
 
+	const [filters, setFilters] = React.useState<TFilters>({
+		couriers: [],
+		status: [],
+	})
+
 	return (
 		<>
 			<div className="mt-3 flex w-full items-center justify-between border-b border-indigo-400/25 pb-3">
-				<h1 className="text-2xl font-semibold tracking-tight text-[#ff6b00]">
+				<h1 className="text-2xl font-semibold tracking-tight">
 					Dashboard
 				</h1>
 				<Filters
 					sortOption={sortOption}
 					setSortOption={setSortOption}
+					filters={filters}
+					setFilters={setFilters}
 				/>
 			</div>
 			{packages.length === 0 ? (
@@ -187,10 +199,15 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 										pkg={pkg}
 										dispatchPackages={dispatchPackages}
 										setSelectedPackage={setSelectedPackage}
-										inSearchResults={searchResults.has(
-											pkg.id
-										)}
+										inSearchResults={
+											searchResults.has(pkg.id) &&
+											(filters.couriers.length === 0 ||
+												filters.couriers.includes(
+													pkg.courier
+												))
+										}
 										disableReorder={sortOption !== "manual"}
+										statusFilter={filters.status}
 										isSelected={selectedIds.includes(
 											`${pkg.id}`
 										)}
