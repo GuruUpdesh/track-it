@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { BiChevronDown, BiFilterAlt } from "react-icons/bi"
+import { BiChevronDown, BiFilterAlt, BiLoaderCircle } from "react-icons/bi"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import {
 	BsArrowDownShort,
@@ -14,6 +14,46 @@ import { cn } from "@/lib/utils"
 import { couriers } from "@/utils/courier"
 import { TFilters } from "../DashboardGrid"
 import { getIconForStatus } from "@/utils/package"
+import { AnimatePresence, motion } from "framer-motion"
+import { MdExplore } from "react-icons/md"
+
+type CheckIconProps = {
+	isVisible: boolean
+	initial?: boolean
+}
+
+function AnimatedCheckIcon({ initial = true, isVisible }: CheckIconProps) {
+	return (
+		<AnimatePresence initial={initial}>
+			{isVisible && (
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					strokeWidth={1.5}
+					stroke="currentColor"
+					className="scale"
+					width={12}
+					height={12}
+				>
+					<motion.path
+						initial={{ pathLength: 0 }}
+						animate={{ pathLength: 1 }}
+						exit={{ pathLength: 0 }}
+						transition={{
+							type: "tween",
+							duration: 0.3,
+							ease: isVisible ? "easeOut" : "easeIn",
+						}}
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						d="M4.5 12.75l6 6 9-13.5"
+					/>
+				</svg>
+			)}
+		</AnimatePresence>
+	)
+}
 
 type Props = {
 	sortOption: string
@@ -136,6 +176,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 					<DropdownMenu.Content
 						className="DropdownMenu-content"
 						onCloseAutoFocus={(e) => e.preventDefault()}
+						align="end"
 					>
 						<DropdownMenu.RadioGroup
 							value={sortOption}
@@ -177,7 +218,16 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				modal={true}
 			>
 				<DropdownMenu.Trigger className="group/container">
-					<button className="group relative flex gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-4 text-indigo-200/80 transition-all hover:border-indigo-400/50 hover:bg-[#1c182c] hover:pr-6 group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c] group-data-[state=open]/container:pr-6">
+					<button
+						className={cn(
+							"group relative flex items-center gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-4 text-indigo-200/80 saturate-0 transition-all",
+							{
+								"saturate-100": filters.couriers.length > 0,
+							},
+							"hover:border-indigo-400/50 hover:bg-[#1c182c] hover:pr-6 group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c] group-data-[state=open]/container:pr-6"
+						)}
+					>
+						<MdExplore />
 						Courier
 						<p className="inline-block max-w-[10ch] overflow-hidden whitespace-nowrap">
 							{filters.couriers.length > 0 &&
@@ -204,6 +254,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				<DropdownMenu.Content
 					className="DropdownMenu-content"
 					onCloseAutoFocus={(e) => e.preventDefault()}
+					align="end"
 				>
 					{couriers.map((courier) => {
 						const selected = filters.couriers.includes(courier.code)
@@ -231,13 +282,15 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 								className="DropdownMenu-item"
 								data-state={selected ? "checked" : "unchecked"}
 							>
-								{selected ? (
-									<BsCheckLg className="absolute left-4" />
-								) : (
-									<div className="absolute left-4">
-										{courier.icon}
-									</div>
-								)}
+								<div className="absolute left-4">
+									{selected ? (
+										<AnimatedCheckIcon
+											isVisible={selected}
+										/>
+									) : (
+										courier.icon
+									)}
+								</div>
 								{courier.name}
 							</DropdownMenu.Item>
 						)
@@ -252,7 +305,16 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				modal={true}
 			>
 				<DropdownMenu.Trigger className="group/container">
-					<button className="group relative flex gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-4 text-indigo-200/80 transition-all hover:border-indigo-400/50 hover:bg-[#1c182c] hover:pr-6 group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c] group-data-[state=open]/container:pr-6">
+					<button
+						className={cn(
+							"group relative flex items-center gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-4 text-indigo-200/80 saturate-0 transition-all",
+							{
+								"saturate-100": filters.status.length > 0,
+							},
+							"hover:border-indigo-400/50 hover:bg-[#1c182c] hover:pr-6 group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c] group-data-[state=open]/container:pr-6"
+						)}
+					>
+						<BiLoaderCircle />
 						Status
 						<p className="inline-block max-w-[10ch] overflow-hidden whitespace-nowrap">
 							{filters.status.length > 0 &&
@@ -279,6 +341,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				<DropdownMenu.Content
 					className="DropdownMenu-content"
 					onCloseAutoFocus={(e) => e.preventDefault()}
+					align="end"
 				>
 					{statusOptions.map((status) => {
 						const selected = filters.status.includes(status.code)
@@ -305,13 +368,15 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 								className="DropdownMenu-item"
 								data-state={selected ? "checked" : "unchecked"}
 							>
-								{selected ? (
-									<BsCheckLg className="absolute left-4" />
-								) : (
-									<div className="absolute left-4">
-										{status.icon}
-									</div>
-								)}
+								<div className="absolute left-4">
+									{selected ? (
+										<AnimatedCheckIcon
+											isVisible={selected}
+										/>
+									) : (
+										status.icon
+									)}
+								</div>
 								{status.name}
 							</DropdownMenu.Item>
 						)
