@@ -217,7 +217,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				onOpenChange={setCouriersMenuOpen}
 				modal={true}
 			>
-				<DropdownMenu.Trigger className="group/container">
+				<DropdownMenu.Trigger asChild className="group/container">
 					<button
 						className={cn(
 							"group relative flex items-center gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-4 text-indigo-200/80 saturate-0 transition-all",
@@ -304,7 +304,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				onOpenChange={setStatusMenuOpen}
 				modal={true}
 			>
-				<DropdownMenu.Trigger className="group/container">
+				<DropdownMenu.Trigger asChild className="group/container">
 					<button
 						className={cn(
 							"group relative flex items-center gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-4 text-indigo-200/80 saturate-0 transition-all",
