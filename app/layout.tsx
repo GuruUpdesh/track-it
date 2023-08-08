@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { Work_Sans } from "next/font/google"
+import { Analytics } from "@vercel/analytics/react"
 
 const workSans = Work_Sans({ subsets: ["latin"], display: "swap" })
 
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: Props) {
 				)}
 			>
 				{children}
+				<Analytics />
 			</body>
 		</html>
 	)
