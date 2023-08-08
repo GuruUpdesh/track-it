@@ -10,7 +10,8 @@
 		"tsc": "tsc",
 		"prettier": "prettier --write .",
 		"test": "jest",
-		"test-dev": "jest --watch"
+		"test-dev": "jest --watch",
+		"cypress:open": "cypress open"
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": [
@@ -59,6 +60,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.61.0",
 		"@typescript-eslint/parser": "^5.61.0",
 		"axios-mock-adapter": "^1.21.5",
+		"cypress": "^12.17.3",
 		"eslint-config-prettier": "^8.8.0",
 		"husky": "^8.0.3",
 		"jest": "^29.6.1",
