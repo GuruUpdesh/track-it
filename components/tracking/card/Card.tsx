@@ -314,6 +314,7 @@ const Card = ({
 						Deleted {pkgCopy.name}
 					</p>
 					<button
+						aria-label="undo"
 						className="ml-3 rounded-md bg-white/10 px-2 py-1 hover:bg-white/20"
 						onClick={() => {
 							undo(dispatchUndoStack, dispatchPackages)

@@ -157,7 +157,10 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				modal={true}
 			>
 				<DropdownMenu.Trigger asChild>
-					<button className="flex items-center justify-between gap-1 rounded-sm border border-indigo-400/25 bg-[#110F1B] px-4 capitalize  text-indigo-200/80 transition-all hover:border-indigo-400/50 hover:bg-[#1c182c]">
+					<button
+						className="flex items-center justify-between gap-1 rounded-sm border border-indigo-400/25 bg-[#110F1B] px-4 capitalize  text-indigo-200/80 transition-all hover:border-indigo-400/50 hover:bg-[#1c182c]"
+						aria-label="sort"
+					>
 						<BsArrowDownUp className="mr-1 text-sm" />
 						Sort:{" "}
 						{
@@ -226,6 +229,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 							},
 							"hover:border-indigo-400/50 hover:bg-[#1c182c] hover:pr-6 group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c] group-data-[state=open]/container:pr-6"
 						)}
+						aria-label="filter-courier"
 					>
 						<MdExplore />
 						Courier
@@ -313,6 +317,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 							},
 							"hover:border-indigo-400/50 hover:bg-[#1c182c] hover:pr-6 group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c] group-data-[state=open]/container:pr-6"
 						)}
+						aria-label="filter-status"
 					>
 						<BiLoaderCircle />
 						Status

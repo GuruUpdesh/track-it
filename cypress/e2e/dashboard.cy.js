@@ -1,11 +1,6 @@
-/// <reference types="cypress" />
-
 describe("Dashboard", () => {
-	beforeEach(() => {
-		cy.visit("/")
-	})
-
 	it("Displays the dashboard", () => {
+		cy.visit("/")
 		cy.get("h1").should("have.text", "Dashboard")
 		cy.get("input#trackingNumber").should("be.visible")
 		cy.get('label[for="trackingNumber"]').should(
@@ -17,7 +12,9 @@ describe("Dashboard", () => {
 		)
 		cy.get('input[placeholder="Search"]').should("be.visible")
 	})
+
 	it("Users can create and interact with first package", () => {
+		cy.visit("/")
 		cy.get("input#trackingNumber").focus().type("abc")
 		cy.get("input#trackingNumber").should(
 			"have.attr",
@@ -48,5 +45,53 @@ describe("Dashboard", () => {
 			.first()
 			.click()
 		cy.get(".TabsTrigger").last().click()
+	})
+
+	it("Users can delete, edit, and undo", () => {
+		cy.visit("/test")
+		cy.get(".card").should("have.length", 8)
+		cy.get('.card button[aria-label="Package Controls"]').first().click()
+
+		// delete
+		cy.get('div [role="menuitem"]').last().click()
+		cy.get(".card").should("have.length", 7)
+
+		// undo
+		cy.get('button[aria-label="undo"]').click()
+		cy.get(".card").should("have.length", 8)
+
+		// duplicate
+		cy.get('.card button[aria-label="Package Controls"]').first().click()
+		cy.get('div [role="menuitem"]:eq(-2)').click()
+		cy.get(".card").should("have.length", 9)
+
+		// edit
+		cy.get('.card button[aria-label="Package Controls"]').first().click()
+		cy.get('div [role="menuitem"]:eq(3)').click()
+		cy.get('div [role="menuitem"]:eq(9)').click()
+		cy.get("input#tracking-number-input").focus().clear().type("invalid")
+		cy.get('div[role="dialog"] button[type="submit"]').click()
+	})
+
+	it("Users can search and filter", () => {
+		cy.visit("/test")
+
+		//search
+		cy.get('input[placeholder="Search"]')
+			.focus()
+			.type("Test String Cypress")
+		cy.get(".card").should("have.length", 1)
+		cy.get('input[placeholder="Search"]').focus().clear()
+
+		//filter
+		cy.get('button[aria-label="filter-status"]').click()
+		cy.get('div [role="menuitem"]').first().click()
+		cy.get(".card").should("have.length", 2)
+		cy.get("body").type("{esc}")
+
+		cy.get('button[aria-label="filter-courier"]').click()
+		cy.get('div [role="menuitem"]').first().click()
+		cy.get(".card").should("have.length", 1)
+		cy.get("body").type("{esc}")
 	})
 })
