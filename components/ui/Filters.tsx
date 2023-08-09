@@ -223,11 +223,11 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				<DropdownMenu.Trigger asChild className="group/container">
 					<button
 						className={cn(
-							"group relative flex items-center gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-4 text-indigo-200/80 saturate-0 transition-all",
+							"group relative flex items-center gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-6 text-indigo-200/80 saturate-0 transition-all",
 							{
 								"saturate-100": filters.couriers.length > 0,
 							},
-							"hover:border-indigo-400/50 hover:bg-[#1c182c] hover:pr-6 group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c] group-data-[state=open]/container:pr-6"
+							"hover:border-indigo-400/50 hover:bg-[#1c182c] group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c]"
 						)}
 						aria-label="filter-courier"
 					>
@@ -246,7 +246,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 						</p>
 						<BiChevronDown
 							className={cn(
-								"absolute right-2 top-0 h-full opacity-0 transition-all group-hover:opacity-100 group-data-[state=open]/container:opacity-100",
+								"absolute right-1 top-0 h-full opacity-0 transition-all group-hover:opacity-100 group-data-[state=open]/container:opacity-100",
 								{
 									"rotate-180": couriersMenuOpen,
 								}
@@ -311,11 +311,11 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 				<DropdownMenu.Trigger asChild className="group/container">
 					<button
 						className={cn(
-							"group relative flex items-center gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-4 text-indigo-200/80 saturate-0 transition-all",
+							"group relative flex items-center gap-1 rounded-full border border-indigo-400/25 bg-[#110F1B] px-4 pr-6 text-indigo-200/80 saturate-0 transition-all",
 							{
 								"saturate-100": filters.status.length > 0,
 							},
-							"hover:border-indigo-400/50 hover:bg-[#1c182c] hover:pr-6 group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c] group-data-[state=open]/container:pr-6"
+							"hover:border-indigo-400/50 hover:bg-[#1c182c] group-data-[state=open]/container:border-indigo-400/50 group-data-[state=open]/container:bg-[#1c182c]"
 						)}
 						aria-label="filter-status"
 					>
@@ -334,7 +334,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 						</p>
 						<BiChevronDown
 							className={cn(
-								"absolute right-2 top-0 h-full opacity-0 transition-all group-hover:opacity-100 group-data-[state=open]/container:opacity-100",
+								"absolute right-1 top-0 h-full opacity-0 transition-all group-hover:opacity-100 group-data-[state=open]/container:opacity-100",
 								{
 									"rotate-180": couriersMenuOpen,
 								}

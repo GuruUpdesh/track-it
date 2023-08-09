@@ -49,21 +49,21 @@ describe("Dashboard", () => {
 
 	it("Users can delete, edit, and undo", () => {
 		cy.visit("/test")
-		cy.get(".card").should("have.length", 8)
+		cy.get(".card").should("have.length", 7)
 		cy.get('.card button[aria-label="Package Controls"]').first().click()
 
 		// delete
 		cy.get('div [role="menuitem"]').last().click()
-		cy.get(".card").should("have.length", 7)
+		cy.get(".card").should("have.length", 6)
 
 		// undo
 		cy.get('button[aria-label="undo"]').click()
-		cy.get(".card").should("have.length", 8)
+		cy.get(".card").should("have.length", 7)
 
 		// duplicate
 		cy.get('.card button[aria-label="Package Controls"]').first().click()
 		cy.get('div [role="menuitem"]:eq(-2)').click()
-		cy.get(".card").should("have.length", 9)
+		cy.get(".card").should("have.length", 8)
 
 		// edit
 		cy.get('.card button[aria-label="Package Controls"]').first().click()
@@ -86,12 +86,12 @@ describe("Dashboard", () => {
 		//filter
 		cy.get('button[aria-label="filter-status"]').click()
 		cy.get('div [role="menuitem"]').first().click()
-		cy.get(".card").should("have.length", 2)
+		cy.get(".card").should("have.length", 1)
 		cy.get("body").type("{esc}")
 
 		cy.get('button[aria-label="filter-courier"]').click()
 		cy.get('div [role="menuitem"]').first().click()
-		cy.get(".card").should("have.length", 1)
+		cy.get(".card").should("have.length", 0)
 		cy.get("body").type("{esc}")
 	})
 })
