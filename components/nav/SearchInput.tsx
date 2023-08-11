@@ -33,7 +33,7 @@ const SearchInput = () => {
 			<input
 				ref={inputRef}
 				type="text"
-				className="md:text-md min-w-0 bg-transparent py-2 text-xs outline-none sm:text-sm"
+				className="md:text-md min-w-0 bg-transparent py-2 text-xs outline-none"
 				placeholder="Search"
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}

@@ -195,7 +195,7 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 	return (
 		<>
 			<div className="mt-3 flex w-full items-center justify-between border-b border-indigo-400/25 pb-3">
-				<h1 className="text-2xl font-semibold tracking-tight">
+				<h1 className="hidden text-2xl font-semibold tracking-tight md:block">
 					Dashboard
 				</h1>
 				<Filters

@@ -93,7 +93,7 @@ const AddInput = () => {
 				id="trackingNumber"
 				placeholder="Type tracking number..."
 				type="text"
-				className="md:text-md w-full bg-transparent px-4 py-2 text-xs outline-none sm:text-sm"
+				className="md:text-md w-full bg-transparent px-4 py-2 text-xs outline-none"
 				value={trackingNumber}
 				onChange={handleChange}
 				aria-invalid={error ? "true" : "false"}
