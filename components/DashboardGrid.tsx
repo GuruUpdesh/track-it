@@ -20,6 +20,7 @@ import packageReducer from "@/context/packageContext/packageReducer"
 import Filters from "./ui/Filters"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
+import { isDesktop } from "react-device-detect"
 
 export const packageSchema = z.object({
 	id: z.number(),
@@ -304,7 +305,7 @@ const DashboardGrid = ({ packagesOverride }: Props) => {
 					</ContextMenu.Content>
 				</ContextMenu.Portal>
 			</ContextMenu.Root>
-			{enabled && (
+			{enabled && isDesktop && (
 				<Selecto
 					selectableTargets={[".card"]}
 					hitRate={5}
