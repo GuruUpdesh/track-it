@@ -1,35 +1,58 @@
-[TrackIt](https://www.shipmentracker.com/) is a web-based application that simplifies shipment tracking by providing a unified platform to monitor your packages' status and journey, across various couriers.
+# TrackIt
 
-![Home](https://github.com/GuruUpdesh/track-it/assets/62634868/15eda10f-9c8d-48fe-aca2-f1f4fe87c9b8)
+TrackIt is a web-based application that simplifies shipment tracking by providing a unified platform to monitor your packages' status and journey, across various couriers.
 
-## [Live Demo](https://www.shipmentracker.com/) | [Video Demo](https://www.youtube.com/watch?v=9Z3Z3X6Z4Zg)
+![Preview](https://github.com/GuruUpdesh/track-it/assets/62634868/26d8a1ab-1eab-4cc4-aa8a-108a9dc61bce)
 
-## Features (TODO SORT BY IMPORTANCE)
+[Live Production Website (shipmentracker.com)](https://www.shipmentracker.com/)
 
--   Centralized tracking dashboard with a consolidated view of shipments and their current statuses
--   Tracking support for multiple couriers, including UPS, USPS, FedEx, and OnTrac
--   Detailed tracking history with status, location, and date information
--   Add, delete, and update your shipments
--   Shipment status is clearly indicated and easy to navigate and filter
--   Mobile friendly responsive UI design
--   Search functionality and filter functionality for power users
--   Undo functionality for accidental deletions
--   Shortcuts
--   Links to courier websites
--   Detailed tracking history and information
+## Features
+![Features Board](https://github.com/GuruUpdesh/track-it/assets/62634868/3e1194e7-70aa-48ee-aaf9-405f2a2c0689)
+- **Centralized Tracking Dashboard**: Consolidated view of shipments and their current statuses.
+- **Multi-Courier Support**: Tracking support for UPS, USPS, FedEx, OnTrac, and more.
+- **Detailed Tracking History**: View status, location, and date information for each shipment.
+- **Easy Management**: Add, delete, and update your shipments with ease.
+- **Clear and easy to understand UI**: Intuitive and responsive design for a seamless user experience. With mobile support for tracking on the go.
+- **Power User Features**: Search and filter functionality, undo accidental deletions, shortcuts, and links to courier websites.
 
 
-## Requirements for local development
--  Node.js v18 (TODO ADD BASIC INSTRUCTIONS AND LINKS)
 
-## Install
+## Setup development environment
 
-TrackIt runs on Next.js 13 and was developed in Node v18. It uses localstorage to store user data and vercel for hosting.
+### Required
+-  Node.js v18+ (https://nodejs.org/en/download/)
+-  NPM v7+ (https://www.npmjs.com/get-npm)
 
-### Clone the repository
+### Install
+Clone the repository
 
 ```bash
 git clone https://github.com/GuruUpdesh/track-it.git
 ```
 
--   npx husky install
+Install dependencies
+```bash
+npm install
+npx husky install
+```
+
+Run the development server
+```bash
+npm run dev
+```
+
+## Testing
+### Unit Tests
+```bash
+npm run test
+```
+
+### Cypress End-to-End Tests (with Cypress GUI)
+```bash
+npm run cypress
+```
+
+### Cypress End-to-End Tests (Headless)
+```bash
+npm run cypress:headless
+```
