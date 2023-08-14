@@ -1,5 +1,7 @@
 TrackIt is a web-based application that simplifies shipment tracking by providing a unified platform to monitor your packages' status and journey, across various couriers.
 
+![Home](https://github.com/GuruUpdesh/track-it/assets/62634868/15eda10f-9c8d-48fe-aca2-f1f4fe87c9b8)
+
 ## Features
 
 -   Centralized tracking dashboard with a consolidated view of shipments and their current statuses
