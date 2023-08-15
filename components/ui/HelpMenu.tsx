@@ -4,12 +4,14 @@ import React from "react"
 import { BiQuestionMark, BiCommand } from "react-icons/bi"
 import Menu, { TMenuItem } from "./menu/Menu"
 import { CgShortcut } from "react-icons/cg"
-import { BsGithub } from "react-icons/bs"
+import { BsBookHalf, BsGithub } from "react-icons/bs"
 import { MdEmail } from "react-icons/md"
 import { toast } from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 const HelpMenu = () => {
 	const [open, setOpen] = React.useState(false)
+	const router = useRouter()
 
 	function getShortcut(shortcut: string) {
 		let isMac = false
@@ -56,24 +58,22 @@ const HelpMenu = () => {
 		{
 			label: "GitHub",
 			icon: <BsGithub className="absolute left-4" />,
+			separator: true,
 			onClick: () => {
 				window.open("https://github.com/GuruUpdesh/track-it")
 			},
 		},
 		{
-			label: "Email",
-			icon: <MdEmail className="absolute left-4" />,
+			label: "User Guide",
+			icon: <BsBookHalf className="absolute left-4" />,
 			onClick: () => {
-				navigator.clipboard.writeText(
-					"guruupdeshsingh+trackit@gmail.com"
-				)
-				toast.success("Email copied to clipboard")
+				router.push("/user-guide")
 			},
-			separator: true,
 		},
 		{
 			label: "Shortcuts",
 			icon: <CgShortcut className="absolute left-4" />,
+			separator: true,
 			children: [
 				{
 					label: "Undo",
@@ -95,6 +95,16 @@ const HelpMenu = () => {
 					separator: true,
 				},
 			],
+		},
+		{
+			label: "Email",
+			icon: <MdEmail className="absolute left-4" />,
+			onClick: () => {
+				navigator.clipboard.writeText(
+					"guruupdeshsingh+trackit@gmail.com"
+				)
+				toast.success("Email copied to clipboard")
+			},
 		},
 	]
 	return (
