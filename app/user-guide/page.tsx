@@ -112,13 +112,9 @@ export default function UserGuide() {
 						</li>
 					</ul>
 					<img
-						src="/guide/add-new.png"
+						src="/guide/add.png"
 						className="rounded-3xl border border-white/25"
 					/>
-					<p className="text-white/75">
-						After following these instructions, your dashboard
-						should look like this.
-					</p>
 				</section>
 
 				<section
@@ -182,10 +178,10 @@ export default function UserGuide() {
 							shipment name.
 						</li>
 					</ul>
-					<p className="text-white/75">
-						After following these instructions, your dashboard
-						should look like this.
-					</p>
+					<img
+						src="/guide/details.png"
+						className="rounded-3xl border border-white/25"
+					/>
 				</section>
 				<section
 					id="finding-your-shipments"
@@ -217,6 +213,10 @@ export default function UserGuide() {
 							results
 						</li>
 					</ul>
+					<img
+						src="/guide/find.png"
+						className="rounded-3xl border border-white/25"
+					/>
 				</section>
 				<section
 					id="organizing-your-shipments"
@@ -252,6 +252,10 @@ export default function UserGuide() {
 							the reorder take place..
 						</li>
 					</ul>
+					<img
+						src="/guide/organize.png"
+						className="rounded-3xl border border-white/25"
+					/>
 				</section>
 				<section
 					id="deleting-your-shipments"
@@ -300,6 +304,10 @@ export default function UserGuide() {
 							</b>
 						</li>
 					</ul>
+					<img
+						src="/guide/delete.png"
+						className="rounded-3xl border border-white/25"
+					/>
 				</section>
 				<section
 					id="courier-website"
@@ -331,6 +339,10 @@ export default function UserGuide() {
 							option 1.
 						</li>
 					</ul>
+					<img
+						src="/guide/web.png"
+						className="rounded-3xl border border-white/25"
+					/>
 				</section>
 				<section id="editing" className="relative mb-12 leading-7">
 					<h2 className="my-3 text-2xl font-semibold">
@@ -365,6 +377,10 @@ export default function UserGuide() {
 							shipment&apos;s menu to select the desired courier.
 						</li>
 					</ul>
+					<img
+						src="/guide/edit.png"
+						className="rounded-3xl border border-white/25"
+					/>
 				</section>
 				<section id="shortcuts" className="relative mb-12 leading-7">
 					<h2 className="my-3 text-2xl font-semibold">
