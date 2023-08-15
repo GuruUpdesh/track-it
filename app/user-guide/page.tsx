@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { BiArrowBack } from "react-icons/bi"
 
 export default function UserGuide() {
@@ -112,12 +111,9 @@ export default function UserGuide() {
 							</p>
 						</li>
 					</ul>
-					<Image
-						src="/guide/add.png"
-						width={600}
-						height={700}
-						alt="Adding a shipment"
-						className="rounded-lg border border-white/10"
+					<img
+						src="/guide/add-new.png"
+						className="rounded-3xl border border-white/25"
 					/>
 					<p className="text-white/75">
 						After following these instructions, your dashboard
@@ -186,13 +182,6 @@ export default function UserGuide() {
 							shipment name.
 						</li>
 					</ul>
-					<Image
-						src="/guide/add.png"
-						width={600}
-						height={700}
-						alt="Adding a shipment"
-						className="rounded-lg border border-white/10"
-					/>
 					<p className="text-white/75">
 						After following these instructions, your dashboard
 						should look like this.
