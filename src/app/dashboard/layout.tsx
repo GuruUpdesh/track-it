@@ -5,8 +5,9 @@ import { PackageContextProvider } from "@/context/packageContext/PackageContextP
 import { SearchContextProvider } from "@/context/searchContext/SearchContextProvider"
 import { SelectContextProvider } from "@/context/selectContext/selectContextProvider"
 import { UndoStackContextProvider } from "@/context/undoStackContext/undoStackProvider"
-import Alert from "@/lib/alert/Alert"
+import Alert from "@/components/ui/alert/Alert"
 import Image from "next/image"
+import { UserButton } from "@clerk/nextjs"
 
 type Props = {
 	children: React.ReactNode
@@ -30,7 +31,10 @@ function DashboardLayout({ children }: Props) {
 									/>
 								</a>
 								<AddInput />
-								<SearchInput />
+								<div className="flex items-center gap-3">
+									<SearchInput />
+									<UserButton afterSignOutUrl="/" />
+								</div>
 							</nav>
 							<NavBackground />
 							<main className="relative flex flex-col items-center">

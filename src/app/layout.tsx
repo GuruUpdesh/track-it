@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { Work_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
+import { ClerkProvider } from "@clerk/nextjs"
 
 const workSans = Work_Sans({ subsets: ["latin"], display: "swap" })
 
@@ -57,17 +58,19 @@ interface Props {
 
 export default function RootLayout({ children }: Props) {
 	return (
-		<html lang="en">
-			<head />
-			<body
-				className={cn(
-					workSans.className,
-					"flex min-h-screen justify-center antialiased"
-				)}
-			>
-				{children}
-				<Analytics />
-			</body>
-		</html>
+		<ClerkProvider>
+			<html lang="en">
+				<head />
+				<body
+					className={cn(
+						workSans.className,
+						"flex min-h-screen justify-center antialiased"
+					)}
+				>
+					{children}
+					<Analytics />
+				</body>
+			</html>
+		</ClerkProvider>
 	)
 }
