@@ -7,6 +7,7 @@ export type SelectContextProps = {
 
 export const SelectContext = createContext<SelectContextProps>({
 	enabled: true,
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	setEnabled: () => {},
 })
 

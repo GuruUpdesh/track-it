@@ -1,6 +1,5 @@
-import { z } from "zod"
 import { AiOutlineWarning } from "react-icons/ai"
-import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
+import { BsHouseDoor, BsQuestion, BsTruck } from "react-icons/bs"
 import { TbTruckLoading } from "react-icons/tb"
 
 type TStatusCode =

@@ -63,7 +63,7 @@ export function getEta(eta: string | null): string | null {
 
 export function getSourceAndDestinationLocations(packageInfo: TShippoResponse) {
 	let source = packageInfo.address_from
-	let destination = packageInfo.address_to
+	const destination = packageInfo.address_to
 
 	const trackingHistory = packageInfo.tracking_history
 	if (trackingHistory.length === 0) {
