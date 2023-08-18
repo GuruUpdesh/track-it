@@ -1,10 +1,13 @@
-import "./globals.css"
+// import "./globals.css"
+import "./global.css"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { Work_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import { ClerkProvider } from "@clerk/nextjs"
+import { ThemeProvider } from "@/components/theme-provider"
+import MainNav from "@/components/MainNav"
 
 const workSans = Work_Sans({ subsets: ["latin"], display: "swap" })
 
@@ -67,7 +70,16 @@ export default function RootLayout({ children }: Props) {
 						"flex min-h-screen justify-center antialiased"
 					)}
 				>
-					{children}
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="dark"
+						enableSystem
+					>
+						<main>
+							<MainNav />
+							{children}
+						</main>
+					</ThemeProvider>
 					<Analytics />
 				</body>
 			</html>

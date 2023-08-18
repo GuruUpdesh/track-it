@@ -1,55 +1,76 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+	darkMode: ["class"],
 	content: [
-		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-	],
-	safelist: [
-		"to-red-400/25",
-		"to-yellow-400/25",
-		"to-lime-400/25",
-		"to-emerald-400/25",
-		"to-indigo-400/25",
-		"from-red-700/50",
-		"from-yellow-700/50",
-		"from-lime-700/50",
-		"from-emerald-700",
-		"from-indigo-700/50",
-		"shadow-red-600/25",
-		"shadow-yellow-600/25",
-		"shadow-lime-600/25",
-		"shadow-emerald-600/25",
-		"shadow-indigo-600/25",
-		"text-red-200",
-		"text-yellow-200",
-		"text-lime-200",
-		"text-emerald-200",
-		"text-indigo-200",
-		"border-red-200",
-		"border-yellow-200",
-		"border-lime-200",
-		"border-emerald-200",
-		"border-indigo-200",
-		"group-hover:bg-red-600",
-		"group-hover:bg-yellow-600",
-		"group-hover:bg-lime-600",
-		"group-hover:bg-emerald-600",
-		"group-hover:bg-indigo-600",
-		"bg-red-600",
-		"bg-yellow-600",
-		"bg-lime-600",
-		"bg-emerald-600",
-		"bg-indigo-600",
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}",
 	],
 	theme: {
+		container: {
+			center: true,
+			padding: "2rem",
+			screens: {
+				"2xl": "1400px",
+			},
+		},
 		extend: {
-			backgroundImage: {
-				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-				"gradient-conic":
-					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+			colors: {
+				border: "hsl(var(--border))",
+				input: "hsl(var(--input))",
+				ring: "hsl(var(--ring))",
+				background: "hsl(var(--background))",
+				foreground: "hsl(var(--foreground))",
+				primary: {
+					DEFAULT: "hsl(var(--primary))",
+					foreground: "hsl(var(--primary-foreground))",
+				},
+				secondary: {
+					DEFAULT: "hsl(var(--secondary))",
+					foreground: "hsl(var(--secondary-foreground))",
+				},
+				destructive: {
+					DEFAULT: "hsl(var(--destructive))",
+					foreground: "hsl(var(--destructive-foreground))",
+				},
+				muted: {
+					DEFAULT: "hsl(var(--muted))",
+					foreground: "hsl(var(--muted-foreground))",
+				},
+				accent: {
+					DEFAULT: "hsl(var(--accent))",
+					foreground: "hsl(var(--accent-foreground))",
+				},
+				popover: {
+					DEFAULT: "hsl(var(--popover))",
+					foreground: "hsl(var(--popover-foreground))",
+				},
+				card: {
+					DEFAULT: "hsl(var(--card))",
+					foreground: "hsl(var(--card-foreground))",
+				},
+			},
+			borderRadius: {
+				lg: "var(--radius)",
+				md: "calc(var(--radius) - 2px)",
+				sm: "calc(var(--radius) - 4px)",
+			},
+			keyframes: {
+				"accordion-down": {
+					from: { height: 0 },
+					to: { height: "var(--radix-accordion-content-height)" },
+				},
+				"accordion-up": {
+					from: { height: "var(--radix-accordion-content-height)" },
+					to: { height: 0 },
+				},
+			},
+			animation: {
+				"accordion-down": "accordion-down 0.2s ease-out",
+				"accordion-up": "accordion-up 0.2s ease-out",
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require("tailwindcss-animate")],
 }
