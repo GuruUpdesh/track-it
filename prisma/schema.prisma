@@ -15,7 +15,7 @@ model Shipment {
   id Int @id @default(autoincrement())
   name String
   trackingNumber String
-  userId Int
+  userId String
   courier String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -2,7 +2,6 @@ import { Input } from "@/components/ui/input"
 import {
 	BiDotsVertical,
 	BiFilterAlt,
-	BiPlus,
 	BiRedo,
 	BiSort,
 	BiUndo,
@@ -19,6 +18,8 @@ import {
 } from "@/components/ui/select"
 import { MdExplore } from "react-icons/md"
 import { Button } from "@/components/ui/button"
+import AddInput from "@/components/nav/AddInput"
+import Alert from "@/components/ui/alert/Alert"
 
 interface Props {
 	children: React.ReactNode
@@ -27,16 +28,18 @@ interface Props {
 export default function DashboardLayout({ children }: Props) {
 	return (
 		<main className="px-24">
+			<Alert />
 			<header className="flex w-full items-center justify-between py-3">
 				<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight">
 					Dashboard
 				</h1>
-				<div className="flex w-full max-w-xs items-center space-x-1">
+				{/* <div className="flex w-full max-w-xs items-center space-x-1">
 					<Input placeholder="Type tracking number..." />
 					<Button variant="outline" size="icon">
 						<BiPlus />
 					</Button>
-				</div>
+				</div> */}
+				<AddInput />
 				<div className="flex w-full max-w-xs items-center space-x-2">
 					<Input placeholder="Search..." />
 					<Button variant="outline" size="icon">

@@ -18,6 +18,7 @@ const MainNav = () => {
 				<li>
 					<Link href="/" passHref legacyBehavior>
 						<Button
+							className="flex items-center gap-2"
 							variant={pathname === "/" ? "outline" : "ghost"}
 						>
 							<AiOutlineHome />
@@ -28,6 +29,7 @@ const MainNav = () => {
 				<li>
 					<Link href="/dashboard" passHref legacyBehavior>
 						<Button
+							className="flex items-center gap-2"
 							variant={
 								pathname === "/dashboard" ? "outline" : "ghost"
 							}
@@ -40,6 +42,7 @@ const MainNav = () => {
 				<li>
 					<Link href="/user-guide" passHref legacyBehavior>
 						<Button
+							className="flex items-center gap-2"
 							variant={
 								pathname === "/user-guide" ? "outline" : "ghost"
 							}
