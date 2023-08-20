@@ -57,17 +57,15 @@ const AddInput = () => {
 			}
 
 			setLoading(true)
-			const res = await createShipment(newShipment)
+			const shipment = await createShipment(newShipment)
 			setLoading(false)
 
-			if (!res.data.success) {
+			if (!shipment) {
 				toast.error("Something went wrong")
 				return
 			}
 
-			const createdShipment = shipmentRecordSchema.parse(
-				res.data.newShipment
-			)
+			const createdShipment = shipmentRecordSchema.parse(shipment)
 			addShipment(createdShipment)
 
 			setTrackingNumber("")

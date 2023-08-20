@@ -56,7 +56,7 @@ export const useShipments = create<ShipmentsState>()((set, get) => ({
 		if (!lastDeletedShipment) return
 
 		try {
-			const res = await createShipment({
+			const shipment = await createShipment({
 				name: lastDeletedShipment.name,
 				courier: lastDeletedShipment.courier,
 				trackingNumber: lastDeletedShipment.trackingNumber,
@@ -65,13 +65,11 @@ export const useShipments = create<ShipmentsState>()((set, get) => ({
 				createdAt: lastDeletedShipment.createdAt,
 			})
 
-			if (!res.data.success) {
+			if (!shipment) {
 				return
 			}
 
-			const createdShipment = shipmentRecordSchema.parse(
-				res.data.newShipment
-			)
+			const createdShipment = shipmentRecordSchema.parse(shipment)
 
 			set((state) => {
 				const newShipments = [...state.shipments]

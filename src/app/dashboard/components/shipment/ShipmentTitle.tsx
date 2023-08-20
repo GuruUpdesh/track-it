@@ -27,7 +27,7 @@ const ShipmentTitle = ({ shipmentRecord }: Props) => {
 
 		if (name === shipmentRecord.name) return
 		setLoading(true)
-		const res = await updateShipment({
+		const shipment = await updateShipment({
 			id: shipmentRecord.id,
 			name: name,
 		})
@@ -38,7 +38,7 @@ const ShipmentTitle = ({ shipmentRecord }: Props) => {
 			name: name,
 		})
 
-		if (!res.data.success) {
+		if (!shipment) {
 			toast.error("Something went wrong")
 			return
 		}

@@ -15,9 +15,9 @@ import { deleteShipment as handleDelete } from "@/app/api/shipment/shipmentAPI"
 import { useShipments } from "@/lib/shipmentsStore"
 
 async function deleteShipment(id: number) {
-	const res = await handleDelete(id)
+	const shipment = await handleDelete(id)
 
-	if (!res.data.success) {
+	if (!shipment) {
 		toast.error("Failed to delete shipment")
 	}
 }

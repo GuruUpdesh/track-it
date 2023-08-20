@@ -118,15 +118,60 @@ export async function DELETE(req: Request) {
 			})
 			.parse(body).id
 
-		const shipment = await prisma.shipment.delete({
+		const shipmentToDelete = await prisma.shipment.findUnique({
+			where: {
+				id: id,
+			},
+			select: {
+				position: true,
+				userId: true,
+			},
+		})
+
+		if (!shipmentToDelete) {
+			throw new Error("Shipment not found")
+		}
+
+		const { position, userId } = shipmentToDelete
+
+		const shipmentsToUpdate = await prisma.shipment.findMany({
+			where: {
+				userId: userId,
+				position: {
+					gt: position,
+				},
+			},
+			select: {
+				id: true,
+				position: true,
+			},
+		})
+
+		await Promise.all(
+			shipmentsToUpdate.map((shipment) => {
+				return prisma.shipment.update({
+					where: {
+						id: shipment.id,
+					},
+					data: {
+						position: shipment.position - 1,
+					},
+				})
+			})
+		)
+
+		const deletedShipment = await prisma.shipment.delete({
 			where: {
 				id: id,
 			},
 		})
 
-		return new NextResponse(JSON.stringify({ shipment, success: true }), {
-			status: 200,
-		})
+		return new NextResponse(
+			JSON.stringify({ shipment: deletedShipment, success: true }),
+			{
+				status: 200,
+			}
+		)
 	} catch (error) {
 		console.error("Request error", error)
 		return new NextResponse(
