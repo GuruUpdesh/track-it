@@ -1,11 +1,20 @@
 import axios from "axios"
-import Shipments from "@/components/ui/Shipments"
+import Shipments from "./components/Shipments"
+import { currentUser } from "@clerk/nextjs"
 
 async function getShipments() {
-	const res = await axios.get(`http://localhost:3000/api/shipment`)
+	const user = await currentUser()
+	console.log(user)
+	if (!user || !user.id) {
+		console.error("No user found")
+		return []
+	}
 
-	// wait 2 seocnds to simulate loading
-	// await new Promise((resolve) => setTimeout(resolve, 2000))
+	const res = await axios.get(`http://localhost:3000/api/shipment`, {
+		params: {
+			userId: user.id,
+		},
+	})
 
 	if (!res.data.success) {
 		return []

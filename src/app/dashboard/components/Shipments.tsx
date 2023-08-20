@@ -2,8 +2,8 @@
 
 import { TShipmentRecord } from "@/app/api/shipment/typesAndSchemas"
 import React from "react"
-import Shipment from "../shipment/Shipment"
-import { ShipmentsState, useShipments } from "@/lib/slices/createShipmentsSlice"
+import Shipment from "./shipment/Shipment"
+import { ShipmentsState, useShipments } from "@/lib/shipmentsStore"
 
 type Props = {
 	loadedShipments: TShipmentRecord[]
@@ -15,6 +15,8 @@ const Shipments = ({ loadedShipments }: Props) => {
 	)
 
 	React.useEffect(() => {
+		// sort by position
+		loadedShipments.sort((a, b) => a.position - b.position)
 		updateShipments(loadedShipments)
 	}, [loadedShipments])
 

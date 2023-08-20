@@ -5,6 +5,8 @@ export const shipmentRecordCreateSchema = z.object({
 	courier: z.string().toLowerCase(),
 	trackingNumber: z.string(),
 	userId: z.string(),
+	position: z.number().min(0),
+	createdAt: z.string().datetime().optional(),
 })
 
 export type TShipmentRecordCreate = z.infer<typeof shipmentRecordCreateSchema>
@@ -24,6 +26,7 @@ export const shipmentRecordUpdateSchema = z.object({
 	name: z.string().max(250).optional(),
 	courier: z.string().toLowerCase().optional(),
 	trackingNumber: z.string().optional(),
+	position: z.number().min(0).optional(),
 })
 
 export type TShipmentRecordUpdate = z.infer<typeof shipmentRecordUpdateSchema>

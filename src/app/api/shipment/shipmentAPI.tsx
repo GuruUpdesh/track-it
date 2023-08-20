@@ -3,6 +3,7 @@ import {
 	TShipmentRecordCreate,
 	TShipmentRecordUpdate,
 	shipmentRecordCreateSchema,
+	shipmentRecordUpdateSchema,
 } from "./typesAndSchemas"
 
 export async function createShipment(shipmentRecord: TShipmentRecordCreate) {
@@ -11,7 +12,9 @@ export async function createShipment(shipmentRecord: TShipmentRecordCreate) {
 		name: shipment.name,
 		courier: shipment.courier,
 		trackingNumber: shipment.trackingNumber,
+		position: shipment.position,
 		userId: shipment.userId,
+		createdAt: shipment.createdAt,
 	})
 
 	return res
@@ -28,11 +31,13 @@ export async function deleteShipment(id: number) {
 }
 
 export async function updateShipment(shipmentRecord: TShipmentRecordUpdate) {
+	const shipment = shipmentRecordUpdateSchema.parse(shipmentRecord)
 	const res = axios.patch("/api/shipment", {
-		id: shipmentRecord.id,
-		name: shipmentRecord.name,
-		courier: shipmentRecord.courier,
-		trackingNumber: shipmentRecord.trackingNumber,
+		id: shipment.id,
+		name: shipment.name,
+		courier: shipment.courier,
+		trackingNumber: shipment.trackingNumber,
+		position: shipment.position,
 	})
 
 	return res

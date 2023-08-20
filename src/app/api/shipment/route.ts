@@ -22,6 +22,10 @@ export async function POST(req: Request) {
 				trackingNumber: shipment.trackingNumber,
 				userId: shipment.userId,
 				courier: shipment.courier,
+				position: shipment.position,
+				createdAt: shipment.createdAt
+					? new Date(shipment.createdAt)
+					: undefined,
 			},
 		})
 
@@ -41,9 +45,19 @@ export async function POST(req: Request) {
 	}
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+	const url = new URL(req.url)
+	const userId = url.searchParams.get("userId")
 	try {
-		const shipments = await prisma.shipment.findMany()
+		if (!userId) {
+			throw new Error("Missing userId in url parameters")
+		}
+
+		const shipments = await prisma.shipment.findMany({
+			where: {
+				userId: userId,
+			},
+		})
 		return new NextResponse(JSON.stringify({ shipments, success: true }), {
 			status: 200,
 		})
@@ -73,6 +87,7 @@ export async function PATCH(req: Request) {
 				name: shipment.name,
 				trackingNumber: shipment.trackingNumber,
 				courier: shipment.courier,
+				position: shipment.position,
 			},
 		})
 

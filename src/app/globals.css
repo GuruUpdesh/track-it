@@ -1,141 +1,64 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+ 
 
-:root {
-	--foreground-rgb: 0, 0, 0;
-	--background-start-rgb: 214, 219, 220;
-	--background-end-rgb: 255, 255, 255;
+@layer base {
+
+  @layer base {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 240 10% 3.9%;
+      --card: 0 0% 100%;
+      --card-foreground: 240 10% 3.9%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 240 10% 3.9%;
+      --primary: 240 5.9% 10%;
+      --primary-foreground: 0 0% 98%;
+      --secondary: 240 4.8% 95.9%;
+      --secondary-foreground: 240 5.9% 10%;
+      --muted: 240 4.8% 95.9%;
+      --muted-foreground: 240 3.8% 46.1%;
+      --accent: 240 4.8% 95.9%;
+      --accent-foreground: 240 5.9% 10%;
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 0 0% 98%;
+      --border: 240 5.9% 90%;
+      --input: 240 5.9% 90%;
+      --ring: 240 5.9% 10%;
+      --radius: 0.3rem;
+    }
+   
+    .dark {
+      --background: 240 10% 3.9%;
+      --foreground: 0 0% 98%;
+      --card: 240 10% 3.9%;
+      --card-foreground: 0 0% 98%;
+      --popover: 240 10% 3.9%;
+      --popover-foreground: 0 0% 98%;
+      --primary: 0 0% 98%;
+      --primary-foreground: 240 5.9% 10%;
+      --secondary: 240 3.7% 15.9%;
+      --secondary-foreground: 0 0% 98%;
+      --muted: 240 3.7% 15.9%;
+      --muted-foreground: 240 5% 64.9%;
+      --accent: 240 3.7% 15.9%;
+      --accent-foreground: 0 0% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 0 0% 98%;
+      --border: 240 3.7% 15.9%;
+      --input: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+    }
+  }  
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--foreground-rgb: 255, 255, 255;
-		--background-start-rgb: 0, 0, 0;
-		--background-end-rgb: 0, 0, 0;
-	}
-}
-
-
-
-
-@keyframes rotate-spin {
-	0% {
-		transform: rotate(0deg) scale(0.5);
-		opacity: 0;
-	}
-	25% {
-		transform: rotate(90deg) scale(1.8);
-		opacity: 1;
-	}
-	50% {
-		transform: rotate(180deg) scale(1.2);
-		opacity: 0;
-	}
-	75% {
-		transform: rotate(270deg) scale(1.8);
-		opacity: 1;
-	}
-	100% {
-		transform: rotate(360deg) scale(0.5);
-		opacity: 0;
-	}
-}
-
-.relaxing-animation-0 {
-	animation-name: rotate-spin;
-	animation-duration: 25s;
-	animation-timing-function: ease-in-out;
-	animation-iteration-count: infinite;
-}
-
-/* Variation 1 */
-@keyframes rotate-spin-1 {
-	0% {
-		transform: rotate(0deg) scale(0.5);
-		opacity: 0;
-	}
-	25% {
-		transform: rotate(90deg) scale(1.8);
-		opacity: 1;
-	}
-	50% {
-		transform: rotate(180deg) scale(1.2);
-		opacity: 0.5;
-	}
-	75% {
-		transform: rotate(270deg) scale(1.5);
-		opacity: 1;
-	}
-	100% {
-		transform: rotate(360deg) scale(0.5);
-		opacity: 0;
-	}
-}
-
-/* Variation 2 */
-@keyframes rotate-spin-2 {
-	0% {
-		transform: rotate(0deg) scale(0.5);
-		opacity: 0;
-	}
-	25% {
-		transform: rotate(90deg) scale(1.2);
-		opacity: 0.5;
-	}
-	50% {
-		transform: rotate(180deg) scale(1.8);
-		opacity: 1;
-	}
-	75% {
-		transform: rotate(270deg) scale(1.5);
-		opacity: 0.5;
-	}
-	100% {
-		transform: rotate(360deg) scale(0.5);
-		opacity: 0;
-	}
-}
-
-/* Variation 3 */
-@keyframes rotate-spin-3 {
-	0% {
-		transform: rotate(0deg) scale(0.5);
-	}
-	25% {
-		transform: rotate(90deg) scale(1.2);
-	}
-	50% {
-		transform: rotate(180deg) scale(1.8);
-	}
-	75% {
-		transform: rotate(270deg) scale(1.5);
-	}
-	100% {
-		transform: rotate(360deg) scale(0.5);
-	}
-}
-
-/* Apply variation 1 to an element */
-.relaxing-animation-1 {
-	animation-name: rotate-spin-1;
-	animation-duration: 25s;
-	animation-timing-function: ease-in-out;
-	animation-iteration-count: infinite;
-}
-
-/* Apply variation 2 to an element */
-.relaxing-animation-2 {
-	animation-name: rotate-spin-2;
-	animation-duration: 25s;
-	animation-timing-function: ease-in-out;
-	animation-iteration-count: infinite;
-}
-
-/* Apply variation 2 to an element */
-.relaxing-animation-3 {
-	animation-name: rotate-spin-3;
-	animation-duration: 25s;
-	animation-timing-function: ease-in-out;
-	animation-iteration-count: infinite;
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

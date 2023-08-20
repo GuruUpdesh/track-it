@@ -1,5 +1,4 @@
-// import "./globals.css"
-import "./global.css"
+import "./globals.css"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"

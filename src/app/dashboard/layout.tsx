@@ -1,11 +1,5 @@
 import { Input } from "@/components/ui/input"
-import {
-	BiDotsVertical,
-	BiFilterAlt,
-	BiRedo,
-	BiSort,
-	BiUndo,
-} from "react-icons/bi"
+import { BiDotsVertical, BiFilterAlt, BiSort } from "react-icons/bi"
 import { RiRecordCircleFill } from "react-icons/ri"
 import { AiOutlineCalendar } from "react-icons/ai"
 import {
@@ -18,8 +12,9 @@ import {
 } from "@/components/ui/select"
 import { MdExplore } from "react-icons/md"
 import { Button } from "@/components/ui/button"
-import AddInput from "@/components/nav/AddInput"
+import AddInput from "./components/AddInput"
 import Alert from "@/components/ui/alert/Alert"
+import UndoRedo from "@/app/dashboard/components/UndoRedo"
 
 interface Props {
 	children: React.ReactNode
@@ -33,12 +28,6 @@ export default function DashboardLayout({ children }: Props) {
 				<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight">
 					Dashboard
 				</h1>
-				{/* <div className="flex w-full max-w-xs items-center space-x-1">
-					<Input placeholder="Type tracking number..." />
-					<Button variant="outline" size="icon">
-						<BiPlus />
-					</Button>
-				</div> */}
 				<AddInput />
 				<div className="flex w-full max-w-xs items-center space-x-2">
 					<Input placeholder="Search..." />
@@ -49,12 +38,7 @@ export default function DashboardLayout({ children }: Props) {
 			</header>
 			<section className="flex justify-between">
 				<div className="flex items-center gap-3">
-					<Button variant="outline" size="icon">
-						<BiUndo />
-					</Button>
-					<Button variant="outline" size="icon">
-						<BiRedo />
-					</Button>
+					<UndoRedo />
 					<Select>
 						<SelectTrigger className="max-w-xs">
 							<BiSort />

@@ -12,7 +12,7 @@ import {
 import { TShipmentRecord } from "@/app/api/shipment/typesAndSchemas"
 import { toast } from "react-hot-toast"
 import { deleteShipment as handleDelete } from "@/app/api/shipment/shipmentAPI"
-import { useShipments } from "@/lib/slices/createShipmentsSlice"
+import { useShipments } from "@/lib/shipmentsStore"
 
 async function deleteShipment(id: number) {
 	const res = await handleDelete(id)

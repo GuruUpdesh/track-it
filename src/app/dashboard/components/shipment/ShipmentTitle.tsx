@@ -2,7 +2,7 @@
 
 import { updateShipment } from "@/app/api/shipment/shipmentAPI"
 import { TShipmentRecord } from "@/app/api/shipment/typesAndSchemas"
-import { useShipments } from "@/lib/slices/createShipmentsSlice"
+import { useShipments } from "@/lib/shipmentsStore"
 import React, { useState } from "react"
 import { toast } from "react-hot-toast"
 

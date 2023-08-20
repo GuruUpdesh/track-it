@@ -14,9 +14,10 @@ datasource db {
 model Shipment {
   id Int @id @default(autoincrement())
   name String
-  trackingNumber String
-  userId String
   courier String
+  trackingNumber String
+  position Int
+  userId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

@@ -1,22 +1,22 @@
 "use client"
 
-import "./nav.css"
 import { getCourierFromTrackingNumber } from "@/utils/courier"
 import React, { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
+import { Input } from "../../../components/ui/input"
+import { Button } from "../../../components/ui/button"
 import { cn } from "@/lib/utils"
 import { BiPlus } from "react-icons/bi"
 import { useAuth } from "@clerk/nextjs"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
 import { createShipment } from "@/app/api/shipment/shipmentAPI"
-import { ShipmentsState, useShipments } from "@/lib/slices/createShipmentsSlice"
+import { ShipmentsState, useShipments } from "@/lib/shipmentsStore"
 import { shipmentRecordSchema } from "@/app/api/shipment/typesAndSchemas"
 
 const AddInput = () => {
-	const [addShipment] = useShipments((state: ShipmentsState) => [
+	const [addShipment, shipments] = useShipments((state: ShipmentsState) => [
 		state.addShipment,
+		state.shipments,
 	])
 	const { userId } = useAuth()
 	const [trackingNumber, setTrackingNumber] = useState("")
@@ -51,6 +51,7 @@ const AddInput = () => {
 			const newShipment = {
 				name: "",
 				courier: courier.code,
+				position: shipments.length,
 				trackingNumber,
 				userId,
 			}
@@ -96,7 +97,7 @@ const AddInput = () => {
 				})}
 				disabled={loading}
 				aria-autocomplete="list"
-				aria-valid={valid ? "true" : "false"}
+				aria-invalid={!valid}
 				aria-describedby={valid ? undefined : "invalid tracking number"}
 			/>
 			<Button
