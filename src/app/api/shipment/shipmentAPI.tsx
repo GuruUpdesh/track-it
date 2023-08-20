@@ -14,7 +14,10 @@ export async function getShipments(): Promise<TShipmentRecord[]> {
 		return []
 	}
 
-	const response = await fetch(`/api/shipment?userId=${user.id}`)
+	const response = await fetch(
+		`/api/shipment?userId=${encodeURIComponent(user.id)}`,
+		{ method: "GET" }
+	)
 	const data = await response.json()
 
 	if (!data.success) {
