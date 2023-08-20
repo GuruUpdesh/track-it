@@ -4,7 +4,6 @@ import { currentUser } from "@clerk/nextjs"
 
 async function getShipments() {
 	const user = await currentUser()
-	console.log(user)
 	if (!user || !user.id) {
 		console.error("No user found")
 		return []

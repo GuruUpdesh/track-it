@@ -1,5 +1,3 @@
-"use client"
-
 import { create } from "zustand"
 import {
 	TShipmentRecord,
@@ -17,20 +15,9 @@ export interface ShipmentsState {
 	undoLastDelete: () => void
 }
 
-const localStorageKey = "deletedShipmentsStack"
-
-function saveToLocalStorage(data: TShipmentRecord[]) {
-	localStorage.setItem(localStorageKey, JSON.stringify(data))
-}
-
-function getFromLocalStorage(): TShipmentRecord[] {
-	const storedData = localStorage.getItem(localStorageKey)
-	return storedData ? JSON.parse(storedData) : []
-}
-
 export const useShipments = create<ShipmentsState>()((set, get) => ({
 	shipments: [],
-	deletedShipmentsStack: getFromLocalStorage(),
+	deletedShipmentsStack: [],
 	redoStack: [],
 	updateShipments: (shipments) => {
 		set(() => ({ shipments: shipments }))
@@ -47,15 +34,12 @@ export const useShipments = create<ShipmentsState>()((set, get) => ({
 			)
 			if (!shipmentToDelete) return state
 
-			const updatedStack = [
-				shipmentToDelete,
-				...state.deletedShipmentsStack,
-			]
-			saveToLocalStorage(updatedStack)
-
 			return {
 				shipments: state.shipments.filter((s) => s.id !== id),
-				deletedShipmentsStack: updatedStack,
+				deletedShipmentsStack: [
+					shipmentToDelete,
+					...state.deletedShipmentsStack,
+				],
 			}
 		})
 	},
@@ -90,9 +74,6 @@ export const useShipments = create<ShipmentsState>()((set, get) => ({
 			)
 
 			set((state) => {
-				const updatedStack = state.deletedShipmentsStack.slice(1)
-				saveToLocalStorage(updatedStack)
-
 				const newShipments = [...state.shipments]
 				newShipments.splice(
 					lastDeletedShipment.position,
@@ -102,7 +83,7 @@ export const useShipments = create<ShipmentsState>()((set, get) => ({
 
 				return {
 					shipments: newShipments,
-					deletedShipmentsStack: updatedStack,
+					deletedShipmentsStack: state.deletedShipmentsStack.slice(1),
 				}
 			})
 		} catch (error) {

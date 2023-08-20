@@ -65,10 +65,16 @@ module.exports = {
 					from: { height: "var(--radix-accordion-content-height)" },
 					to: { height: 0 },
 				},
+				expand: {
+					"0%": { transform: "scale(1)" },
+					"50%": { transform: "scale(0.98)" },
+					"100%": { transform: "scale(1)" },
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
+				expand: "expand 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite",
 			},
 		},
 	},

@@ -6,7 +6,7 @@ import Link from "next/link"
 import { AiOutlineHome } from "react-icons/ai"
 import { BsBook, BsGrid } from "react-icons/bs"
 import { usePathname } from "next/navigation"
-import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs"
+// import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs"
 
 const MainNav = () => {
 	const pathname = usePathname()
@@ -56,12 +56,12 @@ const MainNav = () => {
 			</ul>
 			<div>
 				User
-				<SignedIn>
+				{/* <SignedIn>
 					<UserButton afterSignOutUrl="/" />
 				</SignedIn>
 				<SignedOut>
 					<SignInButton />
-				</SignedOut>
+				</SignedOut> */}
 			</div>
 		</nav>
 	)
