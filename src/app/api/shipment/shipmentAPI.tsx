@@ -14,9 +14,7 @@ export async function getShipments(): Promise<TShipmentRecord[]> {
 		return []
 	}
 
-	const response = await fetch(
-		`http://localhost:3000/api/shipment?userId=${user.id}`
-	)
+	const response = await fetch(`/api/shipment?userId=${user.id}`)
 	const data = await response.json()
 
 	if (!data.success) {
