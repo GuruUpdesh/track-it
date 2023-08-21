@@ -5,17 +5,10 @@ import {
 	shipmentRecordCreateSchema,
 	shipmentRecordUpdateSchema,
 } from "./typesAndSchemas"
-import { currentUser } from "@clerk/nextjs"
 
-export async function getShipments(): Promise<TShipmentRecord[]> {
-	const user = await currentUser()
-	if (!user || !user.id) {
-		console.error("No user found")
-		return []
-	}
-
+export async function getShipments(userId: string): Promise<TShipmentRecord[]> {
 	const response = await fetch(
-		`/api/shipment?userId=${encodeURIComponent(user.id)}`,
+		`/api/shipment?userId=${encodeURIComponent(userId)}`,
 		{ method: "GET" }
 	)
 	const data = await response.json()

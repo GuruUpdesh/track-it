@@ -1,13 +1,10 @@
-// import { NextRequest } from "next/server"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/db"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import {
 	shipmentRecordCreateSchema,
 	shipmentRecordUpdateSchema,
 } from "./typesAndSchemas"
-
-const prisma = new PrismaClient()
 
 export async function POST(req: Request) {
 	const body = await req.json()

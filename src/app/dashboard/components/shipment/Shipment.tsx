@@ -13,12 +13,28 @@ import {
 	FiArrowDownLeft,
 	FiArrowUpLeft,
 } from "react-icons/fi"
+import { getTrackingInfo } from "@/app/api/track/trakingAPI"
 
 type Props = {
 	shipmentRecord: TShipmentRecord
 }
 
 const Shipment = ({ shipmentRecord }: Props) => {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [trackingInfo, setTrackingInfo] = React.useState(null)
+
+	async function fetchTrackingInfo() {
+		const trackingInfoData = await getTrackingInfo(
+			shipmentRecord.trackingNumber,
+			shipmentRecord.courier
+		)
+		setTrackingInfo(trackingInfoData)
+	}
+
+	React.useEffect(() => {
+		fetchTrackingInfo()
+	}, [shipmentRecord.trackingNumber, shipmentRecord.courier])
+
 	return (
 		<motion.div
 			layoutId={`card-${shipmentRecord.id}`}
