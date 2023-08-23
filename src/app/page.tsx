@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button"
 
 export default async function Home() {
 	return (
-		<main>
-			<section className="flex flex-col items-start justify-center">
+		<main className="flex items-center justify-center pt-24">
+			<section className="flex flex-col items-start justify-center gap-2">
 				<header>
 					<h1 className="scroll-m-20 text-5xl font-extrabold tracking-tight">
 						Shipment
@@ -21,7 +21,7 @@ export default async function Home() {
 					and accurate tracking, designed to make your shipping
 					experience worry-free.
 				</p>
-				<div>
+				<div className="flex items-center gap-6">
 					<Button>Get Started</Button>
 					<Button variant="outline">Learn More</Button>
 				</div>

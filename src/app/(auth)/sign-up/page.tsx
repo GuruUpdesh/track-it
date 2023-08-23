@@ -7,6 +7,10 @@ export default function Page() {
 			<SignUp
 				appearance={{
 					baseTheme: dark,
+					elements: {
+						rootBox: "bg-transparent",
+						card: "border bg-white/5 border-white/10 rounded-xl",
+					},
 				}}
 			/>
 		</div>

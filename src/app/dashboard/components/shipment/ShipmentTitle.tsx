@@ -58,11 +58,11 @@ const ShipmentTitle = ({ shipmentRecord }: Props) => {
 							handleSaveName()
 						}
 					}}
-					className="w-[20ch] max-w-full bg-transparent text-xl font-semibold tracking-tighter outline-none"
+					className="w-[20ch] max-w-full bg-transparent text-2xl font-semibold tracking-tighter outline-none"
 				/>
 			) : (
 				<button
-					className="cursor-pointer text-xl font-semibold tracking-tighter"
+					className="cursor-pointer text-2xl font-semibold tracking-tighter"
 					role="heading"
 					onClick={() => setEdit(true)}
 					disabled={loading}

@@ -1,8 +1,5 @@
 import { TPackage } from "@/components/DashboardGrid"
-import {
-	TTrackingHistory,
-	TPackageInfo,
-} from "@/app/api/package/typesAndSchemas"
+import { THistoryRow, TTrackingData } from "@/app/api/package/typesAndSchemas"
 import HistoryLine from "@/components/tracking/HistoryLine"
 import { PackageAction } from "@/context/packageContext/packageReducer"
 import { getCourier } from "@/utils/courier"
@@ -22,7 +19,7 @@ import { formatDate, getTimeFromDate } from "@/utils/date"
 import { toast } from "react-hot-toast"
 
 type TrackingHistoryProps = {
-	trackingHistory: TTrackingHistory[]
+	trackingHistory: THistoryRow[]
 }
 
 const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
@@ -32,26 +29,24 @@ const TrackingHistory = ({ trackingHistory }: TrackingHistoryProps) => {
 			className="relative isolate flex flex-col-reverse px-6 sm:px-10 md:px-20"
 		>
 			<motion.div className="absolute left-[calc(5rem+39px)] h-full w-[1px] origin-top rounded-full bg-gradient-to-b from-white to-white/5" />
-			{trackingHistory.map(
-				(historyItem: TTrackingHistory, idx: number) => {
-					const length = trackingHistory.length
-					return (
-						<motion.div key={historyItem.date} className="z-0">
-							<HistoryLine
-								historyItem={historyItem}
-								topItem={idx === length - 1}
-							/>
-						</motion.div>
-					)
-				}
-			)}
+			{trackingHistory.map((historyItem: THistoryRow, idx: number) => {
+				const length = trackingHistory.length
+				return (
+					<motion.div key={historyItem.date} className="z-0">
+						<HistoryLine
+							historyItem={historyItem}
+							topItem={idx === length - 1}
+						/>
+					</motion.div>
+				)
+			})}
 		</motion.div>
 	)
 }
 
 type Props = {
 	pkg: TPackage
-	pkgInfo: TPackageInfo
+	pkgInfo: TTrackingData
 	dispatchPackages: React.Dispatch<PackageAction>
 	open: boolean
 	setOpen: (open: boolean) => void

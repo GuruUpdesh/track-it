@@ -2,10 +2,10 @@
 
 import { TShipmentRecord } from "@/app/api/shipment/typesAndSchemas"
 import React from "react"
-import Shipment from "./shipment/Shipment"
+import Shipment from "./Shipment"
 import { ShipmentsState, useShipments } from "@/lib/shipmentsStore"
-import { getShipments } from "@/app/api/shipment/shipmentAPI"
-import ShipmentSkeleton from "./shipment/ShipmentSkeleton"
+import shipmentAPI from "@/app/api/shipment/shipmentAPI"
+import ShipmentSkeleton from "./ShipmentSkeleton"
 
 type Props = {
 	userId: string | null
@@ -14,15 +14,14 @@ type Props = {
 const Shipments = ({ userId }: Props) => {
 	const [loading, setLoading] = React.useState(false)
 	const [shipments, updateShipments] = useShipments(
-		(state: ShipmentsState) => [state.shipments, state.updateShipments]
+		(state: ShipmentsState) => [state.shipments, state.setShipments]
 	)
 
 	async function handleLoadShipments() {
 		if (!userId) return
 		setLoading(true)
-		const loadedShipments = await getShipments(userId)
+		const loadedShipments = await shipmentAPI.getShipments(userId)
 		setLoading(false)
-		loadedShipments.sort((a, b) => a.position - b.position)
 		updateShipments(loadedShipments)
 	}
 

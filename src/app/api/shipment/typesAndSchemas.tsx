@@ -30,3 +30,5 @@ export const shipmentRecordUpdateSchema = z.object({
 })
 
 export type TShipmentRecordUpdate = z.infer<typeof shipmentRecordUpdateSchema>
+
+export const shipmentIdSchema = z.object({ id: z.number().min(0) })

@@ -71,7 +71,7 @@ export default function RootLayout({ children }: Props) {
 				>
 					<ThemeProvider
 						attribute="class"
-						defaultTheme="dark"
+						defaultTheme="sy"
 						enableSystem
 					>
 						<main>

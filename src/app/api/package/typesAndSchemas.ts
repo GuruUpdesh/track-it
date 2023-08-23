@@ -21,7 +21,7 @@ export const statusEnum = z.enum([
 	"UNKNOWN",
 ])
 
-const locationSchema = z
+const rawLocationSchema = z
 	.object({
 		city: z.string(),
 		state: z.string(),
@@ -29,6 +29,14 @@ const locationSchema = z
 		country: z.string(),
 	})
 	.nullable()
+
+export type TRawLocation = z.infer<typeof rawLocationSchema>
+
+const locationSchema = z.object({
+	name: z.string(),
+	lat: z.number().nullable(),
+	lng: z.number().nullable(),
+})
 
 export type TLocation = z.infer<typeof locationSchema>
 
@@ -39,14 +47,14 @@ export const shippoTrackingHistorySchema = z.object({
 	status: statusEnum,
 	status_details: z.string(),
 	status_date: z.string(),
-	location: locationSchema,
+	location: rawLocationSchema,
 })
 
 export const shippoResponseSchema = z.object({
 	carrier: courierEnum,
 	tracking_number: z.string(),
-	address_from: locationSchema,
-	address_to: locationSchema,
+	address_from: rawLocationSchema,
+	address_to: rawLocationSchema,
 	transaction: z.string().nullable(),
 	original_eta: z.string().nullable(),
 	eta: z.string().nullable(),
@@ -58,7 +66,7 @@ export const shippoResponseSchema = z.object({
 	tracking_status: z.object({
 		status_date: z.string(),
 		status_details: z.string(),
-		location: locationSchema,
+		location: rawLocationSchema,
 		substatus: z
 			.object({
 				code: z.string().nullable(),
@@ -77,25 +85,25 @@ export const shippoResponseSchema = z.object({
 export type TShippoResponse = z.infer<typeof shippoResponseSchema>
 export type TShippoTrackingHistory = z.infer<typeof shippoTrackingHistorySchema>
 
-export const trackingHistorySchema = z.object({
+export const historyRowSchema = z.object({
 	status: statusEnum,
 	detailedStatus: z.string(),
-	location: z.string(),
+	location: locationSchema,
 	date: z.string(),
 	deliveryLocation: z.string().nullable(),
 })
 
-export const PackageInfoSchema = z.object({
+export const trackingDataSchema = z.object({
 	trackingNumber: z.string(),
 	courier: courierEnum,
-	status: trackingHistorySchema,
+	status: historyRowSchema,
 	eta: z.string().nullable(),
 	progressPercentage: z.number().min(0).max(100),
 	service: z.string().nullable(),
 	sourceAndDestinationString: z.string().nullable(),
 	transitTime: z.string().nullable(),
-	trackingHistory: z.array(trackingHistorySchema),
+	trackingHistory: z.array(historyRowSchema),
 })
 
-export type TPackageInfo = z.infer<typeof PackageInfoSchema>
-export type TTrackingHistory = z.infer<typeof trackingHistorySchema>
+export type TTrackingData = z.infer<typeof trackingDataSchema>
+export type THistoryRow = z.infer<typeof historyRowSchema>

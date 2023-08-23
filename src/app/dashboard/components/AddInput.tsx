@@ -2,19 +2,16 @@
 
 import { getCourierFromTrackingNumber } from "@/utils/courier"
 import React, { useEffect, useState } from "react"
-import { toast } from "react-hot-toast"
 import { Input } from "../../../components/ui/input"
 import { Button } from "../../../components/ui/button"
 import { cn } from "@/lib/utils"
 import { BiPlus } from "react-icons/bi"
 import { useAuth } from "@clerk/nextjs"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
-import { createShipment } from "@/app/api/shipment/shipmentAPI"
-import { ShipmentsState, useShipments } from "@/lib/shipmentsStore"
-import { shipmentRecordSchema } from "@/app/api/shipment/typesAndSchemas"
+import { useShipments } from "@/lib/shipmentsStore"
 
 const AddInput = () => {
-	const [addShipment, shipments] = useShipments((state: ShipmentsState) => [
+	const [addShipment] = useShipments((state) => [
 		state.addShipment,
 		state.shipments,
 	])
@@ -51,25 +48,20 @@ const AddInput = () => {
 			const newShipment = {
 				name: "",
 				courier: courier.code,
-				position: shipments.length,
+				position: -1,
 				trackingNumber,
 				userId,
 			}
 
 			setLoading(true)
-			const shipment = await createShipment(newShipment)
+			const result = await addShipment(newShipment)
 			setLoading(false)
 
-			if (!shipment) {
-				toast.error("Something went wrong")
+			if (result === false) {
 				return
 			}
 
-			const createdShipment = shipmentRecordSchema.parse(shipment)
-			addShipment(createdShipment)
-
 			setTrackingNumber("")
-			toast.success("Shipment added")
 		}
 	}
 

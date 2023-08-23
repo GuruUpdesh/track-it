@@ -3,7 +3,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "geometry",
 		stylers: [
 			{
-				color: "#212121",
+				color: "#161617",
 			},
 		],
 	},
@@ -19,7 +19,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "labels.text.fill",
 		stylers: [
 			{
-				color: "#757575",
+				color: "#586060",
 			},
 		],
 	},
@@ -37,6 +37,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		stylers: [
 			{
 				color: "#757575",
+				visibility: "off",
 			},
 		],
 	},
@@ -46,11 +47,13 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		stylers: [
 			{
 				color: "#9e9e9e",
+				visibility: "off",
 			},
 		],
 	},
 	{
-		featureType: "administrative.land_parcel",
+		featureType: "administrative.province",
+		elementType: "geometry",
 		stylers: [
 			{
 				visibility: "off",
@@ -59,10 +62,10 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 	},
 	{
 		featureType: "administrative.locality",
-		elementType: "labels.text.fill",
+		elementType: "labels.text",
 		stylers: [
 			{
-				color: "#bdbdbd",
+				visibility: "off",
 			},
 		],
 	},
@@ -88,7 +91,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "labels.text.fill",
 		stylers: [
 			{
-				color: "#757575",
+				visibility: "off",
 			},
 		],
 	},
@@ -105,7 +108,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "geometry",
 		stylers: [
 			{
-				color: "#181818",
+				visibility: "off",
 			},
 		],
 	},
@@ -114,7 +117,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "labels.text.fill",
 		stylers: [
 			{
-				color: "#616161",
+				visibility: "off",
 			},
 		],
 	},
@@ -123,7 +126,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "labels.text.stroke",
 		stylers: [
 			{
-				color: "#1b1b1b",
+				visibility: "off",
 			},
 		],
 	},
@@ -159,7 +162,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "labels.text.fill",
 		stylers: [
 			{
-				color: "#8a8a8a",
+				visibility: "off",
 			},
 		],
 	},
@@ -176,7 +179,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "geometry",
 		stylers: [
 			{
-				color: "#373737",
+				color: "#252527",
 			},
 		],
 	},
@@ -185,7 +188,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "geometry",
 		stylers: [
 			{
-				color: "#3c3c3c",
+				color: "#252527",
 			},
 		],
 	},
@@ -203,7 +206,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "geometry",
 		stylers: [
 			{
-				color: "#4e4e4e",
+				color: "#252527",
 			},
 		],
 	},
@@ -238,6 +241,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		stylers: [
 			{
 				color: "#757575",
+				visibility: "off",
 			},
 		],
 	},
@@ -246,7 +250,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		elementType: "geometry",
 		stylers: [
 			{
-				color: "#000000",
+				color: "#09090b",
 			},
 		],
 	},
@@ -265,6 +269,7 @@ export const mapStyles: google.maps.MapTypeStyle[] = [
 		stylers: [
 			{
 				color: "#3d3d3d",
+				visibility: "off",
 			},
 		],
 	},

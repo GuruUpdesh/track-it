@@ -1,51 +1,94 @@
 import { prisma } from "@/db"
 import { NextResponse } from "next/server"
-import { z } from "zod"
+import { ZodError } from "zod"
 import {
+	shipmentIdSchema,
 	shipmentRecordCreateSchema,
 	shipmentRecordUpdateSchema,
+	TShipmentRecordUpdate,
 } from "./typesAndSchemas"
 
-export async function POST(req: Request) {
-	const body = await req.json()
-	console.log("body", body)
+function handleError(error: unknown, baseError: string) {
+	console.error("Request error", error)
 
+	const response = { status: 500, error: baseError }
+	if (error instanceof ZodError) {
+		response.status = 400
+		response.error = error.message
+	}
+
+	return new NextResponse(
+		JSON.stringify({
+			error: response.error,
+			success: false,
+		}),
+		{ status: response.status }
+	)
+}
+
+export async function POST(req: Request) {
 	try {
+		const body = await req.json()
 		const shipment = shipmentRecordCreateSchema.parse(body)
 
-		const newShipment = await prisma.shipment.create({
-			data: {
-				name: shipment.name,
-				trackingNumber: shipment.trackingNumber,
+		// Check existing shipments with a greater or equal position
+		const shipmentsToUpdate = await prisma.shipment.findMany({
+			where: {
 				userId: shipment.userId,
-				courier: shipment.courier,
-				position: shipment.position,
-				createdAt: shipment.createdAt
-					? new Date(shipment.createdAt)
-					: undefined,
+				position: {
+					gte: shipment.position,
+				},
+			},
+			select: {
+				id: true,
+				position: true,
 			},
 		})
 
+		// Prepare update operations to adjust their positions
+		const updateOperations = shipmentsToUpdate.map((shipmentToUpdate) => {
+			return prisma.shipment.update({
+				where: {
+					id: shipmentToUpdate.id,
+				},
+				data: {
+					position: shipmentToUpdate.position + 1,
+				},
+			})
+		})
+
+		// Create a transaction to update positions and then insert the new shipment
+		const transactionResult = await prisma.$transaction([
+			...updateOperations,
+			prisma.shipment.create({
+				data: {
+					name: shipment.name,
+					trackingNumber: shipment.trackingNumber,
+					userId: shipment.userId,
+					courier: shipment.courier,
+					position: shipment.position,
+					createdAt: shipment.createdAt
+						? new Date(shipment.createdAt)
+						: undefined,
+				},
+			}),
+		])
+
+		const newShipment = transactionResult[transactionResult.length - 1]
+
 		return new NextResponse(
-			JSON.stringify({ newShipment, success: true }),
+			JSON.stringify({ shipment: newShipment, success: true }),
 			{ status: 200 }
 		)
 	} catch (error) {
-		console.error("Request error", error)
-		return new NextResponse(
-			JSON.stringify({
-				error: "Error adding shipment",
-				success: false,
-			}),
-			{ status: 500 }
-		)
+		return handleError(error, "Error creating shipment")
 	}
 }
 
 export async function GET(req: Request) {
-	const url = new URL(req.url)
-	const userId = url.searchParams.get("userId")
 	try {
+		const url = new URL(req.url)
+		const userId = url.searchParams.get("userId")
 		if (!userId) {
 			throw new Error("Missing userId in url parameters")
 		}
@@ -71,49 +114,136 @@ export async function GET(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-	const body = await req.json()
-
 	try {
+		const body = await req.json()
 		const shipment = shipmentRecordUpdateSchema.parse(body)
 
-		const updatedShipment = await prisma.shipment.update({
-			where: {
-				id: shipment.id,
-			},
-			data: {
-				name: shipment.name,
-				trackingNumber: shipment.trackingNumber,
-				courier: shipment.courier,
-				position: shipment.position,
-			},
-		})
-
-		return new NextResponse(
-			JSON.stringify({ updatedShipment, success: true }),
-			{ status: 200 }
-		)
+		if (shipment.position === undefined) {
+			return await updateChange(shipment)
+		} else {
+			const shipmentWithPosition =
+				shipment as TShipmentRecordPositionUpdate
+			return await updateWithPositionChange(shipmentWithPosition)
+		}
 	} catch (error) {
-		console.error("Request error", error)
-		return new NextResponse(
-			JSON.stringify({
-				error: "Error updating shipment",
-				success: false,
-			}),
-			{ status: 500 }
-		)
+		return handleError(error, "Error updating shipment")
 	}
 }
 
-export async function DELETE(req: Request) {
-	console.log("API > shipment > DELETE")
-	const body = await req.json()
+type TShipmentRecordPositionUpdate = {
+	id: number
+	position: number
+	name?: string
+	courier?: string
+	trackingNumber?: string
+}
 
+async function updateWithPositionChange(
+	shipment: TShipmentRecordPositionUpdate
+) {
+	// Fetch the current position of the shipment to be updated
+	const currentShipment = await prisma.shipment.findUnique({
+		where: {
+			id: shipment.id,
+		},
+		select: {
+			position: true,
+			userId: true,
+		},
+	})
+
+	if (!currentShipment) {
+		throw new Error("Shipment not found")
+	}
+
+	const { position: currentPosition, userId } = currentShipment
+
+	const shipmentsToUpdate =
+		shipment.position < currentPosition
+			? await prisma.shipment.findMany({
+					where: {
+						userId: userId,
+						position: {
+							gte: shipment.position,
+							lt: currentPosition,
+						},
+					},
+					select: {
+						id: true,
+						position: true,
+					},
+			  })
+			: await prisma.shipment.findMany({
+					where: {
+						userId: userId,
+						position: {
+							gt: currentPosition,
+							lte: shipment.position,
+						},
+					},
+					select: {
+						id: true,
+						position: true,
+					},
+			  })
+
+	const updateOperations = shipmentsToUpdate.map((shipmentToUpdate) => {
+		const newPosition =
+			shipment.position < currentPosition
+				? shipmentToUpdate.position + 1
+				: shipmentToUpdate.position - 1
+
+		return prisma.shipment.update({
+			where: {
+				id: shipmentToUpdate.id,
+			},
+			data: {
+				position: newPosition,
+			},
+		})
+	})
+
+	// Now, add the main shipment update operation.
+	updateOperations.push(
+		prisma.shipment.update({
+			where: {
+				id: shipment.id,
+			},
+			data: shipment,
+		})
+	)
+
+	const transactionResult = await prisma.$transaction(updateOperations)
+	const patchedShipment = transactionResult[transactionResult.length - 1]
+
+	return new NextResponse(
+		JSON.stringify({ shipment: patchedShipment, success: true }),
+		{
+			status: 200,
+		}
+	)
+}
+
+async function updateChange(shipment: TShipmentRecordUpdate) {
+	const updatedShipment = await prisma.shipment.update({
+		where: {
+			id: shipment.id,
+		},
+		data: shipment,
+	})
+
+	return new NextResponse(
+		JSON.stringify({ shipment: updatedShipment, success: true }),
+		{
+			status: 200,
+		}
+	)
+}
+
+export async function DELETE(req: Request) {
 	try {
-		const id = z
-			.object({
-				id: z.number(),
-			})
-			.parse(body).id
+		const body = await req.json()
+		const id = shipmentIdSchema.parse(body).id
 
 		const shipmentToDelete = await prisma.shipment.findUnique({
 			where: {
@@ -130,7 +260,6 @@ export async function DELETE(req: Request) {
 		}
 
 		const { position, userId } = shipmentToDelete
-
 		const shipmentsToUpdate = await prisma.shipment.findMany({
 			where: {
 				userId: userId,
@@ -144,24 +273,27 @@ export async function DELETE(req: Request) {
 			},
 		})
 
-		await Promise.all(
-			shipmentsToUpdate.map((shipment) => {
-				return prisma.shipment.update({
-					where: {
-						id: shipment.id,
-					},
-					data: {
-						position: shipment.position - 1,
-					},
-				})
+		const updateOperations = shipmentsToUpdate.map((shipment) => {
+			return prisma.shipment.update({
+				where: {
+					id: shipment.id,
+				},
+				data: {
+					position: shipment.position - 1,
+				},
 			})
-		)
-
-		const deletedShipment = await prisma.shipment.delete({
-			where: {
-				id: id,
-			},
 		})
+
+		const transactionResult = await prisma.$transaction([
+			...updateOperations,
+			prisma.shipment.delete({
+				where: {
+					id: id,
+				},
+			}),
+		])
+
+		const deletedShipment = transactionResult[transactionResult.length - 1]
 
 		return new NextResponse(
 			JSON.stringify({ shipment: deletedShipment, success: true }),
@@ -170,13 +302,6 @@ export async function DELETE(req: Request) {
 			}
 		)
 	} catch (error) {
-		console.error("Request error", error)
-		return new NextResponse(
-			JSON.stringify({
-				error: "Error deleting shipment",
-				success: false,
-			}),
-			{ status: 500 }
-		)
+		handleError(error, "Error deleting shipment")
 	}
 }

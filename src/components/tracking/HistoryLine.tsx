@@ -1,11 +1,14 @@
-import { TTrackingHistory } from "@/app/api/package/typesAndSchemas"
+// eslint-disable-next-line
+// @ts-nocheck
+
+import { THistoryRow } from "@/app/api/package/typesAndSchemas"
 import { cn } from "@/lib/utils"
 import { formatDate, getTimeFromDate } from "@/utils/date"
 import { getColorFromStatus } from "@/utils/package"
 import { BsDot } from "react-icons/bs"
 
 type Props = {
-	historyItem: TTrackingHistory | null
+	historyItem: THistoryRow | null
 	topItem?: boolean
 }
 

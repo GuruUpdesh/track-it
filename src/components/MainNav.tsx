@@ -6,12 +6,13 @@ import Link from "next/link"
 import { AiOutlineHome } from "react-icons/ai"
 import { BsBook, BsGrid } from "react-icons/bs"
 import { usePathname } from "next/navigation"
-// import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs"
+import UserButton from "./UserButton"
 
 const MainNav = () => {
 	const pathname = usePathname()
+
 	return (
-		<nav className="flex w-screen items-center justify-between border-b bg-black/50 px-24 py-3">
+		<nav className="bg-black/15 flex w-screen items-center justify-between border-b px-24 py-3">
 			<div className="flex items-center gap-3">
 				<h1 className="text-2xl font-semibold">Shipment Tracker</h1>
 			</div>
@@ -55,13 +56,7 @@ const MainNav = () => {
 				</li>
 			</ul>
 			<div>
-				User
-				{/* <SignedIn>
-					<UserButton afterSignOutUrl="/" />
-				</SignedIn>
-				<SignedOut>
-					<SignInButton />
-				</SignedOut> */}
+				<UserButton />
 			</div>
 		</nav>
 	)

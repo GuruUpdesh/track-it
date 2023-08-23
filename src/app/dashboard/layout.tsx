@@ -1,6 +1,4 @@
-import { Input } from "@/components/ui/input"
-import { BiDotsVertical, BiFilterAlt, BiSort } from "react-icons/bi"
-import { RiRecordCircleFill } from "react-icons/ri"
+import { BiDotsVertical, BiSort } from "react-icons/bi"
 import { AiOutlineCalendar } from "react-icons/ai"
 import {
 	Select,
@@ -10,11 +8,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
-import { MdExplore } from "react-icons/md"
 import { Button } from "@/components/ui/button"
 import AddInput from "./components/AddInput"
 import Alert from "@/components/ui/alert/Alert"
 import UndoRedo from "@/app/dashboard/components/UndoRedo"
+import Search from "@/app/dashboard/components/Search"
 
 interface Props {
 	children: React.ReactNode
@@ -30,7 +28,7 @@ export default function DashboardLayout({ children }: Props) {
 				</h1>
 				<AddInput />
 				<div className="flex w-full max-w-xs items-center space-x-2">
-					<Input placeholder="Search..." />
+					<Search />
 					<Button variant="outline" size="icon">
 						<BiDotsVertical />
 					</Button>
@@ -63,13 +61,12 @@ export default function DashboardLayout({ children }: Props) {
 					</Select>
 				</div>
 				<div className="flex items-center gap-3">
-					<p className="flex items-center gap-1">
+					{/* <p className="flex items-center gap-1">
 						<BiFilterAlt />
 						Filters:
-					</p>
+					</p> */}
 					<Select>
 						<SelectTrigger className="h-min w-[180px] rounded-full py-1">
-							<MdExplore />
 							<SelectValue placeholder="Courier" />
 						</SelectTrigger>
 						<SelectContent>
@@ -91,22 +88,12 @@ export default function DashboardLayout({ children }: Props) {
 					</Select>
 					<Select>
 						<SelectTrigger className="h-min w-[180px] rounded-full py-1">
-							<RiRecordCircleFill />
 							<SelectValue placeholder="Status" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectGroup>
 								<SelectItem value="blueberry">
 									Relevance
-								</SelectItem>
-								<SelectItem value="grapes">
-									Latest Update
-								</SelectItem>
-								<SelectItem value="apple">
-									Date Added (asc)
-								</SelectItem>
-								<SelectItem value="banana">
-									Date Added (desc)
 								</SelectItem>
 							</SelectGroup>
 						</SelectContent>
@@ -120,15 +107,6 @@ export default function DashboardLayout({ children }: Props) {
 							<SelectGroup>
 								<SelectItem value="blueberry">
 									Relevance
-								</SelectItem>
-								<SelectItem value="grapes">
-									Latest Update
-								</SelectItem>
-								<SelectItem value="apple">
-									Date Added (asc)
-								</SelectItem>
-								<SelectItem value="banana">
-									Date Added (desc)
 								</SelectItem>
 							</SelectGroup>
 						</SelectContent>

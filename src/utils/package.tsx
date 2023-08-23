@@ -1,11 +1,11 @@
-import { TLocation, TStatus } from "@/app/api/package/typesAndSchemas"
+import { TRawLocation, TStatus } from "@/app/api/package/typesAndSchemas"
 import { differenceInDays } from "date-fns"
 import { AiOutlineWarning } from "react-icons/ai"
 import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
 import { TbTruckLoading } from "react-icons/tb"
 
 export function convertLocationObjectToString(
-	location: TLocation | null
+	location: TRawLocation | null
 ): string {
 	if (!location) return "Location not found"
 
