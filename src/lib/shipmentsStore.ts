@@ -9,11 +9,12 @@ import shipmentAPI from "@/app/api/shipment/shipmentAPI"
 import Fuse from "fuse.js"
 import { toast } from "react-hot-toast"
 
-type TSortOption = "position"
+export type TSortOption = "position" | "dateNewest" | "dateOldest"
 
 export interface ShipmentsState {
 	shipments: TShipmentRecord[]
 	sortOption: TSortOption
+	setSortOption: (sortOption: TSortOption) => void
 	errorAlert: string | null
 	displayedShipments: Set<number>
 	deletedShipmentsStack: TShipmentRecord[]
@@ -28,6 +29,12 @@ export interface ShipmentsState {
 export const useShipments = create<ShipmentsState>()((set, get) => ({
 	shipments: [],
 	sortOption: "position",
+	setSortOption: (sortOption) => {
+		set((state) => ({
+			sortOption,
+			shipments: sortShipments(sortOption, state.shipments),
+		}))
+	},
 	errorAlert: null,
 	setShipments: (shipments) => {
 		set((state) => ({
@@ -245,8 +252,23 @@ export const useShipments = create<ShipmentsState>()((set, get) => ({
 }))
 
 function sortShipments(sortOption: TSortOption, shipments: TShipmentRecord[]) {
-	if (sortOption === "position") {
-		return [...shipments].sort((a, b) => a.position - b.position)
+	switch (sortOption) {
+		case "position": {
+			return [...shipments].sort((a, b) => a.position - b.position)
+		}
+		case "dateNewest": {
+			return [...shipments].sort(
+				(a, b) =>
+					new Date(b.createdAt).getTime() -
+					new Date(a.createdAt).getTime()
+			)
+		}
+		case "dateOldest": {
+			return [...shipments].sort(
+				(a, b) =>
+					new Date(a.createdAt).getTime() -
+					new Date(b.createdAt).getTime()
+			)
+		}
 	}
-	return [...shipments]
 }

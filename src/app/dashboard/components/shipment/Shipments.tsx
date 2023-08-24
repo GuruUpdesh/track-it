@@ -41,8 +41,12 @@ const Shipments = ({ userId }: Props) => {
 				</>
 			) : (
 				<>
-					{shipments.map((shipment: TShipmentRecord) => (
-						<Shipment key={shipment.id} shipmentRecord={shipment} />
+					{shipments.map((shipment: TShipmentRecord, index) => (
+						<Shipment
+							key={shipment.id}
+							shipmentRecord={shipment}
+							index={index}
+						/>
 					))}
 				</>
 			)}

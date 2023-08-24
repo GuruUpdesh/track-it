@@ -28,8 +28,7 @@ type Props = {
 }
 
 const ShipmentMenu = ({ shipmentRecord }: Props) => {
-	const [updateShipment, deleteShipmentState] = useShipments((state) => [
-		state.updateShipment,
+	const [deleteShipmentState] = useShipments((state) => [
 		state.deleteShipment,
 	])
 
@@ -47,18 +46,6 @@ const ShipmentMenu = ({ shipmentRecord }: Props) => {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent>
-					<DropdownMenuItem
-						onSelect={() => {
-							updateShipment({
-								...shipmentRecord,
-								position: shipmentRecord.position - 1,
-							})
-						}}
-						disabled={shipmentRecord.position === 0}
-					>
-						<AiOutlineDelete className="mr-2" />
-						Move Left
-					</DropdownMenuItem>
 					<DropdownMenuItem
 						onSelect={() => {
 							setDeleteDialogOpen(true)

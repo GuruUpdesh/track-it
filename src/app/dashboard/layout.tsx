@@ -1,4 +1,4 @@
-import { BiDotsVertical, BiSort } from "react-icons/bi"
+import { BiDotsVertical } from "react-icons/bi"
 import { AiOutlineCalendar } from "react-icons/ai"
 import {
 	Select,
@@ -13,6 +13,7 @@ import AddInput from "./components/AddInput"
 import Alert from "@/components/ui/alert/Alert"
 import UndoRedo from "@/app/dashboard/components/UndoRedo"
 import Search from "@/app/dashboard/components/Search"
+import Sort from "./components/Sort"
 
 interface Props {
 	children: React.ReactNode
@@ -37,28 +38,7 @@ export default function DashboardLayout({ children }: Props) {
 			<section className="flex justify-between">
 				<div className="flex items-center gap-3">
 					<UndoRedo />
-					<Select>
-						<SelectTrigger className="max-w-xs">
-							<BiSort />
-							<SelectValue placeholder="Sort by" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectItem value="blueberry">
-									Relevance
-								</SelectItem>
-								<SelectItem value="grapes">
-									Latest Update
-								</SelectItem>
-								<SelectItem value="apple">
-									Date Added (asc)
-								</SelectItem>
-								<SelectItem value="banana">
-									Date Added (desc)
-								</SelectItem>
-							</SelectGroup>
-						</SelectContent>
-					</Select>
+					<Sort />
 				</div>
 				<div className="flex items-center gap-3">
 					{/* <p className="flex items-center gap-1">
