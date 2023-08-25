@@ -62,3 +62,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+.card-gradient-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.05) 50%
+  );
+  background-size: 200%;
+  background-position: 100%;
+  transition: background-position 1.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.card-gradient-bg:hover {
+  background-position: 0%;
+}

@@ -16,8 +16,8 @@ import { motion } from "framer-motion"
 // 	FiArrowDownLeft,
 // 	FiArrowUpLeft,
 // } from "react-icons/fi"
-// import { getTrackingInfo } from "@/app/api/track/trakingAPI"
-// import { TTrackingData } from "@/app/api/package/typesAndSchemas"
+import { getTrackingInfo } from "@/app/api/track/trakingAPI"
+import { TTrackingData } from "@/app/api/package/typesAndSchemas"
 import { useShipments } from "@/lib/shipmentsStore"
 import { cn } from "@/lib/utils"
 import {
@@ -61,15 +61,16 @@ const Shipment = ({ shipmentRecord, index }: Props) => {
 		dragging: false,
 	})
 
-	// const [trackingInfo, setTrackingInfo] =
-	// 	React.useState<TTrackingData | null>(null)
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [trackingInfo, setTrackingInfo] =
+		React.useState<TTrackingData | null>(null)
 
 	async function fetchTrackingInfo() {
-		// const trackingInfoData = await getTrackingInfo(
-		// 	shipmentRecord.trackingNumber,
-		// 	shipmentRecord.courier
-		// )
-		// setTrackingInfo(trackingInfoData)
+		const trackingInfoData = await getTrackingInfo(
+			shipmentRecord.trackingNumber,
+			shipmentRecord.courier
+		)
+		setTrackingInfo(trackingInfoData)
 	}
 
 	function getShipmentFromDataTransfer(dataTransfer: DataTransfer) {
@@ -159,17 +160,14 @@ const Shipment = ({ shipmentRecord, index }: Props) => {
 				<Card
 					draggable
 					{...dragAndDrop}
-					className={cn(
-						"group overflow-hidden bg-white/5 transition-all",
-						{
-							"scale-95 opacity-50":
-								drag.indicator !== 0 && drag.dragging,
-							"scale-95 opacity-100":
-								drag.indicator === 0 && drag.dragging,
-						}
-					)}
+					className={cn("group overflow-hidden  transition-all", {
+						"scale-95 opacity-50":
+							drag.indicator !== 0 && drag.dragging,
+						"scale-95 opacity-100":
+							drag.indicator === 0 && drag.dragging,
+					})}
 				>
-					<div className="">
+					<div className="card-gradient-bg">
 						<CardHeader className="flex flex-row items-center justify-between px-4 py-2">
 							<div className="flex items-baseline gap-2">
 								<ShipmentTitle

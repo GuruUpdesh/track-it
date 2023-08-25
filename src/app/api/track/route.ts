@@ -4,6 +4,7 @@ import {
 	TCourier,
 	TRawLocation,
 	TShippoResponse,
+	TTrackingData,
 	shippoResponseSchema,
 	trackingDataSchema,
 } from "../package/typesAndSchemas"
@@ -13,6 +14,7 @@ import {
 	simplifyRawTrackingData,
 } from "@/utils/trackingDataTransform"
 import { kv } from "@vercel/kv"
+import { z } from "zod"
 
 const SHIPPO_API_KEY = "ShippoToken " + process.env.SHIPPO_KEY
 const SHIPPO_TEST_API_KEY = "ShippoToken " + process.env.SHIPPO_TEST
@@ -22,19 +24,11 @@ interface LatLng {
 	lng: number
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function getLatLng(location: TRawLocation): Promise<LatLng> {
 	const locationString = formatRawLocation(location)
 
 	if (locationString === "") {
 		throw new Error("Location string is empty")
-	}
-
-	// 1. Check if the cache has a value for the given locationString
-	const cachedLatLng = await kv.get<LatLng>(locationString)
-
-	if (cachedLatLng) {
-		return cachedLatLng
 	}
 
 	const { data } = await axios.get(
@@ -45,10 +39,14 @@ export async function getLatLng(location: TRawLocation): Promise<LatLng> {
 		throw new Error("Error getting lat lng")
 	}
 
-	const latLng = data.results[0].geometry.location
+	const rawLatLng = data.results[0].geometry.location
 
-	// If the Google API returns a valid result, store this result in the cache for future use
-	await kv.set(locationString, { lat: latLng.lat, lng: latLng.lng })
+	const latLng = z
+		.object({
+			lat: z.number(),
+			lng: z.number(),
+		})
+		.parse(rawLatLng)
 
 	return { lat: latLng.lat, lng: latLng.lng }
 }
@@ -64,19 +62,6 @@ async function getRawTrackingData(
 	trackingNumber: string,
 	courier: TCourier
 ): Promise<TShippoResponse> {
-	const cacheKey = `${courier}-${trackingNumber}`
-
-	const cachedData = await kv.get<CachedTrackingData>(cacheKey)
-
-	if (cachedData) {
-		const currentTime = new Date().getTime()
-		const ageOfCache = currentTime - cachedData.timestamp
-
-		if (ageOfCache <= CACHE_EXPIRY) {
-			return cachedData.data
-		}
-	}
-
 	// step 1: get the tracking info from shippo
 	const headers = {
 		Authorization:
@@ -91,17 +76,12 @@ async function getRawTrackingData(
 	// step 2: validate the response
 	shippoResponseSchema.parse(data)
 
-	await kv.set(cacheKey, {
-		data: data as TShippoResponse,
-		timestamp: new Date().getTime(),
-	})
-
 	return data as TShippoResponse
 }
 
 export async function GET(req: NextRequest) {
+	console.log("Request received")
 	try {
-		const start = new Date().getTime()
 		// parse the request url
 		const url = new URL(req.url)
 		const trackingNumber = url.searchParams.get("trackingNumber")
@@ -112,22 +92,48 @@ export async function GET(req: NextRequest) {
 				"Missing tracking number or courier in url parameters"
 			)
 		}
+
 		const courier = courierSchema.parse(rawCourier)
 
-		// get the tracking info
-		const trackingInfo = await getRawTrackingData(trackingNumber, courier)
+		let trackingData: TTrackingData | null = null
 
-		// transform the tracking info
-		const simplifiedTrackingData =
-			await simplifyRawTrackingData(trackingInfo)
+		// get the cached data
+		const cacheKey = `${courier}-${trackingNumber}`
+		const cachedData = await kv.get<CachedTrackingData>(cacheKey)
+		if (cachedData) {
+			// check if the cache is expired
+			const currentTime = new Date().getTime()
+			const ageOfCache = currentTime - cachedData.timestamp
 
-		trackingDataSchema.parse(simplifiedTrackingData)
-		const end = new Date().getTime()
-		console.log("Time to get tracking info: " + (end - start) + "ms")
+			if (ageOfCache <= CACHE_EXPIRY) {
+				trackingData = trackingDataSchema.parse(cachedData.data)
+			}
+		} else {
+			// get the tracking info
+			const trackingInfo = await getRawTrackingData(
+				trackingNumber,
+				courier
+			)
+
+			// transform the tracking info
+			const simplifiedTrackingData =
+				await simplifyRawTrackingData(trackingInfo)
+
+			trackingData = trackingDataSchema.parse(simplifiedTrackingData)
+
+			await kv.set(cacheKey, {
+				data: trackingData,
+				timestamp: new Date().getTime(),
+			})
+		}
+
+		if (!trackingData) {
+			throw new Error("Error getting tracking info")
+		}
 
 		return new NextResponse(
 			JSON.stringify({
-				trackingInfo: simplifiedTrackingData,
+				trackingInfo: trackingData,
 				success: true,
 			}),
 			{ status: 200 }
