@@ -1,58 +1,57 @@
-# TrackIt
 
-TrackIt is a web-based application that simplifies shipment tracking by providing a unified platform to monitor your packages' status and journey, across various couriers.
+# Taskly
+Taskly is an opinionated agile project managment website that provides a simplified and user focused project managment experience.
+<div align="center">
 
-![Preview](https://github.com/GuruUpdesh/track-it/assets/62634868/26d8a1ab-1eab-4cc4-aa8a-108a9dc61bce)
+[![Open - TasklyPM.com](https://img.shields.io/badge/Open-TasklyPM.com-09d897?style=for-the-badge)](https://www.tasklypm.com/)
 
-[Live Production Website (shipmentracker.com)](https://www.shipmentracker.com/) | [User Guide](https://www.shipmentracker.com/user-guide) 
+</div>
 
 ## Features
-![Features Board](https://github.com/GuruUpdesh/track-it/assets/62634868/3e1194e7-70aa-48ee-aaf9-405f2a2c0689)
-- **Centralized Tracking Dashboard**: Consolidated view of shipments and their current statuses.
-- **Multi-Courier Support**: Tracking support for UPS, USPS, FedEx, OnTrac, and more.
-- **Detailed Tracking History**: View status, location, and date information for each shipment.
-- **Easy Management**: Add, delete, and update your shipments with ease.
-- **Clear and easy to understand UI**: Intuitive and responsive design for a seamless user experience. With mobile support for tracking on the go.
-- **Power User Features**: Search and filter functionality, undo accidental deletions, shortcuts, and links to courier websites.
+![Screenshot 2024-03-13 121651](https://github.com/GuruUpdesh/taskly/assets/62634868/50042f27-d237-4988-9249-4a930d36bd9b)
+1. **AI Features**: Enhance your workflow with cutting-edge AI. Our machine learning algorithms adapt to your project needs, streamlining tasks and boosting productivity.
+2. **Fast & Realtime**: Speed up your work with our seamless user experience. Gain a competitive edge with instant a task management system thats easy for everyone.
+3. **Simple**: Intuitive for all skill levels. Navigate your projects with an interface designed for simplicity, backed by powerful technology.
+4. **Stay Notified**: Taskly provides seamless notification integration and a UI which helps you catch up quickly.
+5. **Documentation** (Coming Soon): Get started quickly with comprehensive guides. Our detailed documentation provides all you need to harness the power of simplified project management.
+![Screenshot 2024-03-13 131326](https://github.com/GuruUpdesh/track-it/assets/62634868/d474efba-e258-47c5-96ad-195b4a9f5046)
 
+## Installation
 
-
-## Setup development environment
-
-### Required
--  Node.js v18+ (https://nodejs.org/en/download/)
--  NPM v7+ (https://www.npmjs.com/get-npm)
-
-### Install
-Clone the repository
-
+**Prerequisites**
 ```bash
-git clone https://github.com/GuruUpdesh/track-it.git
+  Install node (at least version 18.17)
+  Create an account on TasklyPM.com
 ```
 
-Install dependencies
+**.env**
+
+The environment is needed for the project to function properly in local development. If you are recreating the environment with your own keys please see the `.env.example` file.
+
+**Install**
 ```bash
-npm install
-npx husky install
+  Git pull https://github.com/GuruUpdesh/taskly.git
+  cd taskly
+  npm install
+```
+## Usage
+**Development**
+```bash
+  npm run dev
+```
+**Demo**
+```bash
+  npm run build
+  npm start
 ```
 
-Run the development server
-```bash
-npm run dev
-```
+## The Vision
+It's a perfect solution for small teams or startups that need a tool which enables success, but doesn't require a large learning curve. With a focused featureset and simplified options Taskly's "opinionated" approach, emphasizing the belief that a tool's effectiveness is enhanced when it's straightforward and devoid of unnecessary complexities. This philosophy underpins our design choices, ensuring that users encounter minimal friction while maximizing their efficiency.
 
-## Testing
-### Unit Tests
-```bash
-npm run test
-```
+Agile project management tools often suffer from high complexity and difficult learning curves, causing inefficiency, onboarding challenges, and wasted investment. Project planning is critical to a successful business, as poor planning and undefined goals contribute to a significant number of project failures.
 
-### Cypress End-to-End Tests (with Cypress GUI)
-```bash
-npm run cypress
-```
+## Contributors
 
-### Cypress End-to-End Tests (Headless)
-```bash
-npm run cypress:headless
-```
+- [Guru Updesh Singh](https://github.com/GuruUpdesh)
+- [Cameron Hollis](https://github.com/cameronhollis4)
+- [Yash Sankanagouda](https://github.com/sankanay)
