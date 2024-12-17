@@ -2,7 +2,7 @@ import { DependencyList, RefObject, useEffect, useRef, useState } from "react"
 
 function useTextOverflow<T extends HTMLElement>(
 	dependencies: DependencyList = []
-): [RefObject<T>, boolean] {
+): [RefObject<T | null>, boolean] {
 	const ref = useRef<T>(null)
 	const [isOverflowed, setIsOverflowed] = useState(false)
 

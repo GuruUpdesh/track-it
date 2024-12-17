@@ -3,6 +3,8 @@ import { AiOutlineWarning } from "react-icons/ai"
 import { BsHouseDoor, BsMailbox, BsQuestion, BsTruck } from "react-icons/bs"
 import { TbTruckLoading } from "react-icons/tb"
 
+import type { JSX } from "react";
+
 type TStatusCode =
 	| "PRE_TRANSIT"
 	| "TRANSIT"

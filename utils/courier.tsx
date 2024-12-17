@@ -3,6 +3,8 @@ import { FaFedex, FaUps } from "react-icons/fa"
 import { MdOutlineExplore } from "react-icons/md"
 import { SiUsps } from "react-icons/si"
 
+import type { JSX } from "react";
+
 const UPS_REGEX_PATTERN =
 	/\b(1Z ?[0-9A-Z]{3} ?[0-9A-Z]{3} ?[0-9A-Z]{2} ?[0-9A-Z]{4} ?[0-9A-Z]{3} ?[0-9A-Z]|T\d{3} ?\d{4} ?\d{3})\b/i
 
