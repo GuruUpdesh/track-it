@@ -1,9 +1,9 @@
 import Card from "@/components/tracking/card/Card"
+import React from "react"
 import "@testing-library/jest-dom"
 import { render, screen } from "@testing-library/react"
 import axios from "axios"
 import MockAdapter from "axios-mock-adapter"
-import { act } from "react-dom/test-utils"
 
 const testCases = [
 	{
@@ -348,7 +348,7 @@ describe("shippo mock cards", () => {
 			// Mock the response for the API call
 			mock.onGet("/api/package").reply(200, testCase.response)
 
-			await act(async () => {
+			await React.act(async () => {
 				render(
 					<Card
 						pkg={testCase.pkg}

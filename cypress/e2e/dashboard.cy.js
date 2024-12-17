@@ -23,7 +23,7 @@ describe("Dashboard", () => {
 		)
 
 		cy.get("input#trackingNumber").clear()
-		cy.get("input#trackingNumber").focus().type("9341989696005523246306")
+		cy.get("input#trackingNumber").focus().type("9361289696041616769487")
 		cy.get("input#trackingNumber").should(
 			"have.attr",
 			"aria-invalid",
