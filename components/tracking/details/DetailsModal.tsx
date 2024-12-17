@@ -152,7 +152,7 @@ const DetailsModal = ({
 					<Tabs.Root defaultValue="tracking-history">
 						<div className="border-b border-indigo-400/25">
 							<Tabs.List
-								className="relative mx-2  max-w-fit"
+								className="relative mx-2 max-w-fit"
 								ref={tabsRef}
 								onMouseLeave={onTabsExit}
 							>
@@ -260,7 +260,7 @@ const DetailsModal = ({
 								</div>
 							</motion.section>
 							<motion.section className="origin-top rounded-lg border border-indigo-200/25 bg-indigo-200/10 p-4">
-								<h1 className="text-md mb-1 border-b border-b-indigo-200/25 font-semibold capitalize tracking-tight ">
+								<h1 className="text-md mb-1 border-b border-b-indigo-200/25 font-semibold capitalize tracking-tight">
 									Service
 								</h1>
 								<div className="flex flex-col gap-3">

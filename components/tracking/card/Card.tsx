@@ -40,7 +40,7 @@ import EditTrackingNumber from "../../ui/forms/EditTrackingNumber"
 import IconButton from "@/components/ui/IconButton"
 import Menu, { TMenuItem } from "@/components/ui/menu/Menu"
 import { cn } from "@/lib/utils"
-import { toast } from "react-hot-toast"
+import { Toast, toast } from "react-hot-toast"
 import { simplifyDetailMessage } from "@/utils/dataTransform"
 import { isAfter } from "date-fns"
 
@@ -289,7 +289,7 @@ const Card = ({
 				type: "push",
 				new: pkgCopy,
 			})
-			toast.success((t) => (
+			toast.success((t: Toast) => (
 				<div className="flex items-center">
 					<p className="line-clamp-1 h-min max-w-[20ch] overflow-hidden">
 						Deleted {pkgCopy.name}

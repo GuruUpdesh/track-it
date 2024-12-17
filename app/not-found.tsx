@@ -65,7 +65,7 @@ export default function NotFound() {
 			</video> */}
 			<div>
 				<div className="flex items-center">
-					<h1 className="mr-5 border-r border-white/30 p-1  pr-5 text-2xl font-semibold">
+					<h1 className="mr-5 border-r border-white/30 p-1 pr-5 text-2xl font-semibold">
 						404
 					</h1>
 					<h2 className="text-base font-normal leading-7">

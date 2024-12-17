@@ -158,7 +158,7 @@ const Filters = ({ sortOption, setSortOption, filters, setFilters }: Props) => {
 			>
 				<DropdownMenu.Trigger asChild>
 					<button
-						className="flex items-center justify-between gap-1 whitespace-nowrap rounded-sm border border-indigo-400/25 bg-[#110F1B] px-4  capitalize text-indigo-200/80 transition-all hover:border-indigo-400/50 hover:bg-[#1c182c]"
+						className="flex items-center justify-between gap-1 whitespace-nowrap rounded-sm border border-indigo-400/25 bg-[#110F1B] px-4 capitalize text-indigo-200/80 transition-all hover:border-indigo-400/50 hover:bg-[#1c182c]"
 						aria-label="sort"
 					>
 						<BsArrowDownUp className="mr-1 text-sm" />

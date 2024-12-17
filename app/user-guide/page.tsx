@@ -62,7 +62,7 @@ export default function UserGuide() {
 				>
 					Shortcuts
 				</Link>
-				<div className="h-1 w-full " />
+				<div className="h-1 w-full" />
 			</nav>
 			<div
 				id="content"
