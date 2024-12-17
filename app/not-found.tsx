@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect } from "react"
+import Link from "next/link"
 
 function getRandomDelay(): number {
 	return Math.floor(Math.random() * 1)
@@ -72,7 +73,7 @@ export default function NotFound() {
 					</h2>
 				</div>
 			</div>
-			<a href="/">Go to dashboard</a>
+			<Link href="/">Go to dashboard</Link>
 			<div className="absolute z-[-1] h-full w-full overflow-hidden">
 				<div className="absolute z-[1] h-full w-full bg-black/25 backdrop-blur-[200px]" />
 				<svg

@@ -26,7 +26,6 @@ import {
 	AiOutlineEdit,
 	AiOutlineMail,
 	AiOutlineNumber,
-	AiOutlineOrderedList,
 } from "react-icons/ai"
 import { BiCopy, BiExpand } from "react-icons/bi"
 import { BsDot, BsArrowLeft } from "react-icons/bs"
@@ -41,7 +40,6 @@ import EditTrackingNumber from "../../ui/forms/EditTrackingNumber"
 import IconButton from "@/components/ui/IconButton"
 import Menu, { TMenuItem } from "@/components/ui/menu/Menu"
 import { cn } from "@/lib/utils"
-import ReorderCards from "@/components/ui/forms/ReorderCards"
 import { toast } from "react-hot-toast"
 import { simplifyDetailMessage } from "@/utils/dataTransform"
 import { isAfter } from "date-fns"
@@ -63,19 +61,6 @@ export const EditTrackingNumberModal = ({
 				<h1 className="text-lg font-bold">Edit Tracking Number</h1>
 			</div>
 			<EditTrackingNumber pkg={pkg} />
-		</Modal>
-	)
-}
-
-type ReorderModalProps = {
-	open: boolean
-	setOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-export const ReorderModal = ({ open, setOpen }: ReorderModalProps) => {
-	return (
-		<Modal open={open} setOpen={setOpen}>
-			<ReorderCards />
 		</Modal>
 	)
 }
@@ -112,7 +97,6 @@ const Card = ({
 	const [editNameValue, setEditNameValue] = useState(pkg.name)
 	const [openTrackingNumberModal, setOpenEditTrackingNumberModal] =
 		useState(false)
-	const [openReorderModal, setOpenReorderModal] = useState(false)
 	const [error, setError] = useState<null | string>(null)
 	// todo fix the journey percent resets after a state change
 	const journeyPercentRef = React.useRef<HTMLDivElement>(null)
@@ -210,7 +194,7 @@ const Card = ({
 								? {
 										WebkitMaskImage:
 											"linear-gradient(to right, black 90%, transparent)",
-								  }
+									}
 								: {}
 						}
 					>
@@ -294,9 +278,6 @@ const Card = ({
 				dispatchPackages({ type: "updateCourier", id: pkg.id, courier })
 				toast.success("Courier updated")
 			},
-		},
-		reorder: () => {
-			setOpenReorderModal(true)
 		},
 		duplicate: () => {
 			dispatchPackages({ type: "duplicate", id: pkg.id })
@@ -384,12 +365,6 @@ const Card = ({
 				},
 			],
 			separator: true,
-		},
-		{
-			label: "Reorder All",
-			onClick: menuFunctions.reorder,
-			icon: <AiOutlineOrderedList className="absolute left-4" />,
-			disabled: disableReorder,
 		},
 		{
 			label: "Move",
@@ -559,7 +534,7 @@ const Card = ({
 													? {
 															WebkitMaskImage:
 																"linear-gradient(to right, black 90%, transparent)",
-													  }
+														}
 													: {}
 											}
 											data-overflow={
@@ -636,7 +611,7 @@ const Card = ({
 				</div>
 				<div
 					className={cn(
-						"relative flex h-[56px] min-w-[220px]  max-w-[350px] items-center justify-center bg-black p-2",
+						"relative flex h-[56px] min-w-[220px] max-w-[350px] items-center justify-center bg-black p-2",
 						error === null && packageInfo ? "cursor-pointer" : ""
 					)}
 					onClick={menuFunctions.openDetailedView}
@@ -648,10 +623,6 @@ const Card = ({
 				open={openTrackingNumberModal}
 				setOpen={setOpenEditTrackingNumberModal}
 				pkg={pkg}
-			/>
-			<ReorderModal
-				open={openReorderModal}
-				setOpen={setOpenReorderModal}
 			/>
 		</>
 	)

@@ -1,66 +1,67 @@
+import Link from "next/link"
 import { BiArrowBack } from "react-icons/bi"
 
 export default function UserGuide() {
 	return (
 		<main className="flex h-screen overflow-hidden px-4">
 			<nav className="flex h-screen flex-col gap-2 border-r border-white/10 p-4">
-				<a href="/">
+				<Link href="/">
 					<button className="mb-4 flex w-full items-center gap-1 whitespace-nowrap rounded-md bg-white px-4 py-1 text-black">
 						<BiArrowBack />
 						Dashboard
 					</button>
-				</a>
+				</Link>
 				<h5 className="whitespace-nowrap">Getting Started</h5>
-				<a
+				<Link
 					href="#adding-a-shipment"
 					className="cursor-pointer whitespace-nowrap text-white/50 transition-colors hover:text-white"
 				>
 					Adding a Shipment
-				</a>
-				<a
+				</Link>
+				<Link
 					href="#viewing-detailed-tracking-history"
 					className="cursor-pointer whitespace-nowrap text-white/50 transition-colors hover:text-white"
 				>
 					Viewing Detailed Tracking History
-				</a>
+				</Link>
 				<h5 className="whitespace-nowrap">Features</h5>
-				<a
+				<Link
 					href="#finding-your-shipments"
 					className="cursor-pointer whitespace-nowrap text-white/50 transition-colors hover:text-white"
 				>
 					Finding your Shipments
-				</a>
-				<a
+				</Link>
+				<Link
 					href="#organizing-your-shipments"
 					className="cursor-pointer whitespace-nowrap text-white/50 transition-colors hover:text-white"
 				>
 					Organizing your Shipments
-				</a>
-				<a
+				</Link>
+				<Link
 					href="#deleting-your-shipments"
 					className="cursor-pointer whitespace-nowrap text-white/50 transition-colors hover:text-white"
 				>
 					Deleting Shipments
-				</a>
-				<a
+				</Link>
+				<Link
 					href="#courier-website"
 					className="cursor-pointer whitespace-nowrap text-white/50 transition-colors hover:text-white"
 				>
 					Viewing Courier Website
-				</a>
-				<a
+				</Link>
+				<Link
 					href="#editing"
 					className="cursor-pointer whitespace-nowrap text-white/50 transition-colors hover:text-white"
 				>
 					Editing Existing Shipments
-				</a>
+				</Link>
 				<h5 className="whitespace-nowrap">Other</h5>
-				<a
+				<Link
 					href="#shortcuts"
 					className="cursor-pointer whitespace-nowrap text-white/50 transition-colors hover:text-white"
 				>
 					Shortcuts
-				</a>
+				</Link>
 				<div className="h-1 w-full " />
 			</nav>
 			<div

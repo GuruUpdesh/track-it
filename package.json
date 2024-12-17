@@ -21,7 +21,6 @@
     ]
   },
   "dependencies": {
-    "@hello-pangea/dnd": "^17.0.0",
     "@radix-ui/react-context-menu": "^2.1.4",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
@@ -29,7 +28,6 @@
     "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.6",
-    "@react-google-maps/api": "^2.18.1",
     "@types/node": "^22.10.2",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.2",
