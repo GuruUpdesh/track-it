@@ -38,9 +38,11 @@ async function fetchTrackingInfo(
 			},
 		}
 	)
+
 	if (status !== 200) {
 		switch (status) {
 			case 400:
+				console.log("Shippo API ERROR response:", data)
 				throw new Error("Bad Request to Shippo API")
 			case 401:
 				throw new Error("Unauthorized request to Shippo API")
