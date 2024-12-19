@@ -126,6 +126,7 @@ export async function GET(request: NextRequest) {
 			packageInfo: packageInfoSimple,
 		})
 	} catch (error) {
+		console.error(error);
 		if (error instanceof z.ZodError) {
 			return createErrorResponse(
 				400,
