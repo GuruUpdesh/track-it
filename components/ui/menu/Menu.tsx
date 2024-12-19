@@ -72,8 +72,8 @@ export function renderMenuItem(
 					item.variant === "danger"
 						? "bg-red-500/25 text-red-500"
 						: item.variant === "warning"
-						? "bg-orange-400/25 text-orange-400"
-						: ""
+							? "bg-orange-400/25 text-orange-400"
+							: ""
 				)}
 				disabled={item.disabled}
 			>

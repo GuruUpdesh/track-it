@@ -1,4 +1,4 @@
-.TabsTrigger[data-state=active] {
-  color: rgb(238 242 255);
-  box-shadow: inset 0 -1px 0 0 rgb(129 140 248 / 0.5);
+.TabsTrigger[data-state="active"] {
+	color: rgb(238 242 255);
+	box-shadow: inset 0 -1px 0 0 rgb(129 140 248 / 0.5);
 }

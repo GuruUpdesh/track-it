@@ -27,7 +27,7 @@ const useFadedScroll = (basePercentage: number) => {
 				WebkitMaskImage: `linear-gradient(black var(--scrollPercentage), transparent 100%)`,
 				WebkitMaskMode: "alpha",
 				WebkitMaskPositionY: "top",
-		  }
+			}
 		: {}
 
 	return { ref, onScroll, fadeStyles, basePercentage }

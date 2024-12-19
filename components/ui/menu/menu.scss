@@ -59,16 +59,16 @@
 	align-items: center;
 	justify-content: space-between;
 
-    &[data-disabled] {
-        cursor: default;
-        opacity: 0.5;
-    }
+	&[data-disabled] {
+		cursor: default;
+		opacity: 0.5;
+	}
 }
 
 .DropdownMenu-item[data-state="open"] {
-    &.text-orange-400 {
-        background-color: rgba(255, 165, 0, 0.30);
-    }
+	&.text-orange-400 {
+		background-color: rgba(255, 165, 0, 0.3);
+	}
 	background-color: rgb(99 102 241 / 0.25);
 }
 
@@ -81,8 +81,8 @@
 		background-color: rgba(255, 0, 0, 0.5);
 	}
 
-    &.text-orange-400 {
-        background-color: rgba(255, 165, 0, 0.5);
-    }
+	&.text-orange-400 {
+		background-color: rgba(255, 165, 0, 0.5);
+	}
 	background-color: rgb(99 102 241);
 }

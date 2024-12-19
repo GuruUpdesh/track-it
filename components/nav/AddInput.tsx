@@ -81,8 +81,8 @@ const AddInput = () => {
 				(error
 					? " border-red-700/75"
 					: valid
-					? " border-emerald-400/75"
-					: " border-indigo-400/25")
+						? " border-emerald-400/75"
+						: " border-indigo-400/25")
 			}
 		>
 			<label htmlFor="trackingNumber" className="sr-only">
@@ -109,8 +109,8 @@ const AddInput = () => {
 					(error
 						? " border-l-red-700/75"
 						: valid
-						? " border-l-green-400/75"
-						: " border-l-indigo-400/25")
+							? " border-l-green-400/75"
+							: " border-l-indigo-400/25")
 				}
 				disabled={!valid}
 				aria-roledescription="add shipment button"

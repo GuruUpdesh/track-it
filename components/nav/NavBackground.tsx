@@ -24,7 +24,7 @@ const NavBackground = () => {
 	return (
 		<div
 			ref={ref}
-			className="fixed left-0 top-0 z-30  h-14 w-full bg-black/50 backdrop-blur-md transition-all md:h-16"
+			className="fixed left-0 top-0 z-30 h-14 w-full bg-black/50 backdrop-blur-md transition-all md:h-16"
 		/>
 	)
 }

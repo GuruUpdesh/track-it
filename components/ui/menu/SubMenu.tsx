@@ -51,8 +51,8 @@ const SubMenu = ({ menuItem }: Props) => {
 					menuItem.variant === "danger"
 						? "bg-red-500/25 text-red-500"
 						: menuItem.variant === "warning"
-						? "bg-orange-400/25 text-orange-400"
-						: ""
+							? "bg-orange-400/25 text-orange-400"
+							: ""
 				)}
 			>
 				{menuItem.icon}
