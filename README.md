@@ -4,7 +4,7 @@ TrackIt is a web-based application that simplifies shipment tracking by providin
 
 ![Preview](https://github.com/GuruUpdesh/track-it/assets/62634868/26d8a1ab-1eab-4cc4-aa8a-108a9dc61bce)
 
-[Live Production Website](https://tackit.guruupdeshsingh.dev/) | [User Guide](https://tackit.guruupdeshsingh.dev/user-guide)
+[Live Production Website](https://www.shipmentracker.com/) | [User Guide](https://www.shipmentracker.com/user-guide)
 
 ## Features
 
